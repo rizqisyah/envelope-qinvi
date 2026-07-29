@@ -1,0 +1,51 @@
+{
+ "y0": 1040,
+ "y1": 1300,
+ "note": "Focused re-solve for the two florals that peek out from behind the envelope's left flap. Their declared coords are ~80px off, well outside the main job's search window.",
+ "layers": [
+  {
+   "id": "2550:130",
+   "asset": "src/assets/page/parts/00_2550-130_paper-bg.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 13
+  },
+  {
+   "id": "2588:125",
+   "asset": "src/assets/quote/parts/00_2588-125_bac-2.webp",
+   "x": 0,
+   "y": 679
+  },
+  {
+   "id": "2594:456",
+   "asset": "src/assets/quote/parts/09_2594-456.webp",
+   "x": 0,
+   "y": 1075,
+   "solve": true,
+   "search": 60
+  },
+  {
+   "id": "2594:455",
+   "asset": "src/assets/quote/parts/10_2594-455.webp",
+   "x": 17,
+   "y": 1124,
+   "solve": true,
+   "search": 60
+  },
+  {
+   "id": "2560:141",
+   "asset": "src/assets/quote/parts/g238_2560-141_card.webp",
+   "x": 0,
+   "y": 762
+  }
+ ],
+ "textMasks": [
+  {
+   "id": "2551:174",
+   "x": 68,
+   "y": 1030,
+   "w": 165,
+   "h": 238
+  }
+ ]
+}

@@ -11,6 +11,7 @@
  * Figma's bounds do not describe where the art lands. Positions were solved with
  * scripts/solve_band.py against .figma-ref/bands/envelope.json.
  */
+import { useFitText } from '../../composables/useFitText'
 import { useReveal } from '../../composables/useReveal'
 import { useWedding } from '../../composables/useWedding'
 
@@ -33,8 +34,8 @@ import orchid from '../../assets/quote/parts/06_2609-109.webp' // z147
 type Layer = { src: string; x: number; y: number; w: number; h: number }
 
 const behind: Layer[] = [
-  { src: floralLeft, x: -48, y: 421, w: 83, h: 131 },
-  { src: floralLeft2, x: 83, y: 463, w: 66, h: 99 },
+  { src: floralLeft, x: 0, y: 315, w: 83, h: 131 },
+  { src: floralLeft2, x: 17, y: 364, w: 66, h: 99 },
   { src: stamp, x: 168, y: -38, w: 207, h: 211 },
 ]
 
@@ -52,8 +53,8 @@ const front: Layer[] = [
   { src: blossom, x: 281, y: 281, w: 85, h: 85 },
   { src: disc, x: 243, y: 315, w: 97, h: 93 },
   { src: bud, x: 321, y: 332, w: 37, h: 56 },
-  { src: sprig, x: 357, y: 348, w: 79, h: 76 },
-  { src: spray, x: 275, y: 224, w: 104, h: 101 },
+  { src: sprig, x: 348, y: 343, w: 79, h: 76 },
+  { src: spray, x: 322, y: 355, w: 104, h: 101 },
   { src: orchid, x: 271, y: 326, w: 66, h: 143 },
 ]
 
@@ -69,24 +70,25 @@ function box(l: Layer, delay: number) {
   }
 }
 
-const { el, shown } = useReveal(0.1)
+const { el, shown } = useReveal()
+const fitQuote = useFitText()
 const { quoteVerse, quoteText, quoteArabic } = useWedding()
 </script>
 
 <template>
   <section :ref="el" class="envelope" :class="{ 'is-in': shown }" aria-labelledby="quote-heading">
-    <img v-for="(l, i) in behind" :key="`b${i}`" :src="l.src" alt="" :style="box(l, i * 90)" class="lyr" />
+    <img v-for="(l, i) in behind" :key="`b${i}`" :src="l.src" alt="" :style="box(l, i * 140)" class="lyr lyr--behind" />
 
     <p class="envelope__stamp-text">Wedding<br />Invitation</p>
 
-    <img v-for="(l, i) in middle" :key="`m${i}`" :src="l.src" alt="" :style="box(l, 300 + i * 120)" class="lyr" />
+    <img v-for="(l, i) in middle" :key="`m${i}`" :src="l.src" alt="" :style="box(l, 400 + i * 180)" class="lyr lyr--mid" />
 
     <h2 id="quote-heading" class="envelope__verse">{{ quoteVerse }}</h2>
     <p class="envelope__save">Save<br />The<br />Date</p>
     <p class="envelope__arabic envelope__quote">{{ quoteArabic }}</p>
-    <blockquote class="envelope__quote envelope__quote-id">&ldquo;{{ quoteText }}&rdquo;</blockquote>
+    <blockquote :ref="fitQuote" class="envelope__quote envelope__quote-id">&ldquo;{{ quoteText }}&rdquo;</blockquote>
 
-    <img v-for="(l, i) in front" :key="`f${i}`" :src="l.src" alt="" :style="box(l, 800 + i * 90)" class="lyr" />
+    <img v-for="(l, i) in front" :key="`f${i}`" :src="l.src" alt="" :style="box(l, 1150 + i * 110)" class="lyr lyr--front" />
   </section>
 </template>
 
@@ -154,8 +156,8 @@ const { quoteVerse, quoteText, quoteArabic } = useWedding()
   left: calc(73 * var(--px));
   width: calc(155 * var(--px));
   font-family: var(--font-quote);
-  font-size: calc(10 * var(--px));
-  line-height: calc(14 * var(--px));
+  font-size: calc(10 * var(--px) * var(--fit, 1));
+  line-height: calc(1.4em);
   color: var(--brown-mid);
 }
 
@@ -174,6 +176,13 @@ const { quoteVerse, quoteText, quoteArabic } = useWedding()
 
 .envelope__quote-id {
   top: calc(361 * var(--px));
+  /*
+   * Fixed height so useFitText has a box to fit into. 175 lands the last line
+   * well inside the card, whose bottom edge is at 568. Without this the copy —
+   * which is data-driven and any length — spills off the card at narrow widths,
+   * where the type gets small enough to pick up an extra line.
+   */
+  height: calc(145 * var(--px));
 }
 
 .lyr {
@@ -181,8 +190,9 @@ const { quoteVerse, quoteText, quoteArabic } = useWedding()
 }
 
 /*
- * Reveal: the envelope and its stamp settle first, then the card slides up out of
- * it as if being drawn out, and the text on the card follows.
+ * Reveal, in the order the piece was assembled: the stems and the stamp settle,
+ * the envelope and its card rise out of the fold as if being drawn out, the
+ * printed copy follows, and the florals are laid on top one at a time.
  */
 .envelope .lyr,
 .envelope__stamp-text,
@@ -191,8 +201,22 @@ const { quoteVerse, quoteText, quoteArabic } = useWedding()
 .envelope__quote {
   opacity: 0;
   transition:
-    opacity 1400ms ease-out var(--in, 0ms),
-    transform 1700ms cubic-bezier(0.16, 1, 0.3, 1) var(--in, 0ms);
+    opacity 1500ms ease-out var(--in, 0ms),
+    transform 2000ms cubic-bezier(0.16, 1, 0.3, 1) var(--in, 0ms);
+}
+
+.lyr--behind {
+  transform: translateY(calc(18 * var(--px))) scale(0.96);
+}
+
+/* The envelope and card are drawn upward out of the fold. */
+.lyr--mid {
+  transform: translateY(calc(64 * var(--px)));
+}
+
+.lyr--front {
+  transform: scale(0.82);
+  transform-origin: 60% 40%;
 }
 
 .envelope.is-in .lyr,
@@ -205,21 +229,26 @@ const { quoteVerse, quoteText, quoteArabic } = useWedding()
 }
 
 .envelope__stamp-text {
-  --in: 500ms;
-  transform: translateY(calc(-14 * var(--px)));
+  --in: 700ms;
+  transform: translateY(calc(-18 * var(--px)));
 }
 
 .envelope__verse {
-  --in: 1500ms;
+  --in: 1750ms;
 }
 
 .envelope__save {
-  --in: 1700ms;
+  --in: 1950ms;
 }
 
-.envelope__quote {
-  --in: 1900ms;
-  transform: translateY(calc(16 * var(--px)));
+.envelope__arabic {
+  --in: 2150ms;
+  transform: translateY(calc(14 * var(--px)));
+}
+
+.envelope__quote-id {
+  --in: 2350ms;
+  transform: translateY(calc(20 * var(--px)));
 }
 
 @media (prefers-reduced-motion: reduce) {

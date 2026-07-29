@@ -97,9 +97,18 @@ shows; it also handles layers that bleed off the left or top edge, and masks out
 TEXT nodes, which cannot be composited and would otherwise read as a mismatch.
 
 A layer that never improves is either genuinely buried or the search window never
-reached it — the script says which, and a buried one usually means **a layer from
-the next band is what hides it**. That is how the two lowest florals in the
-envelope band were resolved: they are covered by the groom backdrop at y 1235.
+reached it — the script says which. Two failure modes to watch for, both hit in
+the envelope band:
+
+- **The window never reached it.** Two florals there sit ~100px from their
+  declared coordinates, far outside the default ±24. Read the frame render, get a
+  hint by eye, and re-run a focused job over a narrow y range with a wide `search`.
+- **A text mask gave the layer somewhere free to hide.** Masked pixels cost
+  nothing, so the solver happily parked a floral spray on top of the "Save The
+  Date" copy. If a solved layer lands on masked text, it is wrong.
+
+Both were fixed with small focused jobs (`envelope-florals.json`,
+`save-the-date.json`) rather than by widening the main one.
 
 ## Frame 242 — three things that will bite you
 
@@ -218,10 +227,12 @@ those two lines at y 532 / 553 instead of the reported 534 / 555.
   placeholders and owns the two page-wide backdrops. `BottomNav` is still a stub.
   `CoverSection` (Frame 241) is done.
 - The envelope band's quote body wraps to 11 lines where Figma sets 10 — the browser's Playfair
-  runs marginally wider. It still sits inside the card.
-- Two florals (`2594:456`, `2594:455`) hang below the quote card. In Figma the groom backdrop
-  (`2551:179`, y 1235) covers them; that band isn't built, so for now they show. Not a bug —
-  building Groom fixes it.
+  runs marginally wider, and the design leaves no slack (its own last line ends 5px past the
+  card art). `useFitText` shrinks the copy ~2% so it always lands inside the card.
+- Enlarging the card instead was measured and rejected: the card asset is the whole envelope
+  composition, so stretching it drags the flap, the Save The Date sub-card and the wax seal down
+  with it. +4% takes the band from 6.3 to 13.1 / 255 against the design, +7% to 15.8. Change
+  `{ src: card, ... h: 566 }` in `EnvelopeSection.vue` if that trade is ever wanted.
 - `2594:178` ("Wedding Invitation") reports fill `#ffffff` but renders about `#c8c8c8`. The node
   carries a blend mode the MCP doesn't expose, and pure white is invisible on the stamp, so the
   colour is sampled from the frame render. Same for the Arabic run in `2551:174`: reported 10/14,

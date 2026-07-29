@@ -1,0 +1,77 @@
+{
+ "y0": 950,
+ "y1": 1160,
+ "note": "Focused re-solve for the two sprays around the Save The Date card. The main job masks that text, which let the solver park a spray on top of it for free.",
+ "layers": [
+  {
+   "id": "2550:130",
+   "asset": "src/assets/page/parts/00_2550-130_paper-bg.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 13
+  },
+  {
+   "id": "2588:125",
+   "asset": "src/assets/quote/parts/00_2588-125_bac-2.webp",
+   "x": 0,
+   "y": 679
+  },
+  {
+   "id": "2560:141",
+   "asset": "src/assets/quote/parts/g238_2560-141_card.webp",
+   "x": 0,
+   "y": 762
+  },
+  {
+   "id": "2594:183",
+   "asset": "src/assets/quote/parts/04_2594-183.webp",
+   "x": 311,
+   "y": 1061
+  },
+  {
+   "id": "2594:187",
+   "asset": "src/assets/quote/parts/03_2594-187.webp",
+   "x": 281,
+   "y": 1041
+  },
+  {
+   "id": "2594:185",
+   "asset": "src/assets/quote/parts/08_2594-185.webp",
+   "x": 349,
+   "y": 1103,
+   "solve": true,
+   "search": 30
+  },
+  {
+   "id": "2609:108",
+   "asset": "src/assets/quote/parts/02_2609-108.webp",
+   "x": 316,
+   "y": 1133,
+   "solve": true,
+   "search": 30
+  }
+ ],
+ "textMasks": [
+  {
+   "id": "2609:107",
+   "x": 274,
+   "y": 958,
+   "w": 88,
+   "h": 112
+  },
+  {
+   "id": "2551:173",
+   "x": 53,
+   "y": 982,
+   "w": 195,
+   "h": 74
+  },
+  {
+   "id": "2551:174",
+   "x": 68,
+   "y": 1030,
+   "w": 165,
+   "h": 238
+  }
+ ]
+}

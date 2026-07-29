@@ -1,7 +1,7 @@
 {
  "y0": 700,
  "y1": 1400,
- "note": "Frame 242 envelope band. Layers in Figma z order; `solve` marks the ones whose export size disagrees with the node's declared size (rotation, frame clipping, or an effect growing the export).",
+ "note": "Frame 242 envelope band. Layers in Figma z order; the four florals were resolved in the focused jobs beside this one, because the main job's search window could not reach them and its text masks let a spray hide on top of the Save The Date copy for free.",
  "layers": [
   {
    "id": "2550:130",
@@ -23,19 +23,21 @@
    "id": "2594:456",
    "z": 2,
    "asset": "src/assets/quote/parts/09_2594-456.webp",
-   "x": -48,
-   "y": 1181,
-   "solve": true,
-   "search": 36
+   "x": 0,
+   "y": 1075,
+   "solve": false,
+   "search": 36,
+   "note": "solved in a focused job \u2014 see envelope-florals.json / save-the-date.json"
   },
   {
    "id": "2594:455",
    "z": 4,
    "asset": "src/assets/quote/parts/10_2594-455.webp",
-   "x": 83,
-   "y": 1223,
-   "solve": true,
-   "search": 36
+   "x": 17,
+   "y": 1124,
+   "solve": false,
+   "search": 36,
+   "note": "solved in a focused job \u2014 see envelope-florals.json / save-the-date.json"
   },
   {
    "id": "2551:179",
@@ -130,19 +132,21 @@
    "id": "2594:185",
    "z": 88,
    "asset": "src/assets/quote/parts/08_2594-185.webp",
-   "x": 357,
-   "y": 1108,
-   "solve": true,
-   "search": 32
+   "x": 348,
+   "y": 1103,
+   "solve": false,
+   "search": 32,
+   "note": "solved in a focused job \u2014 see envelope-florals.json / save-the-date.json"
   },
   {
    "id": "2609:108",
    "z": 89,
    "asset": "src/assets/quote/parts/02_2609-108.webp",
-   "x": 275,
-   "y": 984,
-   "solve": true,
-   "search": 32
+   "x": 322,
+   "y": 1115,
+   "solve": false,
+   "search": 32,
+   "note": "solved in a focused job \u2014 see envelope-florals.json / save-the-date.json"
   },
   {
    "id": "2609:109",

@@ -11,7 +11,14 @@ import { onUnmounted, ref, type ComponentPublicInstance, type Ref } from "vue";
  *   const { el, shown } = useReveal()
  *   <section :ref="el" :class="{ 'is-in': shown }">
  */
-export function useReveal(threshold = 0.2): {
+export function useReveal(
+  threshold = 0,
+  // A band can be 500+ design px tall, so a plain threshold fires while its top
+  // edge is still below the fold and the whole reveal plays where nobody is
+  // looking. Requiring it to reach a quarter up the viewport fixes that; a band
+  // taller than the viewport would never satisfy a percentage threshold anyway.
+  rootMargin = "0px 0px -25% 0px"
+): {
   el: (node: Element | ComponentPublicInstance | null) => void;
   shown: Ref<boolean>;
 } {
@@ -34,7 +41,7 @@ export function useReveal(threshold = 0.2): {
           disconnect();
         }
       },
-      { threshold }
+      { threshold, rootMargin }
     );
     obs.observe(node);
   }

@@ -66,8 +66,15 @@ await sheet.waitForTimeout(800)
 await sheet.click('.opening__envelope')
 await sheet.waitForTimeout(2500)
 await sheet.locator('.hero').screenshot({ path: `${OUT}/web-hero.png` })
-// Whole sheet from the frame top through the envelope band, for a 1:1 diff.
+// Scroll the whole sheet past the viewport first: the reveals are viewport-gated
+// and the fit-to-box pass needs each block to have been rendered at least once.
+for (let y = 0; y < 3000; y += 400) {
+  await sheet.evaluate((to) => window.scrollTo(0, to), y)
+  await sheet.waitForTimeout(250)
+}
+await sheet.waitForTimeout(1500)
 await sheet.evaluate(() => window.scrollTo(0, 0))
+await sheet.waitForTimeout(400)
 await sheet.locator('.sheet').screenshot({ path: `${OUT}/web-sheet.png` })
 await sheet.close()
 await browser.close()
