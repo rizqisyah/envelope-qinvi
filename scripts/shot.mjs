@@ -30,11 +30,17 @@ for (const [name, width, height] of VIEWPORTS) {
   await page.close()
 }
 
-// One frame mid-stagger, to eyeball the entrance itself.
+// Frames mid-stagger, to eyeball the entrances themselves.
 const motion = await browser.newPage({ viewport: { width: 375, height: 812 }, deviceScaleFactor: 2 })
 await motion.goto(URL, { waitUntil: 'networkidle' })
-await motion.waitForTimeout(600)
+await motion.waitForTimeout(1100)
 await motion.screenshot({ path: `${OUT}/web-entrance.png` })
+await motion.click('.opening__envelope')
+await motion.waitForTimeout(2200)
+await motion.screenshot({ path: `${OUT}/web-hero-reveal.png` })
+// The reduced-motion shots below force everything visible, so they can't tell us
+// whether useReveal actually fired. This can.
+const revealed = (await motion.locator('.hero.is-in').count()) === 1
 await motion.close()
 
 // The cover's only job is to open the invitation — assert it actually does.
@@ -42,7 +48,7 @@ const page = await browser.newPage({ viewport: { width: 375, height: 812 }, devi
 await page.goto(URL, { waitUntil: 'networkidle' })
 await page.waitForTimeout(1000)
 await page.click('.opening__envelope')
-await page.waitForTimeout(1200)
+await page.waitForTimeout(3000)
 const opened = await page.locator('#invite').isVisible()
 const coverGone = (await page.locator('.opening').count()) === 0
 await page.screenshot({ path: `${OUT}/web-opened.png` })
@@ -58,12 +64,13 @@ const sheet = await browser.newPage({
 await sheet.goto(URL, { waitUntil: 'networkidle' })
 await sheet.waitForTimeout(800)
 await sheet.click('.opening__envelope')
-await sheet.waitForTimeout(1500)
+await sheet.waitForTimeout(2500)
 await sheet.locator('.hero').screenshot({ path: `${OUT}/web-hero.png` })
 await sheet.close()
 await browser.close()
 
 console.log(`invite visible after click: ${opened}`)
 console.log(`cover removed after transition: ${coverGone}`)
+console.log(`hero reveal fired: ${revealed}`)
 if (errors.length) console.log(errors.join('\n'))
-if (!opened) process.exitCode = 1
+if (!opened || !revealed) process.exitCode = 1

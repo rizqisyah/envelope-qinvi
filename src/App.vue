@@ -84,27 +84,28 @@ const leftBackgroundStyle = computed(() => {
  */
 .splash-leave-active {
   transition:
-    opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.85s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    opacity 1.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 1.4s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 1.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   will-change: opacity, transform, filter;
 }
 
 .splash-leave-to {
   opacity: 0 !important;
-  transform: scale(1.08) !important;
-  filter: blur(8px) !important;
+  transform: scale(1.16) !important;
+  filter: blur(14px) !important;
 }
 
 /* Cinematic entrance for Invitation Content */
+/* Held back 0.45s so the cover has visibly receded before this rises to meet it. */
 .invitation-content {
   opacity: 0;
-  transform: translateY(16px);
-  filter: blur(4px);
+  transform: translateY(28px) scale(0.965);
+  filter: blur(10px);
   transition:
-    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.45s,
+    transform 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.45s,
+    filter 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.45s;
   will-change: opacity, transform, filter;
 }
 

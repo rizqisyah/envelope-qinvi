@@ -1,35 +1,45 @@
-import { onMounted, onUnmounted, ref, type Ref } from "vue";
+import { onUnmounted, ref, type ComponentPublicInstance, type Ref } from "vue";
 
 /**
- * Adds an `in-view` flag the first time the element scrolls into view.
+ * Flips `shown` the first time the element scrolls into view.
  * Section entrance animations are gated on this so each one fires on scroll,
  * not all at load.
+ *
+ * `el` is a callback ref, not a `ref()` holding the node: a plain ref would have
+ * to be bound as `ref="el"`, which `noUnusedLocals` reads as never used.
+ *
+ *   const { el, shown } = useReveal()
+ *   <section :ref="el" :class="{ 'is-in': shown }">
  */
 export function useReveal(threshold = 0.2): {
-  el: Ref<HTMLElement | null>;
+  el: (node: Element | ComponentPublicInstance | null) => void;
   shown: Ref<boolean>;
 } {
-  const el = ref<HTMLElement | null>(null);
   const shown = ref(false);
   let obs: IntersectionObserver | null = null;
 
-  onMounted(() => {
-    if (!el.value) return;
+  function disconnect(): void {
+    obs?.disconnect();
+    obs = null;
+  }
+
+  function el(node: Element | ComponentPublicInstance | null): void {
+    disconnect();
+    if (!(node instanceof Element) || shown.value) return;
+
     obs = new IntersectionObserver(
       (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            shown.value = true;
-            obs?.disconnect();
-          }
+        if (entries.some((e) => e.isIntersecting)) {
+          shown.value = true;
+          disconnect();
         }
       },
       { threshold }
     );
-    obs.observe(el.value);
-  });
+    obs.observe(node);
+  }
 
-  onUnmounted(() => obs?.disconnect());
+  onUnmounted(disconnect);
 
   return { el, shown };
 }

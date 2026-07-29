@@ -66,7 +66,7 @@ const { coupleNickname } = useWedding()
   position: absolute;
   margin: 0;
   text-align: center;
-  animation: rise 900ms cubic-bezier(0.16, 1, 0.3, 1) var(--delay) backwards;
+  animation: rise 1400ms cubic-bezier(0.16, 1, 0.3, 1) var(--delay) backwards;
 }
 
 /*
@@ -77,7 +77,7 @@ const { coupleNickname } = useWedding()
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(calc(16 * var(--px)));
+    transform: translateY(calc(26 * var(--px)));
   }
 }
 
@@ -89,7 +89,7 @@ const { coupleNickname } = useWedding()
 }
 
 .opening__eyebrow {
-  --delay: 120ms;
+  --delay: 200ms;
   top: calc(154 * var(--px));
   left: calc(53 * var(--px));
   width: calc(269 * var(--px));
@@ -101,7 +101,7 @@ const { coupleNickname } = useWedding()
 }
 
 .opening__couple {
-  --delay: 220ms;
+  --delay: 430ms;
   top: calc(195 * var(--px));
   left: calc(53 * var(--px));
   width: calc(269 * var(--px));
@@ -113,7 +113,7 @@ const { coupleNickname } = useWedding()
 }
 
 .opening__envelope {
-  --delay: 340ms;
+  --delay: 640ms;
   top: calc(173 * var(--px));
   left: calc(10 * var(--px));
   width: calc(361 * var(--px));
@@ -152,11 +152,11 @@ const { coupleNickname } = useWedding()
   left: calc(152 * var(--px));
   width: calc(65 * var(--px));
   height: calc(82 * var(--px));
-  animation: seal-drop 700ms cubic-bezier(0.34, 1.4, 0.5, 1) 760ms backwards;
+  animation: seal-drop 1100ms cubic-bezier(0.34, 1.5, 0.5, 1) 1240ms backwards;
 }
 
 .opening__lily {
-  --delay: 560ms;
+  --delay: 1020ms;
   top: calc(386 * var(--px));
   left: calc(56 * var(--px));
   width: calc(264 * var(--px));
@@ -165,7 +165,7 @@ const { coupleNickname } = useWedding()
 }
 
 .opening__hint {
-  --delay: 820ms;
+  --delay: 1460ms;
   top: calc(463 * var(--px));
   left: calc(25 * var(--px));
   width: calc(133 * var(--px));
@@ -177,8 +177,8 @@ const { coupleNickname } = useWedding()
   pointer-events: none;
   /* Breathes after it lands — the only affordance cue on the screen. */
   animation:
-    rise 900ms cubic-bezier(0.16, 1, 0.3, 1) var(--delay) backwards,
-    hint-breathe 2800ms ease-in-out 1800ms infinite;
+    rise 1400ms cubic-bezier(0.16, 1, 0.3, 1) var(--delay) backwards,
+    hint-breathe 3000ms ease-in-out 3000ms infinite;
 }
 
 @keyframes hint-breathe {
@@ -189,7 +189,7 @@ const { coupleNickname } = useWedding()
 
 /* -2px against the Figma box: Platypi/Poltawski sit 2px lower than Figma's auto line box. */
 .opening__dear {
-  --delay: 900ms;
+  --delay: 1620ms;
   top: calc(532 * var(--px));
   left: calc(91 * var(--px));
   width: calc(193 * var(--px));
@@ -200,7 +200,7 @@ const { coupleNickname } = useWedding()
 }
 
 .opening__guest {
-  --delay: 980ms;
+  --delay: 1800ms;
   top: calc(553 * var(--px));
   left: calc(106 * var(--px));
   width: calc(163 * var(--px));
