@@ -24,6 +24,7 @@ All copy is data-driven via `useWedding()`, so these are placeholders only.
 |------|------------|
 | `.figma-ref/frame241-layout.json` | Frame 241: every graphic + text node, with the verified render position of each and why three nodes were dropped |
 | `.figma-ref/frame242-zorder.json` | **Frame 242's 165 direct children in Figma child order** — the only file that carries z-order. Read this before building any band |
+| `.figma-ref/bands/*.json` | Per-band layer stacks with solved coordinates, one file per built band (input and output of `scripts/solve_band.py`) |
 | `.figma-ref/frame242-layout.json` | All 344 nodes incl. nested: id, type, name, parent, depth, x/y/w/h (frame-local), section, text, and `styles` (font family/size/weight/line-height/fills) |
 | `.figma-ref/frame242-raw.json` | Untouched `get_selection` dump — regenerate the layout from this rather than re-querying Figma |
 | `.figma-ref/asset-dedupe-map.json` | Which exports collapsed into which file (see "Deduped assets" below) |
@@ -66,6 +67,40 @@ pnpm dev & node scripts/shot.mjs   # 375×725, 375×812, 1440×900 + clicks the 
 then diff `.figma-tmp/web-mobile.png` against `.figma-tmp/frame241-full.png`. The built cover
 currently sits at a mean per-channel difference of **3.35 / 255** below the status-bar row.
 
+## Placing a layer when Figma's coordinates lie
+
+Three separate things make a node's reported bounds wrong, and they compound:
+
+| Symptom | Cause |
+|---------|-------|
+| Export is *bigger* than the node in both axes | The node is rotated. Figma reports the unrotated size at the transform origin — it says nothing about where the art lands |
+| Export is *smaller*, usually snapped to 375 wide | Figma clipped the export to the frame |
+| Export is a few px bigger, same aspect | An effect (drop shadow) grew the export box |
+
+So: **compare every export's pixel size against its node's declared size before
+placing it.** If they disagree, the coordinates need solving, and the export's own
+size — not the node's — is what you set in CSS.
+
+Two tools do the solving, both diffing against `.figma-tmp/frame242-full.png`
+(export Frame 242 at scale 1, so 1px == 1 design px):
+
+```bash
+python3 scripts/locate.py <asset> <hintX> <hintY>     # one asset, if nothing covers it
+python3 scripts/solve_band.py .figma-ref/bands/<band>.json   # a whole stack
+```
+
+`locate.py` only works when the asset is the topmost thing at its spot. In a dense
+band it fails silently with a high error, because a floral buried under a card
+matches nothing. `solve_band.py` composites the entire band in z order and moves
+one layer at a time, so a buried layer is scored on whatever slice of it still
+shows; it also handles layers that bleed off the left or top edge, and masks out
+TEXT nodes, which cannot be composited and would otherwise read as a mismatch.
+
+A layer that never improves is either genuinely buried or the search window never
+reached it — the script says which, and a buried one usually means **a layer from
+the next band is what hides it**. That is how the two lowest florals in the
+envelope band were resolved: they are covered by the groom backdrop at y 1235.
+
 ## Frame 242 — three things that will bite you
 
 **1. `frame242-layout.json` does not carry z-order.** It is sorted by `(depth, y)`, so its array
@@ -94,8 +129,7 @@ of something 8700px tall exceeds what Figma will produce. Don't "fix" this by re
 | # | y range | Section | Assets |
 |---|---------|---------|--------|
 | 1 | 0–760 | Hero — "The Bride & The Groom", ornate frame, couple portrait — **built** | `hero/` (2) + `footer/21_..._img-8300` |
-| 2 | 760–1000 | Cover — white envelope, "Wedding Invitation" stamp, "Save The Date" seal | `cover/` (5) |
-| 3 | 1000–1330 | Quote — QS Ar-Rum 21 card | `quote/` (10) |
+| 2–3 | 760–1400 | Envelope — white envelope, stamp, "Save The Date", QS Ar-Rum 21 card — **built as one component** | `cover/` (5) + `quote/` (11) |
 | 4 | 1330–1960 | Groom — Antonio | `groom/` (9) |
 | 5 | 1960–2160 | Divider — drape + pearls + "And" | `divider/` (10) |
 | 6 | 2160–2740 | Bride — Allysa | `bride/` (6) |
@@ -162,6 +196,7 @@ Installed and wired in `src/style.css`, tokens in `src/style/tokens.css`:
 | Reddit Sans | 15 | Frame 241 "THE WEDDING OF" |
 | Platypi | 14 | Frame 241 "Dear Mr/ Mrs/ Ms" |
 | Poltawski Nowy | 16 | Frame 241 guest name |
+| Playfair | 10 | Frame 242 quote-card body |
 
 Frame 241 shares only Pinyon Script and Jost with Frame 242; the other three families above are
 its own.
@@ -179,10 +214,18 @@ those two lines at y 532 / 553 instead of the reported 534 / 555.
   If pearls are missing along the footer, they are the reason.
 - `DEFAULT_SLUG` in `src/lib/api.ts` and the `name` field in `package.json` are both still
   `tema-elegan-putih`, carried over from the previous template. Neither is this project's slug.
-- Frame 242: only the hero band is built. `InviteBody` renders it plus 14 placeholders, and owns
-  the two page-wide backdrops. `BottomNav` is still a stub. `CoverSection` (Frame 241) is done.
-- The hero band's y 679–760 shows plain paper because the "Wedding Invitation" stamp
-  (`2594:179`, z69, y 722) belongs to the cover band, which isn't built yet.
+- Frame 242: the hero and envelope bands are built. `InviteBody` renders them plus 13
+  placeholders and owns the two page-wide backdrops. `BottomNav` is still a stub.
+  `CoverSection` (Frame 241) is done.
+- The envelope band's quote body wraps to 11 lines where Figma sets 10 — the browser's Playfair
+  runs marginally wider. It still sits inside the card.
+- Two florals (`2594:456`, `2594:455`) hang below the quote card. In Figma the groom backdrop
+  (`2551:179`, y 1235) covers them; that band isn't built, so for now they show. Not a bug —
+  building Groom fixes it.
+- `2594:178` ("Wedding Invitation") reports fill `#ffffff` but renders about `#c8c8c8`. The node
+  carries a blend mode the MCP doesn't expose, and pure white is invisible on the stamp, so the
+  colour is sampled from the frame render. Same for the Arabic run in `2551:174`: reported 10/14,
+  actually renders in a fallback face at roughly 13/27.
 
 ## Re-exporting from Figma
 

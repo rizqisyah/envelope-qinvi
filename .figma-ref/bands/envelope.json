@@ -1,0 +1,185 @@
+{
+ "y0": 700,
+ "y1": 1400,
+ "note": "Frame 242 envelope band. Layers in Figma z order; `solve` marks the ones whose export size disagrees with the node's declared size (rotation, frame clipping, or an effect growing the export).",
+ "layers": [
+  {
+   "id": "2550:130",
+   "z": 0,
+   "asset": "src/assets/page/parts/00_2550-130_paper-bg.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 13
+  },
+  {
+   "id": "2588:125",
+   "z": 1,
+   "asset": "src/assets/quote/parts/00_2588-125_bac-2.webp",
+   "x": 0,
+   "y": 679,
+   "solve": true
+  },
+  {
+   "id": "2594:456",
+   "z": 2,
+   "asset": "src/assets/quote/parts/09_2594-456.webp",
+   "x": -48,
+   "y": 1181,
+   "solve": true,
+   "search": 36
+  },
+  {
+   "id": "2594:455",
+   "z": 4,
+   "asset": "src/assets/quote/parts/10_2594-455.webp",
+   "x": 83,
+   "y": 1223,
+   "solve": true,
+   "search": 36
+  },
+  {
+   "id": "2551:179",
+   "z": 17,
+   "asset": "src/assets/groom/parts/00_2551-179_sdvbsdbsddb-2.webp",
+   "x": 0,
+   "y": 1235
+  },
+  {
+   "id": "2594:177",
+   "z": 69,
+   "asset": "src/assets/cover/parts/g239_2594-177_stamp.webp",
+   "x": 168,
+   "y": 722,
+   "solve": true
+  },
+  {
+   "id": "2594:180",
+   "z": 70,
+   "asset": "src/assets/cover/parts/02_2594-180.webp",
+   "x": 286,
+   "y": 836,
+   "solve": true,
+   "search": 40
+  },
+  {
+   "id": "2594:189",
+   "z": 71,
+   "asset": "src/assets/cover/parts/03_2594-189.webp",
+   "x": 236,
+   "y": 848
+  },
+  {
+   "id": "2560:141",
+   "z": 72,
+   "asset": "src/assets/quote/parts/g238_2560-141_card.webp",
+   "x": 0,
+   "y": 762,
+   "solve": true
+  },
+  {
+   "id": "2594:140",
+   "z": 72.5,
+   "asset": "src/assets/quote/parts/g238_2594-140.webp",
+   "x": 220,
+   "y": 925
+  },
+  {
+   "id": "2594:437",
+   "z": 73,
+   "asset": "src/assets/cover/parts/01_2594-437.webp",
+   "x": 172,
+   "y": 787,
+   "solve": true
+  },
+  {
+   "id": "2594:141",
+   "z": 74,
+   "asset": "src/assets/cover/parts/04_2594-141.webp",
+   "x": 250,
+   "y": 910
+  },
+  {
+   "id": "2594:183",
+   "z": 84,
+   "asset": "src/assets/quote/parts/04_2594-183.webp",
+   "x": 311,
+   "y": 1061
+  },
+  {
+   "id": "2594:187",
+   "z": 85,
+   "asset": "src/assets/quote/parts/03_2594-187.webp",
+   "x": 281,
+   "y": 1041
+  },
+  {
+   "id": "2594:182",
+   "z": 86,
+   "asset": "src/assets/quote/parts/05_2594-182_ellipse-9.webp",
+   "x": 243,
+   "y": 1075
+  },
+  {
+   "id": "2594:184",
+   "z": 87,
+   "asset": "src/assets/quote/parts/04_2594-183.webp",
+   "x": 321,
+   "y": 1092
+  },
+  {
+   "id": "2594:185",
+   "z": 88,
+   "asset": "src/assets/quote/parts/08_2594-185.webp",
+   "x": 357,
+   "y": 1108,
+   "solve": true,
+   "search": 32
+  },
+  {
+   "id": "2609:108",
+   "z": 89,
+   "asset": "src/assets/quote/parts/02_2609-108.webp",
+   "x": 275,
+   "y": 984,
+   "solve": true,
+   "search": 32
+  },
+  {
+   "id": "2609:109",
+   "z": 147,
+   "asset": "src/assets/quote/parts/06_2609-109.webp",
+   "x": 271,
+   "y": 1086
+  }
+ ],
+ "textMasks": [
+  {
+   "id": "2594:178",
+   "x": 176,
+   "y": 760,
+   "w": 195,
+   "h": 76
+  },
+  {
+   "id": "2609:107",
+   "x": 274,
+   "y": 958,
+   "w": 88,
+   "h": 112
+  },
+  {
+   "id": "2551:173",
+   "x": 53,
+   "y": 982,
+   "w": 195,
+   "h": 74
+  },
+  {
+   "id": "2551:174",
+   "x": 68,
+   "y": 1030,
+   "w": 165,
+   "h": 238
+  }
+ ]
+}

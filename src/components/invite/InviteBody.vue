@@ -4,14 +4,13 @@
 // relative to its own top, so inserting a band never renumbers the others.
 // Band map and asset inventory: ../../../SLICING.md
 import HeroSection from '../sections/HeroSection.vue'
+import EnvelopeSection from '../sections/EnvelopeSection.vue'
 
 import paperBg from '../../assets/page/parts/00_2550-130_paper-bg.webp' // z0, y 13
 import quoteBg from '../../assets/quote/parts/00_2588-125_bac-2.webp' // z1, (-16, 679)
 
 // Bands still to build, in frame order.
 const pending = [
-  'Cover',
-  'Quote',
   'Groom',
   'Divider',
   'Bride',
@@ -35,10 +34,11 @@ const pending = [
     -->
     <div class="sheet__backdrop" aria-hidden="true">
       <img :src="paperBg" alt="" class="sheet__paper" />
-      <img :src="quoteBg" alt="" width="422" height="704" class="sheet__quote-bg" />
+      <img :src="quoteBg" alt="" width="375" height="704" class="sheet__quote-bg" />
     </div>
 
     <HeroSection />
+    <EnvelopeSection />
 
     <section v-for="name in pending" :key="name" class="sheet__placeholder">
       {{ name }}
@@ -79,11 +79,12 @@ const pending = [
   height: auto;
 }
 
+/* Node is 422 wide at x -16, but the export came back clipped to the frame. */
 .sheet__quote-bg {
   position: absolute;
   top: calc(679 * var(--px));
-  left: calc(-16 * var(--px));
-  width: calc(422 * var(--px));
+  left: 0;
+  width: calc(375 * var(--px));
   height: calc(704 * var(--px));
 }
 

@@ -28,6 +28,7 @@
   --font-eyebrow: "Reddit Sans", system-ui, sans-serif; /* Frame 241 "THE WEDDING OF" */
   --font-serif-soft: "Platypi", serif; /* Frame 241 "Dear Mr/ Mrs/ Ms" */
   --font-guest: "Poltawski Nowy", serif; /* Frame 241 guest name */
+  --font-quote: "Playfair", serif; /* Frame 242 quote card body */
 
   /* design frame reference (Figma Frame 242) */
   --frame-w: 375;
