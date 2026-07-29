@@ -8,13 +8,14 @@ import EnvelopeSection from '../sections/EnvelopeSection.vue'
 import GroomSection from '../sections/GroomSection.vue'
 import DividerSection from '../sections/DividerSection.vue'
 import BrideSection from '../sections/BrideSection.vue'
+import GlimpseSection from '../sections/GlimpseSection.vue'
 
 import paperBg from '../../assets/page/parts/00_2550-130_paper-bg.webp' // z0, y 13
 import quoteBg from '../../assets/quote/parts/00_2588-125_bac-2.webp' // z1, (-16, 679)
+import bgStrip from '../../assets/page/parts/01_2560-276_bg-strip.webp' // z3, y 2821
 
 // Bands still to build, in frame order.
 const pending = [
-  'Glimpse',
   'Gallery',
   'Akad',
   'Resepsi',
@@ -35,6 +36,7 @@ const pending = [
     <div class="sheet__backdrop" aria-hidden="true">
       <img :src="paperBg" alt="" class="sheet__paper" />
       <img :src="quoteBg" alt="" width="375" height="704" class="sheet__quote-bg" />
+      <img :src="bgStrip" alt="" width="375" height="5928" class="sheet__strip" />
     </div>
 
     <HeroSection />
@@ -42,6 +44,7 @@ const pending = [
     <GroomSection />
     <DividerSection />
     <BrideSection />
+    <GlimpseSection />
 
     <section v-for="name in pending" :key="name" class="sheet__placeholder">
       {{ name }}
@@ -89,6 +92,19 @@ const pending = [
   left: 0;
   width: calc(375 * var(--px));
   height: calc(704 * var(--px));
+}
+
+/*
+ * Group 233: ten stacked panels flattened into one strip. Declared 405 x 6683 at
+ * (-20, 2821), but 2821 + 6683 overshoots the frame, so the export is clipped on
+ * both axes to 375 x 5928 at x 0 — another scale-1 export, like the paper above.
+ */
+.sheet__strip {
+  position: absolute;
+  top: calc(2821 * var(--px));
+  left: 0;
+  width: calc(375 * var(--px));
+  height: calc(5928 * var(--px));
 }
 
 .sheet__placeholder {

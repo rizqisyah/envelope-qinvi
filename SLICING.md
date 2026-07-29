@@ -85,8 +85,10 @@ Two tools do the solving, both diffing against `.figma-tmp/frame242-full.png`
 (export Frame 242 at scale 1, so 1px == 1 design px):
 
 ```bash
-python3 scripts/locate.py <asset> <hintX> <hintY>     # one asset, if nothing covers it
-python3 scripts/solve_band.py .figma-ref/bands/<band>.json   # a whole stack
+python3 scripts/locate.py <asset> <hintX> <hintY>            # one asset, if nothing covers it
+python3 scripts/solve_band.py .figma-ref/bands/<band>.json    # a whole stack
+node   scripts/fit-text.mjs <port> <sel> <x> <y> <w> <h>      # where a text node's glyphs land
+python3 scripts/ink.py <clipX> <clipY> [bandY0]               # ...turned into a bounding box
 ```
 
 `locate.py` only works when the asset is the topmost thing at its spot. In a dense
@@ -111,6 +113,14 @@ the envelope band:
   pearls 76px up onto the parents line and called it an improvement. When a layer
   is low-contrast against its backdrop, check it with `locate.py` — it matched the
   declared y exactly — or just trust the declared coordinates.
+- **A whole element is missing, and no node explains it.** The glimpse band's date
+  sits on a scalloped plate that matches nothing in the 345-node dump — the band
+  scored 9.98 with a 330 × 162 hole in it. It is `2555:112`, exported into
+  **`assets/gallery/`**: sections are derived from y, and that node is rotated, so
+  Figma reports y 3405 while it renders at ~3095. When a band is missing something
+  large, look for a rotated node filed under the neighbouring section before
+  concluding the export is absent. `scan_nodes_by_types` over the frame plus an
+  asset-to-node diff is the fast way to find it.
 - **The declared coordinates were right all along.** The divider's pearl chain
   (`2560:178`) reports x 383 on a 375-wide frame, which reads as nonsense, so it
   got solved — and landed 200px off. It is simply frame-clipped: a 475-wide node
@@ -131,6 +141,29 @@ the bride band, and solving the bride without it left those rows comparing
 artwork against bare paper: base error 4.77, and the frame layer solved against a
 biased target. Pinning the 13 overhanging layers took the same band to 2.79 and
 both solves then sat at their optimum already.
+
+**A big text mask is a big hiding place.** The glimpse band's date block needs a
+290 × 125 mask, and with the plate missing it needed another 330 × 162. Six layers
+promptly solved *into* those holes, where masked pixels cost nothing — including a
+white orchid that ended up printed across "We're getting married". The
+leave-one-out pass is what caught them: all six contributed 0.00 to the band error.
+Rule: a layer that contributes nothing, or that lands inside a mask, is unplaced —
+read its position off the render instead. The lily `2588:127` shipped once at its
+declared coordinates on exactly that evidence and was 237px out: rotated ~68°
+(declared 117 × 208 portrait, export 236 × 184 landscape), and `locate.py` had
+*declined* to run on it ("does not fit inside the frame") rather than disagreed, so
+there was no second opinion. A probe over the region its footprint can reach found
+a clean minimum 1.08/255 below having it absent. When a mask hides most of a
+layer's footprint, score only the strip outside the mask — that is still a real
+signal, and it is how `2560:171` was placed 55px from its declared x. Corollary: fill the hole if you can. Once
+the plate was found and composited, the same band solved to 4.28 and only the two
+genuinely-buried layers went quiet.
+
+**Score the band you actually ship.** The glimpse job first ran to `y1: 3400`
+against a component 691px tall, leaving the last 100 rows — the lily and the
+envelope's bottom — unscored, so the quoted number was not a statement about the
+band on screen. Set `y1` to where the next band's art really starts (3477 here:
+`2560:190` sits 24px above its own group box at 3501).
 
 **Low contrast defeats the check as well as the solve.** Getting the divider's
 paint order wrong — bells, the pearl chain and the orchid all emitted too late —
@@ -172,8 +205,8 @@ of something 8700px tall exceeds what Figma will produce. Don't "fix" this by re
 | 4 | 1235–2014 | Groom — ornate frame, portrait, name block — **built** | `groom/` (9) + `bride/01_..._bg-bride` |
 | 5 | 1899–2160 | Divider — drape + pearls + "And" — **built, overlay only** | `divider/` (10) + 3 of `groom/` |
 | 6 | 2014–2810 | Bride — Allysa — **built** | `bride/` (6) + `glimpse/00_..._vdsvzdsvd-1` |
-| 7 | 2740–3480 | Glimpse of Us — polaroids, green envelope, "09.09.26" | `glimpse/` (22) |
-| 8 | 3480–3980 | Gallery — hero photo + thumbnails | `gallery/` (2) |
+| 7 | 2810–3501 | Glimpse of Us — polaroids, green envelope, "09.09.26" — **built** | `glimpse/` (22) + `gallery/00_2555-112` |
+| 8 | 3501–3980 | Gallery — hero photo + thumbnails | `gallery/01_..._group-219` |
 | 9 | 3980–4560 | Akad | `akad/` (1) |
 | 10 | 4560–5180 | Resepsi | `resepsi/` (1) |
 | 11 | 5180–5420 | Countdown — silver tray | `countdown/` (17) |
@@ -213,7 +246,7 @@ Some assets are wider or taller than the 375 frame and are clipped by it by desi
 | Asset | Size | Note |
 |-------|------|------|
 | `page/00_..._paper-bg` | 375 × 9500 | Backdrop, 751px taller than the frame |
-| `page/01_..._bg-strip` | 405 × 6683 | Bleeds 15px each side |
+| `page/01_..._bg-strip` | 405 × 6683 | Declared at (-20, 2821), but 2821 + 6683 overshoots the frame, so the export is clipped on **both** axes to 375 × 5928 at x 0. Rendered by `InviteBody` |
 | `divider/05_..._drape` | 812 × 356 | Drape bleeds well past both edges |
 | `quote/00_..._bac-2` | 422 × 704 | Bleeds ~23px each side |
 
@@ -247,6 +280,20 @@ two nodes get built. Find them with a `styles.fontFamily` search in the layout J
 Platypi and Poltawski Nowy render ~2px lower than Figma's auto line box, so `CoverSection` places
 those two lines at y 532 / 553 instead of the reported 534 / 555.
 
+Two things the Figma API gets wrong about this frame's type, both caught by
+measuring the rendered ink with `node scripts/fit-text.mjs` + `python3 scripts/ink.py`
+(they screenshot a text node with and without it rendered, so the artwork can be
+subtracted and only the glyphs measured):
+
+- **`2555:119` reports Pinyon Script and renders in Meow Script.** At the height the
+  design draws it, Meow sets "We're getting married" 172px wide; Pinyon sets the
+  same string 131px. The typography table below had it right and the API does not.
+- **A `lineHeight` well over the font size renders low in CSS and high in Figma.**
+  The three date lines are 24/36/24px type in 48px line boxes; at their declared y
+  the browser puts the glyphs 17/24/30px lower than the render. `GlimpseSection`
+  subtracts those. Do not "fix" this by changing line-height — that would move the
+  block as a unit and lose the design's spacing.
+
 The divider's "And" is worse: Figma says Pinyon Script 96, but the browser sets the same word ~14%
 wider, so 96 overruns the drape. `DividerSection` uses **84** with a 4px/3px nudge, which puts the
 glyph ink on exactly Figma's box (x 109–281, baseline 2074). Measure, don't trust the number —
@@ -260,8 +307,8 @@ declared height tells you nothing about where the glyphs land.
   If pearls are missing along the footer, they are the reason.
 - `DEFAULT_SLUG` in `src/lib/api.ts` and the `name` field in `package.json` are both still
   `tema-elegan-putih`, carried over from the previous template. Neither is this project's slug.
-- Frame 242: the hero, envelope, groom, divider and bride bands are built. `InviteBody` renders
-  them plus 9 placeholders and owns the two page-wide backdrops. `BottomNav` is still a stub.
+- Frame 242: the hero, envelope, groom, divider, bride and glimpse bands are built. `InviteBody`
+  renders them plus 8 placeholders and owns the two page-wide backdrops. `BottomNav` is still a stub.
   `CoverSection` (Frame 241) is done.
 - `BrideSection` paints `2560:278`, the glimpse band's backdrop. It is a top-to-bottom alpha
   gradient that sits above the bride's paper (z20 < z21) and below her name block (z21 < z22), so
@@ -282,6 +329,15 @@ declared height tells you nothing about where the glyphs land.
   composition, so stretching it drags the flap, the Save The Date sub-card and the wax seal down
   with it. +4% takes the band from 6.3 to 13.1 / 255 against the design, +7% to 15.8. Change
   `{ src: card, ... h: 566 }` in `EnvelopeSection.vue` if that trade is ever wanted.
+- `GlimpseSection` hardcodes the date as `09. 09. 26`. `useWedding().acara` is typed
+  `any[]` and no built band has pinned down which field carries a display date, so a
+  guess here would fail silently. Bind it when the Akad band establishes the shape.
+- The glimpse band's title is rotated **9.9° clockwise** — measured off the tag
+  export's own alpha edge, which is the only high-contrast straight line available.
+  The tag's export carries its rotation; the title is live text, so `GlimpseSection`
+  applies the transform, and repeats it in the reveal end-state because there is only
+  one `transform` property. The three date lines are **not** rotated even though the
+  plate under them is.
 - `2594:178` ("Wedding Invitation") reports fill `#ffffff` but renders about `#c8c8c8`. The node
   carries a blend mode the MCP doesn't expose, and pure white is invisible on the stamp, so the
   colour is sampled from the frame render. Same for the Arabic run in `2551:174`: reported 10/14,

@@ -1,0 +1,260 @@
+{
+ "y0": 2750,
+ "y1": 3477,
+ "note": "Frame 242 glimpse band. Densest band in the frame: a green envelope holding two polaroids, a paper tag, a date card and a lot of florals. z21 is painted by the bride band and pinned here; z3 is the page-wide bg strip that InviteBody owns. y1 stops at 3477, where the gallery band's own art starts (2560:190 at y 3477.6, above its group box at 3501). Layers in Figma z order.",
+ "layers": [
+  {
+   "id": "2550:130",
+   "z": 0,
+   "asset": "src/assets/page/parts/00_2550-130_paper-bg.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 13
+  },
+  {
+   "id": "2560:276",
+   "z": 3,
+   "asset": "src/assets/page/parts/01_2560-276_bg-strip.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 2821,
+   "note": "405 wide at x -20 and 6683 tall from y 2821, so the export is clipped on both axes: 375 x 5928 at x 0"
+  },
+  {
+   "id": "2560:278",
+   "z": 21,
+   "asset": "src/assets/glimpse/parts/00_2560-278_vdsvzdsvd-1.webp",
+   "x": 0,
+   "y": 2556
+  },
+  {
+   "id": "2560:175",
+   "z": 23,
+   "asset": "src/assets/glimpse/parts/01_2560-175.webp",
+   "x": 32,
+   "y": 2758,
+   "search": 40,
+   "solve": true
+  },
+  {
+   "id": "2555:109",
+   "z": 24,
+   "asset": "src/assets/glimpse/parts/11_2555-109_cascasc-1.webp",
+   "x": 7,
+   "y": 3031,
+   "solve": true,
+   "search": 45
+  },
+  {
+   "id": "2610:128",
+   "z": 25,
+   "asset": "src/assets/glimpse/parts/03_2610-128.webp",
+   "x": 44,
+   "y": 2863,
+   "search": 30,
+   "solve": true
+  },
+  {
+   "id": "2610:129",
+   "z": 26,
+   "asset": "src/assets/glimpse/parts/05_2610-129.webp",
+   "x": 29,
+   "y": 2904,
+   "search": 30,
+   "solve": true
+  },
+  {
+   "id": "2610:130",
+   "z": 27,
+   "asset": "src/assets/glimpse/parts/04_2610-130.webp",
+   "x": 77,
+   "y": 2911,
+   "search": 30,
+   "solve": true
+  },
+  {
+   "id": "2556:127",
+   "z": 28,
+   "asset": "src/assets/glimpse/parts/09_2556-127_group-229.webp",
+   "x": 12,
+   "y": 2962,
+   "search": 40,
+   "solve": true
+  },
+  {
+   "id": "2556:126",
+   "z": 29,
+   "asset": "src/assets/glimpse/parts/08_2556-126_group-228.webp",
+   "x": 145,
+   "y": 2933,
+   "search": 40,
+   "solve": true
+  },
+  {
+   "id": "2555:112",
+   "z": 31,
+   "asset": "src/assets/gallery/parts/00_2555-112.webp",
+   "x": 0,
+   "y": 2995,
+   "search": 60,
+   "solve": true,
+   "note": "the scalloped plate the date is printed on. Filed under gallery/ because sections are derived from y and this rotated node reports y 3405, ~310px below where it renders"
+  },
+  {
+   "id": "2586:107",
+   "z": 32,
+   "asset": "src/assets/glimpse/parts/13_2586-107.webp",
+   "x": 243,
+   "y": 3072,
+   "search": 40,
+   "solve": true
+  },
+  {
+   "id": "2556:128",
+   "z": 33,
+   "asset": "src/assets/glimpse/parts/19_2556-128.webp",
+   "x": 141,
+   "y": 3228,
+   "search": 30,
+   "solve": true
+  },
+  {
+   "id": "2560:172",
+   "z": 34,
+   "asset": "src/assets/glimpse/parts/18_2560-168.webp",
+   "x": 111,
+   "y": 3247,
+   "note": "same art as z63"
+  },
+  {
+   "id": "2558:108",
+   "z": 35,
+   "asset": "src/assets/glimpse/parts/16_2558-108.webp",
+   "x": 19,
+   "y": 3113,
+   "note": "invisible in the composite -- every pixel is masked or covered, so the position is the solve hint and cannot be verified"
+  },
+  {
+   "id": "2555:110",
+   "z": 36,
+   "asset": "src/assets/glimpse/parts/10_2555-110_defcew-1.webp",
+   "x": 22,
+   "y": 3024,
+   "search": 45,
+   "solve": true
+  },
+  {
+   "id": "2588:127",
+   "z": 37,
+   "asset": "src/assets/glimpse/parts/22_2588-127_vdf-2.webp",
+   "x": 86,
+   "y": 3204,
+   "note": "rotated ~68deg (declared 117x208 portrait, export 236x184 landscape), so the declared (323, 3311) is 237px out; probed against the render"
+  },
+  {
+   "id": "2558:116",
+   "z": 38,
+   "asset": "src/assets/glimpse/parts/21_2558-116.webp",
+   "x": 133,
+   "y": 3247,
+   "search": 30,
+   "solve": true
+  },
+  {
+   "id": "2558:109",
+   "z": 42,
+   "asset": "src/assets/glimpse/parts/12_2558-109.webp",
+   "x": 0,
+   "y": 3030,
+   "search": 40,
+   "solve": true
+  },
+  {
+   "id": "2610:127",
+   "z": 43,
+   "asset": "src/assets/glimpse/parts/06_2610-127.webp",
+   "x": 183,
+   "y": 2916,
+   "search": 40,
+   "solve": true
+  },
+  {
+   "id": "2560:171",
+   "z": 44,
+   "asset": "src/assets/glimpse/parts/15_2560-171.webp",
+   "x": -1,
+   "y": 3094,
+   "search": 40,
+   "solve": true,
+   "note": "probed over the strip above the date mask; the full-band score cannot see it"
+  },
+  {
+   "id": "2560:170",
+   "z": 59,
+   "asset": "src/assets/glimpse/parts/14_2560-170.webp",
+   "x": 21,
+   "y": 3084,
+   "note": "locate.py against the render; the band solve parked it inside the date's text mask, where masked pixels cost nothing"
+  },
+  {
+   "id": "2560:169",
+   "z": 62,
+   "asset": "src/assets/glimpse/parts/17_2560-169.webp",
+   "x": 10,
+   "y": 3159,
+   "search": 30,
+   "solve": true
+  },
+  {
+   "id": "2560:168",
+   "z": 63,
+   "asset": "src/assets/glimpse/parts/18_2560-168.webp",
+   "x": 38,
+   "y": 3187,
+   "search": 30,
+   "solve": true
+  },
+  {
+   "id": "2592:136",
+   "z": 68,
+   "asset": "src/assets/glimpse/parts/02_2592-136.webp",
+   "x": 199,
+   "y": 2858,
+   "search": 30,
+   "solve": true
+  },
+  {
+   "id": "2594:143",
+   "z": 75,
+   "asset": "src/assets/glimpse/parts/07_2594-143.webp",
+   "x": 178,
+   "y": 2920
+  }
+ ],
+ "textMasks": [
+  {
+   "id": "2558:125",
+   "note": "the bride's parents line, bottom edge only",
+   "x": 25,
+   "y": 2740,
+   "w": 335,
+   "h": 25
+  },
+  {
+   "id": "2560:174",
+   "note": "'THE GLIMPSE OF US' -- rotated with the tag it is printed on",
+   "x": 95,
+   "y": 2785,
+   "w": 215,
+   "h": 125
+  },
+  {
+   "id": "2555:115",
+   "note": "SAVE THE DATE / 09. 09. 26 / We're getting married, one block",
+   "x": 50,
+   "y": 3148,
+   "w": 290,
+   "h": 125
+  }
+ ]
+}
