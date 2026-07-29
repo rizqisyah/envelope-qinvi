@@ -1,15 +1,31 @@
 :root {
-  /* colors — from Figma */
-  --maroon-title: #900202;
-  --maroon-text: #961a1a;
-  --gold: #d9bf9d;
+  /* Theme hooks — useWedding() overwrites these from the API's theme_config. */
+  --maroon-title: #850c0e;
+  --maroon-text: #742e2e;
+  --gold: #ac6f28;
+  --bg-body: #f2efe9;
+
+  /* colors — sampled from Frame 242 text fills, most-used first */
+  --brown-deep: #55391c;
+  --brown-title: #844711;
+  --brown-mid: #8a5d30;
+  --brown-soft: #905d2a;
+  --ink: #000000;
+  --muted: #ababab;
+  --olive: #3b4030;
 
   /* fonts */
-  --font-script: "Pinyon Script", cursive;
-  --font-hand: "Playball", cursive;
+  --font-script: "Pinyon Script", cursive; /* display names, section titles */
+  --font-serif: "EB Garamond", serif; /* body copy */
+  --font-serif-alt: "Ovo", serif; /* small caption serif */
+  --font-serif-bold: "Cormorant Garamond", serif; /* emphasised serif */
+  --font-caps: "Playfair Display SC", serif; /* small-caps headings */
+  --font-hand: "Meow Script", cursive; /* "We're getting married" */
+  --font-sans: "Jost", system-ui, sans-serif; /* UI labels */
+  --font-arabic: "Noto Sans", system-ui, sans-serif; /* Arabic verse + wish list */
 
-  /* design frame reference (Figma cover) */
+  /* design frame reference (Figma Frame 242) */
   --frame-w: 375;
-  --frame-h: 725;
+  --frame-h: 8749;
   --card-max: 430px;
 }

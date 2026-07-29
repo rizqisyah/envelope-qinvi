@@ -12,8 +12,10 @@ All copy is data-driven via `useWedding()`, so these are placeholders only.
 
 | File | What it is |
 |------|------------|
-| `.figma-ref/frame242-layout.json` | All 316 nodes: id, type, name, x/y/w/h (frame-local), section, text content |
-| `src/assets/<section>/parts/*.webp` | 139 deduped per-node exports at 2× |
+| `.figma-ref/frame242-layout.json` | All 344 nodes incl. nested: id, type, name, parent, depth, x/y/w/h (frame-local), section, text, and `styles` (font family/size/weight/line-height/fills) |
+| `.figma-ref/frame242-raw.json` | Untouched `get_selection` dump — regenerate the layout from this rather than re-querying Figma |
+| `.figma-ref/asset-dedupe-map.json` | Which exports collapsed into which file (see "Deduped assets" below) |
+| `src/assets/<section>/parts/*.webp` | Per-node exports at 2×, deduped |
 
 The frame is **flat** — no section frames in Figma. Sections below were derived from node
 y-positions and confirmed against a full-frame render. Node names in Figma are junk
@@ -41,14 +43,65 @@ be traced back with `frame242-layout.json`.
 | 15 | 7700–8749 | Footer / Thank You + credits + IG/WA | `footer/` (32) |
 | — | full page | Paper texture backdrop + long bg strip | `page/` (2) |
 
+## Text is never baked into an asset
+
+Ten groups (bride/groom name blocks, the quote card, the gift cards, the RSVP arch, both event
+cards, the wish panel, the credits row) contain TEXT children. Exporting those groups whole would
+have burned "Allysa", "Antonio", the bank account numbers and the event dates into pixels — copy
+that `useWedding()` is supposed to supply. Those group exports were deleted and replaced with
+their graphic-only descendants, named `g<group>_<nodeId>_*.webp`.
+
+**If you export anything new: never export a node that has a TEXT descendant.** Walk down to the
+highest subtree that contains none. `frame242-layout.json` has `parent` and `depth` for this.
+
+## Deduped assets
+
+Identical exports collapsed to one file, so an asset may live under a sibling section:
+
+- The groom background is byte-identical to the bride's and only exists as
+  `bride/parts/01_2551-186_bg-bride.webp`.
+- The three gift cards share one card, one BCA logo and one copy icon.
+- Akad and Resepsi are the same composition twice; each kept its own copy.
+
+`.figma-ref/asset-dedupe-map.json` maps every dropped export to the file that replaced it.
+
+## Intentional overflow
+
+Some assets are wider or taller than the 375 frame and are clipped by it by design. Do not
+"fix" these by scaling them to 375 — they are meant to bleed:
+
+| Asset | Size | Note |
+|-------|------|------|
+| `page/00_..._paper-bg` | 375 × 9500 | Backdrop, 751px taller than the frame |
+| `page/01_..._bg-strip` | 405 × 6683 | Bleeds 15px each side |
+| `divider/05_..._drape` | 812 × 356 | Drape bleeds well past both edges |
+| `quote/00_..._bac-2` | 422 × 704 | Bleeds ~23px each side |
+
+## Typography
+
+Frame 242 uses a different type system from template-2 — `Playball` does not appear at all.
+Installed and wired in `src/style.css`, tokens in `src/style/tokens.css`:
+
+| Family | Sizes used | Role |
+|--------|-----------|------|
+| Pinyon Script | 20–96 | Display names, section titles |
+| EB Garamond | 11–36 (400/600) | Body copy |
+| Ovo | 8–15 | Small captions |
+| Cormorant Garamond | 16 (700) | Emphasised serif |
+| Noto Sans | 12–14 (300/400/600) | Arabic verse, wish list |
+| Jost | 10–13 | UI labels |
+| Playfair Display SC | 20 | Small-caps headings |
+| Meow Script | 20 | "We're getting married" |
+
+**Pochaevsk** (12px and 15px, 2 nodes) is not on Fontsource and is not installed — those two
+nodes will fall back. Find them with a `styles.fontFamily` search in the layout JSON.
+
 ## Known gaps
 
 - Two nodes exported blank and were dropped: `2594:479`, `2594:480` (both "mutiara last page").
   If pearls are missing along the footer, they are the reason.
 - `DEFAULT_SLUG` in `src/lib/api.ts` is a placeholder (`tema-elegan-putih`) — the real slug is
   still pending.
-- Fonts are inherited from template-2 (`@fontsource/pinyon-script`, `@fontsource/playball`) and
-  have not been checked against this frame's actual type.
 - Components are not built yet. `CoverSection` / `InviteBody` / `BottomNav` are stubs.
 
 ## Re-exporting from Figma

@@ -8,12 +8,30 @@ importers:
 
   .:
     dependencies:
+      '@fontsource/cormorant-garamond':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/eb-garamond':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/jost':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/meow-script':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/noto-sans':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/ovo':
+        specifier: 5.3.0
+        version: 5.3.0
       '@fontsource/pinyon-script':
         specifier: 5.2.8
         version: 5.2.8
-      '@fontsource/playball':
-        specifier: 5.2.8
-        version: 5.2.8
+      '@fontsource/playfair-display-sc':
+        specifier: 5.3.0
+        version: 5.3.0
       vue:
         specifier: ^3.5.39
         version: 3.5.40(typescript@6.0.3)
@@ -65,11 +83,29 @@ packages:
   '@emnapi/wasi-threads@1.2.2':
     resolution: {integrity: sha512-c95qOXkHdydNKhscBTebqEC1CVAZpyqOfVfBzQ1qgzyl3gfeldUjIggDbIZgDKsHLgnsM+igH7TJ/eAasaVuMA==}
 
+  '@fontsource/cormorant-garamond@5.3.0':
+    resolution: {integrity: sha512-weuGsCirGVWBWqpt6YUp0yLThTe4G8YO45noq8wxeJCRvEpq5lFrxNMFSTxcyOyV5k5otzJ8guDzYegdYlcLMQ==}
+
+  '@fontsource/eb-garamond@5.3.0':
+    resolution: {integrity: sha512-VplwHpB8FLuzl+4G5LDci1b3Z4SghiuXH8XEgaxjnOb5aue5mEt1njmDKeO6iyLeGa73LffU7PC7hzncLRx0ZA==}
+
+  '@fontsource/jost@5.3.0':
+    resolution: {integrity: sha512-lORv5y49hSoLVxjGb0qNuBzXvnaNYI3B94200uGPGJFei8fao6d6LLz2ziWbOZubGfZnibzuT6GVNX8fBw8WQQ==}
+
+  '@fontsource/meow-script@5.3.0':
+    resolution: {integrity: sha512-XjXi0iZK2kNFFHmlSIEsiaRM05L4f91R1POEUcVDvKy5CR0LCzPD36ntFAwLNMbI0b3QlBSFu2q97Eco1AfGMQ==}
+
+  '@fontsource/noto-sans@5.3.0':
+    resolution: {integrity: sha512-fBCog2PY7DiVVTEEqtI/Qdinx/knobHYfoGpjFXdfBX5RoJaBp1Prw2G75p0OIsdlMZg3cLo0c+YbIUYOxnQJw==}
+
+  '@fontsource/ovo@5.3.0':
+    resolution: {integrity: sha512-/3YolrDRLGJLa2z3HAtyoToemZz6djPIk0tiU47DWfFxjWdjCECR9491Spy1OpnfFI55Pauk1gOSSXyvDI1X3w==}
+
   '@fontsource/pinyon-script@5.2.8':
     resolution: {integrity: sha512-X2besX/JgOOPGwPy3CX6InZwmMQ7wmLGNGTWDHHhUfpfSj94TbfTieFpDW2/PoFLjWswiTdWwlOM8rQY0QGEVg==}
 
-  '@fontsource/playball@5.2.8':
-    resolution: {integrity: sha512-vH7cYhHnISVVwE733HsuH+emdtrmz3jFNVF9VNrSDrp7ij+A8l2owdAg3OaxqQOMisT8ocrIlBG8X1XkU+Q2lQ==}
+  '@fontsource/playfair-display-sc@5.3.0':
+    resolution: {integrity: sha512-Yb+xs3+sR4m2IpzNVF+ildXus1k/5IQifBQKs3fYmSdO2aUpic7z+2Gp762tEUGbiItJWbWZDnRlKNRbM6ldUg==}
 
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
@@ -480,9 +516,21 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
+  '@fontsource/cormorant-garamond@5.3.0': {}
+
+  '@fontsource/eb-garamond@5.3.0': {}
+
+  '@fontsource/jost@5.3.0': {}
+
+  '@fontsource/meow-script@5.3.0': {}
+
+  '@fontsource/noto-sans@5.3.0': {}
+
+  '@fontsource/ovo@5.3.0': {}
+
   '@fontsource/pinyon-script@5.2.8': {}
 
-  '@fontsource/playball@5.2.8': {}
+  '@fontsource/playfair-display-sc@5.3.0': {}
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
 

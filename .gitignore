@@ -23,5 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 
-.figma-ref/
+# .figma-ref holds the Figma node map the slicing depends on - keep it tracked.
 .figma-tmp/

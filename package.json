@@ -9,8 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/cormorant-garamond": "5.3.0",
+    "@fontsource/eb-garamond": "5.3.0",
+    "@fontsource/jost": "5.3.0",
+    "@fontsource/meow-script": "5.3.0",
+    "@fontsource/noto-sans": "5.3.0",
+    "@fontsource/ovo": "5.3.0",
     "@fontsource/pinyon-script": "5.2.8",
-    "@fontsource/playball": "5.2.8",
+    "@fontsource/playfair-display-sc": "5.3.0",
     "vue": "^3.5.39"
   },
   "devDependencies": {
