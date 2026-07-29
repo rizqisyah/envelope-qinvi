@@ -1,0 +1,198 @@
+{
+ "y0": 2014,
+ "y1": 2760,
+ "note": "Frame 242 bride band, y 2014 (this paper's top) to the glimpse band. z21 is the glimpse backdrop: it paints above the bride's paper but below her name block, so this band owns it. Layers in Figma z order. The divider band hangs into rows 2014-2327 and paints above the bride graphics, so its layers are pinned here too.",
+ "layers": [
+  {
+   "id": "2550:130",
+   "z": 0,
+   "asset": "src/assets/page/parts/00_2550-130_paper-bg.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 13
+  },
+  {
+   "id": "2551:186",
+   "z": 10,
+   "asset": "src/assets/bride/parts/01_2551-186_bg-bride.webp",
+   "x": 8,
+   "y": 2161
+  },
+  {
+   "id": "2551:198",
+   "z": 18,
+   "asset": "src/assets/bride/parts/04_2551-198_photo.webp",
+   "x": 108,
+   "y": 2255
+  },
+  {
+   "id": "2551:189",
+   "z": 19,
+   "asset": "src/assets/bride/parts/02_2551-189_sdvbsdbsddb-4.webp",
+   "x": 23,
+   "y": 2147,
+   "search": 40,
+   "solve": true
+  },
+  {
+   "id": "2551:188",
+   "z": 20,
+   "asset": "src/assets/bride/parts/00_2551-188_sdvbsdbsddb-3.webp",
+   "x": 0,
+   "y": 2014
+  },
+  {
+   "id": "2560:278",
+   "z": 21,
+   "asset": "src/assets/glimpse/parts/00_2560-278_vdsvzdsvd-1.webp",
+   "x": 0,
+   "y": 2556,
+   "note": "391 wide at x 0, so the export is frame-clipped; x is 0 and the declared y stands"
+  },
+  {
+   "id": "2558:122",
+   "z": 22,
+   "asset": "src/assets/bride/parts/g214_2558-122_ornament.webp",
+   "x": 132,
+   "y": 2610,
+   "search": 20
+  },
+  {
+   "id": "2560:162",
+   "z": 47,
+   "asset": "src/assets/divider/parts/03_2560-162.webp",
+   "x": 0,
+   "y": 1905,
+   "note": "divider band, overhangs into this one"
+  },
+  {
+   "id": "2560:146",
+   "z": 48,
+   "asset": "src/assets/divider/parts/05_2560-146_drape.webp",
+   "x": 0,
+   "y": 1940,
+   "note": "divider band, overhangs into this one"
+  },
+  {
+   "id": "2560:151",
+   "z": 49,
+   "asset": "src/assets/divider/parts/02_2560-151.webp",
+   "x": 261,
+   "y": 1901,
+   "note": "divider band, overhangs into this one"
+  },
+  {
+   "id": "2560:152",
+   "z": 50,
+   "asset": "src/assets/divider/parts/04_2560-152.webp",
+   "x": 0,
+   "y": 1924,
+   "note": "divider band, overhangs into this one"
+  },
+  {
+   "id": "2560:153",
+   "z": 51,
+   "asset": "src/assets/divider/parts/01_2560-153.webp",
+   "x": 0,
+   "y": 1899,
+   "note": "divider band, overhangs into this one"
+  },
+  {
+   "id": "2560:157",
+   "z": 53,
+   "asset": "src/assets/divider/parts/07_2560-157.webp",
+   "x": 0,
+   "y": 1981,
+   "note": "divider band, overhangs into this one"
+  },
+  {
+   "id": "2560:158",
+   "z": 54,
+   "asset": "src/assets/divider/parts/10_2560-158.webp",
+   "x": 322,
+   "y": 1999,
+   "note": "divider band, overhangs into this one"
+  },
+  {
+   "id": "2560:178",
+   "z": 55,
+   "asset": "src/assets/divider/parts/00_2560-178.webp",
+   "x": 0,
+   "y": 1837,
+   "note": "divider band, overhangs into this one"
+  },
+  {
+   "id": "2560:160",
+   "z": 56,
+   "asset": "src/assets/divider/parts/06_2560-164.webp",
+   "x": 287,
+   "y": 2042,
+   "note": "divider band, overhangs into this one"
+  },
+  {
+   "id": "2560:164",
+   "z": 57,
+   "asset": "src/assets/divider/parts/06_2560-164.webp",
+   "x": 50,
+   "y": 1967,
+   "note": "divider band, overhangs into this one"
+  },
+  {
+   "id": "2560:161",
+   "z": 58,
+   "asset": "src/assets/divider/parts/08_2560-161.webp",
+   "x": 5,
+   "y": 2041,
+   "note": "divider band, overhangs into this one"
+  },
+  {
+   "id": "2560:163",
+   "z": 60,
+   "asset": "src/assets/groom/parts/07_2560-163.webp",
+   "x": 271,
+   "y": 1841,
+   "note": "divider band, overhangs into this one"
+  },
+  {
+   "id": "2560:182",
+   "z": 64,
+   "asset": "src/assets/groom/parts/05_2560-182.webp",
+   "x": -41,
+   "y": 1745,
+   "note": "divider band, overhangs into this one"
+  },
+  {
+   "id": "2588:135",
+   "z": 67,
+   "asset": "src/assets/bride/parts/03_2588-135_vdf-3.webp",
+   "x": 233,
+   "y": 2229,
+   "search": 50,
+   "solve": true
+  }
+ ],
+ "textMasks": [
+  {
+   "id": "2558:123",
+   "note": "Pinyon Script 40 in a 38px line box, so the glyphs overhang it",
+   "x": 60,
+   "y": 2553,
+   "w": 270,
+   "h": 62
+  },
+  {
+   "id": "2558:124",
+   "x": 25,
+   "y": 2628,
+   "w": 335,
+   "h": 52
+  },
+  {
+   "id": "2558:125",
+   "x": 25,
+   "y": 2668,
+   "w": 335,
+   "h": 95
+  }
+ ]
+}

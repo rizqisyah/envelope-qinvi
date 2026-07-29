@@ -126,6 +126,12 @@ with that layer left out: if removing a layer does not make the band error worse
 its solved position is arbitrary and probably wrong. Every divider layer moved the
 error by 0.13–3.2, so none of them were parked off-canvas.
 
+**Pin the neighbouring band's overhang in the job.** The divider hangs 313px into
+the bride band, and solving the bride without it left those rows comparing
+artwork against bare paper: base error 4.77, and the frame layer solved against a
+biased target. Pinning the 13 overhanging layers took the same band to 2.79 and
+both solves then sat at their optimum already.
+
 **Low contrast defeats the check as well as the solve.** Getting the divider's
 paint order wrong — bells, the pearl chain and the orchid all emitted too late —
 moved the band diff by 0.15/255, because every overlap there is white pearls on
@@ -165,7 +171,7 @@ of something 8700px tall exceeds what Figma will produce. Don't "fix" this by re
 | 2–3 | 760–1400 | Envelope — white envelope, stamp, "Save The Date", QS Ar-Rum 21 card — **built as one component** | `cover/` (5) + `quote/` (11) |
 | 4 | 1235–2014 | Groom — ornate frame, portrait, name block — **built** | `groom/` (9) + `bride/01_..._bg-bride` |
 | 5 | 1899–2160 | Divider — drape + pearls + "And" — **built, overlay only** | `divider/` (10) + 3 of `groom/` |
-| 6 | 2160–2740 | Bride — Allysa | `bride/` (6) |
+| 6 | 2014–2810 | Bride — Allysa — **built** | `bride/` (6) + `glimpse/00_..._vdsvzdsvd-1` |
 | 7 | 2740–3480 | Glimpse of Us — polaroids, green envelope, "09.09.26" | `glimpse/` (22) |
 | 8 | 3480–3980 | Gallery — hero photo + thumbnails | `gallery/` (2) |
 | 9 | 3980–4560 | Akad | `akad/` (1) |
@@ -254,9 +260,13 @@ declared height tells you nothing about where the glyphs land.
   If pearls are missing along the footer, they are the reason.
 - `DEFAULT_SLUG` in `src/lib/api.ts` and the `name` field in `package.json` are both still
   `tema-elegan-putih`, carried over from the previous template. Neither is this project's slug.
-- Frame 242: the hero, envelope, groom and divider bands are built. `InviteBody` renders them plus
-  10 placeholders and owns the two page-wide backdrops. `BottomNav` is still a stub.
+- Frame 242: the hero, envelope, groom, divider and bride bands are built. `InviteBody` renders
+  them plus 9 placeholders and owns the two page-wide backdrops. `BottomNav` is still a stub.
   `CoverSection` (Frame 241) is done.
+- `BrideSection` paints `2560:278`, the glimpse band's backdrop. It is a top-to-bottom alpha
+  gradient that sits above the bride's paper (z20 < z21) and below her name block (z21 < z22), so
+  it can only be drawn between them — **`GlimpseSection` must not draw it again.** Same reasoning
+  as the three groom layers the divider owns.
 - The divider is a **pure overlay**: its art straddles y 2014, where the groom band ends and the
   bride band begins, so `DividerSection` has `height: 0` and places everything relative to that
   seam. It also carries `z-index: 2`, because the bride's paper backdrop renders after it in the
