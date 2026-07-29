@@ -106,6 +106,11 @@ the envelope band:
 - **A text mask gave the layer somewhere free to hide.** Masked pixels cost
   nothing, so the solver happily parked a floral spray on top of the "Save The
   Date" copy. If a solved layer lands on masked text, it is wrong.
+- **The layer barely tints what it covers.** A thin white pearl string over white
+  paper moves the error by almost nothing, so the solver slid the groom band's
+  pearls 76px up onto the parents line and called it an improvement. When a layer
+  is low-contrast against its backdrop, check it with `locate.py` — it matched the
+  declared y exactly — or just trust the declared coordinates.
 
 Both were fixed with small focused jobs (`envelope-florals.json`,
 `save-the-date.json`) rather than by widening the main one.
@@ -139,7 +144,7 @@ of something 8700px tall exceeds what Figma will produce. Don't "fix" this by re
 |---|---------|---------|--------|
 | 1 | 0–760 | Hero — "The Bride & The Groom", ornate frame, couple portrait — **built** | `hero/` (2) + `footer/21_..._img-8300` |
 | 2–3 | 760–1400 | Envelope — white envelope, stamp, "Save The Date", QS Ar-Rum 21 card — **built as one component** | `cover/` (5) + `quote/` (11) |
-| 4 | 1330–1960 | Groom — Antonio | `groom/` (9) |
+| 4 | 1235–2014 | Groom — ornate frame, portrait, name block — **built** | `groom/` (9) + `bride/01_..._bg-bride` |
 | 5 | 1960–2160 | Divider — drape + pearls + "And" | `divider/` (10) |
 | 6 | 2160–2740 | Bride — Allysa | `bride/` (6) |
 | 7 | 2740–3480 | Glimpse of Us — polaroids, green envelope, "09.09.26" | `glimpse/` (22) |
@@ -223,7 +228,7 @@ those two lines at y 532 / 553 instead of the reported 534 / 555.
   If pearls are missing along the footer, they are the reason.
 - `DEFAULT_SLUG` in `src/lib/api.ts` and the `name` field in `package.json` are both still
   `tema-elegan-putih`, carried over from the previous template. Neither is this project's slug.
-- Frame 242: the hero and envelope bands are built. `InviteBody` renders them plus 13
+- Frame 242: the hero, envelope and groom bands are built. `InviteBody` renders them plus 12
   placeholders and owns the two page-wide backdrops. `BottomNav` is still a stub.
   `CoverSection` (Frame 241) is done.
 - The envelope band's quote body wraps to 11 lines where Figma sets 10 — the browser's Playfair

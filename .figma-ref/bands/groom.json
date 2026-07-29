@@ -1,0 +1,144 @@
+{
+ "y0": 1235,
+ "y1": 2014,
+ "note": "Frame 242 groom band, y 1235 (this backdrop's top) to 2014 (the bride backdrop's top). Layers in Figma z order.",
+ "layers": [
+  {
+   "id": "2550:130",
+   "z": 0,
+   "asset": "src/assets/page/parts/00_2550-130_paper-bg.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 13
+  },
+  {
+   "id": "2588:125",
+   "z": 1,
+   "asset": "src/assets/quote/parts/00_2588-125_bac-2.webp",
+   "x": 0,
+   "y": 679
+  },
+  {
+   "id": "2594:456",
+   "z": 2,
+   "asset": "src/assets/quote/parts/09_2594-456.webp",
+   "x": 0,
+   "y": 1075
+  },
+  {
+   "id": "2594:455",
+   "z": 4,
+   "asset": "src/assets/quote/parts/10_2594-455.webp",
+   "x": 17,
+   "y": 1124
+  },
+  {
+   "id": "2551:184",
+   "z": 9,
+   "asset": "src/assets/bride/parts/01_2551-186_bg-bride.webp",
+   "x": 8,
+   "y": 1382
+  },
+  {
+   "id": "2551:183",
+   "z": 11,
+   "asset": "src/assets/groom/parts/03_2551-183_photo.webp",
+   "x": 69,
+   "y": 1461
+  },
+  {
+   "id": "2594:171",
+   "z": 16,
+   "asset": "src/assets/groom/parts/02_2594-171_sdvbsdbsddb-5.webp",
+   "x": 45,
+   "y": 1381,
+   "search": 30
+  },
+  {
+   "id": "2551:179",
+   "z": 17,
+   "asset": "src/assets/groom/parts/00_2551-179_sdvbsdbsddb-2.webp",
+   "x": 0,
+   "y": 1235
+  },
+  {
+   "id": "2594:142",
+   "z": 30,
+   "asset": "src/assets/groom/parts/09_2594-142.webp",
+   "x": 26,
+   "y": 1901
+  },
+  {
+   "id": "2558:114",
+   "z": 46,
+   "asset": "src/assets/groom/parts/g213_2558-114_ornament.webp",
+   "x": 131,
+   "y": 1820,
+   "search": 20
+  },
+  {
+   "id": "2560:155",
+   "z": 52,
+   "asset": "src/assets/groom/parts/08_2560-155.webp",
+   "x": 11,
+   "y": 1886,
+   "search": 40
+  },
+  {
+   "id": "2560:163",
+   "z": 60,
+   "asset": "src/assets/groom/parts/07_2560-163.webp",
+   "x": 271,
+   "y": 1841,
+   "search": 44
+  },
+  {
+   "id": "2560:182",
+   "z": 64,
+   "asset": "src/assets/groom/parts/05_2560-182.webp",
+   "x": -41,
+   "y": 1745,
+   "search": 60,
+   "note": "locate.py confirms the declared y; the band solve drifted it 76px up onto the parents line, because a thin white string over white paper barely moves the error"
+  },
+  {
+   "id": "2588:131",
+   "z": 66,
+   "asset": "src/assets/groom/parts/04_2588-131_vdf-1.webp",
+   "x": 0,
+   "y": 1461,
+   "search": 34,
+   "solve": true
+  },
+  {
+   "id": "2560:141",
+   "z": 72,
+   "asset": "src/assets/quote/parts/g238_2560-141_card.webp",
+   "x": 0,
+   "y": 762
+  }
+ ],
+ "textMasks": [
+  {
+   "id": "2558:111",
+   "x": 85,
+   "y": 1786,
+   "w": 212,
+   "h": 52
+  },
+  {
+   "id": "2558:112",
+   "x": 25,
+   "y": 1836,
+   "w": 331,
+   "h": 50
+  },
+  {
+   "id": "2558:113",
+   "x": 25,
+   "y": 1873,
+   "w": 331,
+   "h": 93
+  }
+ ]
+}
