@@ -25,3 +25,7 @@ dist-ssr
 
 # .figma-ref holds the Figma node map the slicing depends on - keep it tracked.
 .figma-tmp/
+
+# Python bytecode from the slicing scripts.
+__pycache__/
+*.pyc

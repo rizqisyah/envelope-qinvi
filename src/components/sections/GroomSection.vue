@@ -19,10 +19,11 @@ import innerFrame from '../../assets/groom/parts/02_2594-171_sdvbsdbsddb-5.webp'
 import paperFrame from '../../assets/groom/parts/00_2551-179_sdvbsdbsddb-2.webp' // z17
 import leaf from '../../assets/groom/parts/09_2594-142.webp' // z30
 import ornament from '../../assets/groom/parts/g213_2558-114_ornament.webp' // z46, inside Group 213
-import bells from '../../assets/groom/parts/08_2560-155.webp' // z52
-import orchid from '../../assets/groom/parts/07_2560-163.webp' // z60
-import pearls from '../../assets/groom/parts/05_2560-182.webp' // z64
 import calla from '../../assets/groom/parts/04_2588-131_vdf-1.webp' // z66
+
+// z52, z60 and z64 -- the bells, the orchid and the pearl strand -- are Figma's
+// groom layers too, but they paint above the divider's drape, which renders after
+// this component. DividerSection.vue owns them.
 
 type Layer = { src: string; x: number; y: number; w: number; h: number }
 
@@ -34,12 +35,7 @@ const behind: Layer[] = [
   { src: leaf, x: 26, y: 666, w: 86, h: 95 },
 ]
 
-const front: Layer[] = [
-  { src: bells, x: 11, y: 651, w: 65, h: 121 },
-  { src: orchid, x: 271, y: 606, w: 104, h: 180 },
-  { src: pearls, x: -41, y: 510, w: 375, h: 422 },
-  { src: calla, x: 0, y: 226, w: 136, h: 200 },
-]
+const front: Layer[] = [{ src: calla, x: 0, y: 226, w: 136, h: 200 }]
 
 function box(l: Layer, delay: number) {
   return {

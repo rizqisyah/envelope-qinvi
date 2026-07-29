@@ -19,6 +19,7 @@ const bodyImages = Object.values(
       '../assets/quote/**/*.webp',
       '../assets/groom/**/*.webp',
       '../assets/bride/**/*.webp',
+      '../assets/divider/**/*.webp',
     ],
     { eager: true, import: 'default' },
   ),

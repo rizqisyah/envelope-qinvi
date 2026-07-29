@@ -1,0 +1,164 @@
+{
+ "y0": 1860,
+ "y1": 2160,
+ "note": "Frame 242 divider band. Pure overlay: it straddles the groom/bride boundary at y 2014, so it owns no vertical space of its own. Layers in Figma z order; the groom's own florals (z52/z60/z64) paint ABOVE the divider's and are pinned here so the stack matches.",
+ "layers": [
+  {
+   "id": "2550:130",
+   "z": 0,
+   "asset": "src/assets/page/parts/00_2550-130_paper-bg.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 13
+  },
+  {
+   "id": "2551:179",
+   "z": 17,
+   "asset": "src/assets/groom/parts/00_2551-179_sdvbsdbsddb-2.webp",
+   "x": 0,
+   "y": 1235
+  },
+  {
+   "id": "2551:188",
+   "z": 20,
+   "asset": "src/assets/bride/parts/00_2551-188_sdvbsdbsddb-3.webp",
+   "x": 0,
+   "y": 2014
+  },
+  {
+   "id": "2594:142",
+   "z": 30,
+   "asset": "src/assets/groom/parts/09_2594-142.webp",
+   "x": 26,
+   "y": 1901
+  },
+  {
+   "id": "2560:162",
+   "z": 47,
+   "asset": "src/assets/divider/parts/03_2560-162.webp",
+   "x": 0,
+   "y": 1905,
+   "search": 40,
+   "solve": true
+  },
+  {
+   "id": "2560:146",
+   "z": 48,
+   "asset": "src/assets/divider/parts/05_2560-146_drape.webp",
+   "x": 0,
+   "y": 1940,
+   "search": 70,
+   "solve": true
+  },
+  {
+   "id": "2560:151",
+   "z": 49,
+   "asset": "src/assets/divider/parts/02_2560-151.webp",
+   "x": 261,
+   "y": 1901,
+   "search": 50,
+   "solve": true
+  },
+  {
+   "id": "2560:152",
+   "z": 50,
+   "asset": "src/assets/divider/parts/04_2560-152.webp",
+   "x": 0,
+   "y": 1924,
+   "search": 40,
+   "solve": true
+  },
+  {
+   "id": "2560:153",
+   "z": 51,
+   "asset": "src/assets/divider/parts/01_2560-153.webp",
+   "x": 0,
+   "y": 1899,
+   "search": 40,
+   "solve": true
+  },
+  {
+   "id": "2560:155",
+   "z": 52,
+   "asset": "src/assets/groom/parts/08_2560-155.webp",
+   "x": 11,
+   "y": 1886
+  },
+  {
+   "id": "2560:157",
+   "z": 53,
+   "asset": "src/assets/divider/parts/07_2560-157.webp",
+   "x": 0,
+   "y": 1981
+  },
+  {
+   "id": "2560:158",
+   "z": 54,
+   "asset": "src/assets/divider/parts/10_2560-158.webp",
+   "x": 322,
+   "y": 1999,
+   "search": 40,
+   "solve": true
+  },
+  {
+   "id": "2560:178",
+   "z": 55,
+   "asset": "src/assets/divider/parts/00_2560-178.webp",
+   "x": 0,
+   "y": 1837,
+   "note": "declared y is true: the export is frame-clipped horizontally (node is 475 wide at a negative x), so x is 0 and the height was never touched"
+  },
+  {
+   "id": "2560:160",
+   "z": 56,
+   "asset": "src/assets/divider/parts/06_2560-164.webp",
+   "x": 287,
+   "y": 2042
+  },
+  {
+   "id": "2560:164",
+   "z": 57,
+   "asset": "src/assets/divider/parts/06_2560-164.webp",
+   "x": 50,
+   "y": 1967
+  },
+  {
+   "id": "2560:161",
+   "z": 58,
+   "asset": "src/assets/divider/parts/08_2560-161.webp",
+   "x": 5,
+   "y": 2041
+  },
+  {
+   "id": "2560:163",
+   "z": 60,
+   "asset": "src/assets/groom/parts/07_2560-163.webp",
+   "x": 271,
+   "y": 1841
+  },
+  {
+   "id": "2560:182",
+   "z": 64,
+   "asset": "src/assets/groom/parts/05_2560-182.webp",
+   "x": -41,
+   "y": 1745
+  }
+ ],
+ "textMasks": [
+  {
+   "id": "2558:113",
+   "x": 25,
+   "y": 1873,
+   "w": 331,
+   "h": 93
+  },
+  {
+   "id": "2560:147",
+   "note": "'And' is Pinyon Script 96 in a 40px box, so the glyphs spill far past the node bounds",
+   "x": 55,
+   "y": 1980,
+   "w": 265,
+   "h": 115
+  }
+ ]
+}

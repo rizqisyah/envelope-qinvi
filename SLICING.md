@@ -111,9 +111,28 @@ the envelope band:
   pearls 76px up onto the parents line and called it an improvement. When a layer
   is low-contrast against its backdrop, check it with `locate.py` — it matched the
   declared y exactly — or just trust the declared coordinates.
+- **The declared coordinates were right all along.** The divider's pearl chain
+  (`2560:178`) reports x 383 on a 375-wide frame, which reads as nonsense, so it
+  got solved — and landed 200px off. It is simply frame-clipped: a 475-wide node
+  at a negative x, exported 375 wide from the frame's left edge, so **x is 0 and
+  the declared y is untouched**. When only the width was clipped, the reported y
+  is still good; seed the solve from it before assuming the node is rotated.
 
-Both were fixed with small focused jobs (`envelope-florals.json`,
+These were fixed with small focused jobs (`envelope-florals.json`,
 `save-the-date.json`) rather than by widening the main one.
+
+**Confirm nothing is hiding before you ship a band.** Composite it once per layer
+with that layer left out: if removing a layer does not make the band error worse,
+its solved position is arbitrary and probably wrong. Every divider layer moved the
+error by 0.13–3.2, so none of them were parked off-canvas.
+
+**Low contrast defeats the check as well as the solve.** Getting the divider's
+paint order wrong — bells, the pearl chain and the orchid all emitted too late —
+moved the band diff by 0.15/255, because every overlap there is white pearls on
+white daisies on white drape. A mean-difference metric cannot see a stacking bug
+in that material. Keep each band's array in Figma's z order and carry the
+animation delay on the layer; do not group layers by entrance, because the
+grouping silently reorders the stack and nothing downstream will flag it.
 
 ## Frame 242 — three things that will bite you
 
@@ -145,7 +164,7 @@ of something 8700px tall exceeds what Figma will produce. Don't "fix" this by re
 | 1 | 0–760 | Hero — "The Bride & The Groom", ornate frame, couple portrait — **built** | `hero/` (2) + `footer/21_..._img-8300` |
 | 2–3 | 760–1400 | Envelope — white envelope, stamp, "Save The Date", QS Ar-Rum 21 card — **built as one component** | `cover/` (5) + `quote/` (11) |
 | 4 | 1235–2014 | Groom — ornate frame, portrait, name block — **built** | `groom/` (9) + `bride/01_..._bg-bride` |
-| 5 | 1960–2160 | Divider — drape + pearls + "And" | `divider/` (10) |
+| 5 | 1899–2160 | Divider — drape + pearls + "And" — **built, overlay only** | `divider/` (10) + 3 of `groom/` |
 | 6 | 2160–2740 | Bride — Allysa | `bride/` (6) |
 | 7 | 2740–3480 | Glimpse of Us — polaroids, green envelope, "09.09.26" | `glimpse/` (22) |
 | 8 | 3480–3980 | Gallery — hero photo + thumbnails | `gallery/` (2) |
@@ -222,15 +241,30 @@ two nodes get built. Find them with a `styles.fontFamily` search in the layout J
 Platypi and Poltawski Nowy render ~2px lower than Figma's auto line box, so `CoverSection` places
 those two lines at y 532 / 553 instead of the reported 534 / 555.
 
+The divider's "And" is worse: Figma says Pinyon Script 96, but the browser sets the same word ~14%
+wider, so 96 overruns the drape. `DividerSection` uses **84** with a 4px/3px nudge, which puts the
+glyph ink on exactly Figma's box (x 109–281, baseline 2074). Measure, don't trust the number —
+`node scripts/fit-and.mjs` screenshots the word with and without it rendered so the artwork can be
+subtracted and the ink measured on its own. The type is set in a 40px-tall auto box, so its
+declared height tells you nothing about where the glyphs land.
+
 ## Known gaps
 
 - Two nodes exported blank and were dropped: `2594:479`, `2594:480` (both "mutiara last page").
   If pearls are missing along the footer, they are the reason.
 - `DEFAULT_SLUG` in `src/lib/api.ts` and the `name` field in `package.json` are both still
   `tema-elegan-putih`, carried over from the previous template. Neither is this project's slug.
-- Frame 242: the hero, envelope and groom bands are built. `InviteBody` renders them plus 12
-  placeholders and owns the two page-wide backdrops. `BottomNav` is still a stub.
+- Frame 242: the hero, envelope, groom and divider bands are built. `InviteBody` renders them plus
+  10 placeholders and owns the two page-wide backdrops. `BottomNav` is still a stub.
   `CoverSection` (Frame 241) is done.
+- The divider is a **pure overlay**: its art straddles y 2014, where the groom band ends and the
+  bride band begins, so `DividerSection` has `height: 0` and places everything relative to that
+  seam. It also carries `z-index: 2`, because the bride's paper backdrop renders after it in the
+  DOM and would otherwise cover it — that matters as soon as the bride band exists.
+- Three layers Figma files under the groom (`2560:155` bells, `2560:163` orchid, `2560:182` pearl
+  strand) paint *above* the divider's drape, and the groom band renders first, so
+  `DividerSection` owns them. Painting them from `GroomSection` buried them; moving them also took
+  the groom band from 4.08 to 3.30 / 255.
 - The envelope band's quote body wraps to 11 lines where Figma sets 10 — the browser's Playfair
   runs marginally wider, and the design leaves no slack (its own last line ends 5px past the
   card art). `useFitText` shrinks the copy ~2% so it always lands inside the card.
