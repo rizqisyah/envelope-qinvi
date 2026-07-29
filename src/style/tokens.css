@@ -13,6 +13,8 @@
   --ink: #000000;
   --muted: #ababab;
   --olive: #3b4030;
+  --rose-muted: #8f7373; /* Frame 241 guest-name block */
+  --paper: #efe7dc; /* behind the paper-texture slice */
 
   /* fonts */
   --font-script: "Pinyon Script", cursive; /* display names, section titles */
@@ -23,6 +25,9 @@
   --font-hand: "Meow Script", cursive; /* "We're getting married" */
   --font-sans: "Jost", system-ui, sans-serif; /* UI labels */
   --font-arabic: "Noto Sans", system-ui, sans-serif; /* Arabic verse + wish list */
+  --font-eyebrow: "Reddit Sans", system-ui, sans-serif; /* Frame 241 "THE WEDDING OF" */
+  --font-serif-soft: "Platypi", serif; /* Frame 241 "Dear Mr/ Mrs/ Ms" */
+  --font-guest: "Poltawski Nowy", serif; /* Frame 241 guest name */
 
   /* design frame reference (Figma Frame 242) */
   --frame-w: 375;

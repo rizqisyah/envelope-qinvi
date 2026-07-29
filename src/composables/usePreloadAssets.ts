@@ -1,14 +1,20 @@
 import { ref } from 'vue'
 
 // Assets are discovered by glob so new slices need no edit here.
-// Cover = the splash screen; body = the first screens behind it.
+// Cover = the splash screen (Frame 241 = opening/); body = the first screens behind it.
+// assets/cover/ is Frame 242's cover *section*, so it belongs to the body, not the splash.
 const coverImages = Object.values(
-  import.meta.glob('../assets/cover/**/*.webp', { eager: true, import: 'default' }),
+  import.meta.glob('../assets/opening/**/*.webp', { eager: true, import: 'default' }),
 ) as string[]
 
 const bodyImages = Object.values(
   import.meta.glob(
-    ['../assets/hero/**/*.webp', '../assets/page/**/*.webp', '../assets/quote/**/*.webp'],
+    [
+      '../assets/hero/**/*.webp',
+      '../assets/page/**/*.webp',
+      '../assets/cover/**/*.webp',
+      '../assets/quote/**/*.webp',
+    ],
     { eager: true, import: 'default' },
   ),
 ) as string[]

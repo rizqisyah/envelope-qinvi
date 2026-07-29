@@ -29,7 +29,16 @@ importers:
       '@fontsource/pinyon-script':
         specifier: 5.2.8
         version: 5.2.8
+      '@fontsource/platypi':
+        specifier: 5.3.0
+        version: 5.3.0
       '@fontsource/playfair-display-sc':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/poltawski-nowy':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/reddit-sans':
         specifier: 5.3.0
         version: 5.3.0
       vue:
@@ -45,6 +54,9 @@ importers:
       '@vue/tsconfig':
         specifier: ^0.9.1
         version: 0.9.1(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3))
+      playwright:
+        specifier: 1.62.0
+        version: 1.62.0
       typescript:
         specifier: ~6.0.2
         version: 6.0.3
@@ -104,8 +116,17 @@ packages:
   '@fontsource/pinyon-script@5.2.8':
     resolution: {integrity: sha512-X2besX/JgOOPGwPy3CX6InZwmMQ7wmLGNGTWDHHhUfpfSj94TbfTieFpDW2/PoFLjWswiTdWwlOM8rQY0QGEVg==}
 
+  '@fontsource/platypi@5.3.0':
+    resolution: {integrity: sha512-7VBIe6zNmETcaF3kVw6WC+iuMUWlTf0bgCXb1HU7U/Xb8yx6mZlP0Hv4V/VZb7MVBkWbkIThXhOyJK6M1dX3xQ==}
+
   '@fontsource/playfair-display-sc@5.3.0':
     resolution: {integrity: sha512-Yb+xs3+sR4m2IpzNVF+ildXus1k/5IQifBQKs3fYmSdO2aUpic7z+2Gp762tEUGbiItJWbWZDnRlKNRbM6ldUg==}
+
+  '@fontsource/poltawski-nowy@5.3.0':
+    resolution: {integrity: sha512-83EMAAzWbqH6MFmTZy0YK46/Kjap0ojg2s0pRB6iM3OMCK/6unmPj634Cb2IWt+GEvshU9YbSRzju2aUaXmieg==}
+
+  '@fontsource/reddit-sans@5.3.0':
+    resolution: {integrity: sha512-SdA8nHMxMVs8sGeVWQ4qw2Gt/JPYISj7GzseSfVq2ECpl3GyYLgBRBftzeHlP06cV7OZRjJraUCggXteVlQJgg==}
 
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
@@ -301,6 +322,11 @@ packages:
       picomatch:
         optional: true
 
+  fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -396,6 +422,16 @@ packages:
   picomatch@4.0.5:
     resolution: {integrity: sha512-RvwwcruNjI1ncT5xRakeyS9Lf8lcItv34KD+aif+VH9kduAyfYBipGh12274xtenIPZ119/R9BdTBa8gAwSh0A==}
     engines: {node: '>=12'}
+
+  playwright-core@1.62.0:
+    resolution: {integrity: sha512-nsNRyq0r2zsG8AcRHWknc9QRA5XCueC7gWMrs+Gx2tlZn9hcl8zudfh00lhJPY1DE7NmZ6bDsT9g2yey8mXljA==}
+    engines: {node: '>=20'}
+    hasBin: true
+
+  playwright@1.62.0:
+    resolution: {integrity: sha512-Z14dG305dgaLu6foB1TXQagFiW8JfSUIUaUuPaKQ6NtBPKF1P/qXcqfh6c6K/icPqdy37JmjbiBXf6JNg6Sylw==}
+    engines: {node: '>=20'}
+    hasBin: true
 
   postcss@8.5.24:
     resolution: {integrity: sha512-8RyVklq0owXUTa4xlpzu4l9AaVKIdQvAcOHZWaMh98HgySsUtxRVf/chRe3dsSLqb6i40BzGRzEUddRaI+9TSw==}
@@ -530,7 +566,13 @@ snapshots:
 
   '@fontsource/pinyon-script@5.2.8': {}
 
+  '@fontsource/platypi@5.3.0': {}
+
   '@fontsource/playfair-display-sc@5.3.0': {}
+
+  '@fontsource/poltawski-nowy@5.3.0': {}
+
+  '@fontsource/reddit-sans@5.3.0': {}
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
 
@@ -704,6 +746,9 @@ snapshots:
     optionalDependencies:
       picomatch: 4.0.5
 
+  fsevents@2.3.2:
+    optional: true
+
   fsevents@2.3.3:
     optional: true
 
@@ -769,6 +814,14 @@ snapshots:
   picocolors@1.1.1: {}
 
   picomatch@4.0.5: {}
+
+  playwright-core@1.62.0: {}
+
+  playwright@1.62.0:
+    dependencies:
+      playwright-core: 1.62.0
+    optionalDependencies:
+      fsevents: 2.3.2
 
   postcss@8.5.24:
     dependencies:

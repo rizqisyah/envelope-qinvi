@@ -1,7 +1,17 @@
-# Slicing notes — Frame 242 ("adat jawa" Figma file)
+# Slicing notes — "adat jawa" Figma file
 
-Template 3. Source of truth: Figma file **adat jawa**, Page 1, node **`2550:131`** ("Frame 242"),
-375 × 8749. Sibling of the frame that produced `slicing-wedding-template-2`.
+Template 3 comes from **two** frames on Page 1 of the Figma file **adat jawa**:
+
+| Frame | Node | Size | What it is | Assets |
+|-------|------|------|------------|--------|
+| Frame 241 | `2548:110` | 375 × 725 | Opening cover / splash — olive envelope, "Click to open…" | `src/assets/opening/` |
+| Frame 242 | `2550:131` | 375 × 8749 | The scrolling invitation behind it | every other `src/assets/*` |
+
+`src/assets/cover/` is **not** Frame 241 — it is Frame 242's own cover section (white envelope +
+"Wedding Invitation" stamp + "Save The Date" seal) at y 760–1000. Frame 241's slices live in
+`src/assets/opening/`.
+
+Frame 242 is a sibling of the frame that produced `slicing-wedding-template-2`.
 
 Design direction differs from template-2: cream paper texture, embossed white ornate frames,
 olive-green envelopes, gold script. Couple in the design: **Antonio Josua Setiyadi** &
@@ -12,6 +22,7 @@ All copy is data-driven via `useWedding()`, so these are placeholders only.
 
 | File | What it is |
 |------|------------|
+| `.figma-ref/frame241-layout.json` | Frame 241: every graphic + text node, with the verified render position of each and why three nodes were dropped |
 | `.figma-ref/frame242-layout.json` | All 344 nodes incl. nested: id, type, name, parent, depth, x/y/w/h (frame-local), section, text, and `styles` (font family/size/weight/line-height/fills) |
 | `.figma-ref/frame242-raw.json` | Untouched `get_selection` dump — regenerate the layout from this rather than re-querying Figma |
 | `.figma-ref/asset-dedupe-map.json` | Which exports collapsed into which file (see "Deduped assets" below) |
@@ -22,7 +33,39 @@ y-positions and confirmed against a full-frame render. Node names in Figma are j
 (`sdvbsdbsddb 1`, `vdf 2`, `Photoroom 5`); the export filenames keep the node id so anything can
 be traced back with `frame242-layout.json`.
 
-## Section map
+## Frame 241 — opening cover (built)
+
+Only four graphics survive; the whole screen is `CoverSection.vue`.
+
+| z | Node | Asset | Frame-local box |
+|---|------|-------|-----------------|
+| 1 | `2548:133` "bac 1" | `opening/00_2548-133_paper-bg.webp` | full-bleed, `background-size: cover` |
+| 2 | `2588:122` | `opening/01_2588-122_envelope.webp` | 361 × 361 @ (10, 173) |
+| 3 | `2588:124` "vdf 1" | `opening/03_2588-124_lily.webp` | 264 × 165.5 @ (56, 386) |
+| 4 | `2588:126` | `opening/02_2588-126_seal.webp` | 65 × 82 @ (162, 346) |
+
+Dropped: `2548:88` (solid `#d9d9d9` base, fully covered by the opaque paper texture), `2548:185`
+(claims 549 × 686, exports 1 × 1 — empty node), `2548:111` (iOS status-bar mockup).
+
+**Two traps this frame set, worth checking on any other frame:**
+
+1. **A rotated node's reported bounds are not where the art lands.** `vdf 1` reports
+   143 × 254 @ (58, 528.9) but renders 264 × 165.5 @ (56, 386). Figma gives the *unrotated* size
+   at the transform origin.
+2. **Figma clips exports to the parent frame.** `bac 1` is 422 × 704 at (-22, 29) but exports
+   375 × 696 — the bleed is gone. Don't assume the export matches the declared size.
+
+Both were caught by exporting each node alone, then template-matching that export against a
+full-frame render to find where it actually sits. Do the same for any node you can't place by eye:
+
+```bash
+pnpm dev & node scripts/shot.mjs   # 375×725, 375×812, 1440×900 + clicks the cover open
+```
+
+then diff `.figma-tmp/web-mobile.png` against `.figma-tmp/frame241-full.png`. The built cover
+currently sits at a mean per-channel difference of **3.35 / 255** below the status-bar row.
+
+## Frame 242 — section map
 
 | # | y range | Section | Assets |
 |---|---------|---------|--------|
@@ -92,17 +135,28 @@ Installed and wired in `src/style.css`, tokens in `src/style/tokens.css`:
 | Jost | 10–13 | UI labels |
 | Playfair Display SC | 20 | Small-caps headings |
 | Meow Script | 20 | "We're getting married" |
+| Reddit Sans | 15 | Frame 241 "THE WEDDING OF" |
+| Platypi | 14 | Frame 241 "Dear Mr/ Mrs/ Ms" |
+| Poltawski Nowy | 16 | Frame 241 guest name |
 
-**Pochaevsk** (12px and 15px, 2 nodes) is not on Fontsource and is not installed — those two
-nodes will fall back. Find them with a `styles.fontFamily` search in the layout JSON.
+Frame 241 shares only Pinyon Script and Jost with Frame 242; the other three families above are
+its own.
+
+**Pochaevsk** (12px and 15px, 2 nodes in Frame 242) is still uninstalled, but `@fontsource/pochaevsk`
+*does* exist (5.3.0) — an earlier note here claiming otherwise was wrong. Install it when those
+two nodes get built. Find them with a `styles.fontFamily` search in the layout JSON.
+
+Platypi and Poltawski Nowy render ~2px lower than Figma's auto line box, so `CoverSection` places
+those two lines at y 532 / 553 instead of the reported 534 / 555.
 
 ## Known gaps
 
 - Two nodes exported blank and were dropped: `2594:479`, `2594:480` (both "mutiara last page").
   If pearls are missing along the footer, they are the reason.
-- `DEFAULT_SLUG` in `src/lib/api.ts` is a placeholder (`tema-elegan-putih`) — the real slug is
-  still pending.
-- Components are not built yet. `CoverSection` / `InviteBody` / `BottomNav` are stubs.
+- `DEFAULT_SLUG` in `src/lib/api.ts` and the `name` field in `package.json` are both still
+  `tema-elegan-putih`, carried over from the previous template. Neither is this project's slug.
+- Frame 242's components are still stubs — `InviteBody` and `BottomNav`. `CoverSection` is built
+  (Frame 241).
 
 ## Re-exporting from Figma
 

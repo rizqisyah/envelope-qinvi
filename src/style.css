@@ -10,6 +10,10 @@
 @import "@fontsource/noto-sans/300.css";
 @import "@fontsource/noto-sans/400.css";
 @import "@fontsource/noto-sans/600.css";
+/* Frame 241 (opening cover) adds three families Frame 242 never uses. */
+@import "@fontsource/reddit-sans/400.css";
+@import "@fontsource/platypi/400.css";
+@import "@fontsource/poltawski-nowy/400.css";
 @import "./style/tokens.css";
 
 *,

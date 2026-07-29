@@ -1,0 +1,129 @@
+{
+  "frame": {
+    "id": "2548:110",
+    "name": "Frame 241",
+    "role": "opening cover / splash screen (separate frame from Frame 242's scrolling page)",
+    "width": 375,
+    "height": 725,
+    "absolute": { "x": 2119, "y": -3276 }
+  },
+  "note": "Coordinates below are frame-local. Z-order is ascending, matching Figma child order. Placement of every graphic was verified by template-matching the individual export against a full-frame render (.figma-tmp/frame241-full.png).",
+  "graphics": [
+    {
+      "id": "2548:133",
+      "figmaName": "bac 1",
+      "asset": "src/assets/opening/parts/00_2548-133_paper-bg.webp",
+      "role": "cream paper texture backdrop",
+      "figmaBounds": { "x": -22, "y": 29, "w": 422, "h": 704 },
+      "exportedSize": { "w": 375, "h": 696 },
+      "exportClipped": true,
+      "opaque": true,
+      "usedAs": "CSS background-size: cover on the whole screen",
+      "comment": "Figma clipped the export to the frame (422 wide bleeds 22px each side; 29+704 overflows the 725 bottom). Stretching it to full height is why the 375x725 #d9d9d9 base rect 2548:88 was dropped."
+    },
+    {
+      "id": "2588:122",
+      "figmaName": "9d870396-455c-4adf-bc4c-f0bde9d64efd-Photoroom 1",
+      "asset": "src/assets/opening/parts/01_2588-122_envelope.webp",
+      "role": "olive envelope with lace flap",
+      "figmaBounds": { "x": 10, "y": 173, "w": 361, "h": 361 },
+      "matchedAt": { "x": 10, "y": 173 },
+      "visibleContent": { "x": 38, "y": 247.5, "w": 305, "h": 212 },
+      "comment": "Square export; the envelope itself is letterboxed inside it."
+    },
+    {
+      "id": "2588:126",
+      "figmaName": "dd394a56-c64d-424d-a92b-31fe52e64004-Photoroom 1",
+      "asset": "src/assets/opening/parts/02_2588-126_seal.webp",
+      "role": "cream wax seal",
+      "figmaBounds": { "x": 162, "y": 346, "w": 65, "h": 82 },
+      "matchedAt": { "x": 162, "y": 346 }
+    },
+    {
+      "id": "2588:124",
+      "figmaName": "vdf 1",
+      "asset": "src/assets/opening/parts/03_2588-124_lily.webp",
+      "role": "calla lily draped across the envelope's bottom edge",
+      "figmaBounds": { "x": 58, "y": 528.9, "w": 143.04, "h": 254.0 },
+      "matchedAt": { "x": 56, "y": 386, "w": 264, "h": 165.5 },
+      "rotated": true,
+      "comment": "The node is rotated, so figmaBounds is its UNROTATED size at the transform origin — it does not describe where the art lands. Use matchedAt (rendered axis-aligned box), derived by template-matching the export against the full-frame render."
+    }
+  ],
+  "droppedNodes": [
+    {
+      "id": "2548:88",
+      "figmaName": "Rectangle 124",
+      "reason": "solid #d9d9d9 375x725 base plate, fully covered by the opaque paper texture"
+    },
+    {
+      "id": "2548:185",
+      "figmaName": "watermarked_img_17750995129444261270-Photoroom 4",
+      "reason": "declared 549x686 at (144,111) but exports 1x1 — empty/hidden node"
+    },
+    {
+      "id": "2548:111",
+      "figmaName": "Status / Default - Black",
+      "reason": "iOS status bar mockup, not part of the product UI"
+    }
+  ],
+  "text": [
+    {
+      "id": "2548:141",
+      "characters": "THE WEDDING OF",
+      "bounds": { "x": 53, "y": 154, "w": 269, "h": 30 },
+      "fontFamily": "Reddit Sans",
+      "fontSize": 15,
+      "fontWeight": 400,
+      "lineHeight": 30,
+      "letterSpacing": "10%",
+      "align": "CENTER",
+      "fill": "#ac6f28"
+    },
+    {
+      "id": "2549:107",
+      "characters": "Ahmad & Salma",
+      "bounds": { "x": 53, "y": 195, "w": 269, "h": 27 },
+      "fontFamily": "Pinyon Script",
+      "fontSize": 40,
+      "fontWeight": 400,
+      "lineHeight": 27,
+      "align": "CENTER",
+      "fill": "#ac6f28",
+      "boundTo": "useWedding().coupleNickname"
+    },
+    {
+      "id": "2588:123",
+      "characters": "Click to open...",
+      "bounds": { "x": 25, "y": 463, "w": 133, "h": 30 },
+      "fontFamily": "Jost",
+      "fontSize": 15,
+      "fontWeight": 400,
+      "lineHeight": 30,
+      "letterSpacing": "2%",
+      "align": "CENTER",
+      "fill": "#ac6f28"
+    },
+    {
+      "id": "2548:144",
+      "characters": "Dear Mr/ Mrs/ Ms",
+      "bounds": { "x": 91, "y": 534, "w": 193, "h": 25 },
+      "fontFamily": "Platypi",
+      "fontSize": 14,
+      "fontWeight": 400,
+      "align": "CENTER",
+      "fill": "#8f7373"
+    },
+    {
+      "id": "2548:145",
+      "characters": "Nama Tamu",
+      "bounds": { "x": 106, "y": 555, "w": 163, "h": 25 },
+      "fontFamily": "Poltawski Nowy",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "align": "CENTER",
+      "fill": "#8f7373",
+      "boundTo": "?to= URL param, falls back to \"Nama Tamu\""
+    }
+  ]
+}
