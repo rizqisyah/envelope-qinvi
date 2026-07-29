@@ -78,16 +78,22 @@ const leftBackgroundStyle = computed(() => {
 </template>
 
 <style>
-/* Smooth slide-up + fade-out for CoverSection */
+/*
+ * The cover pushes past the viewer rather than sliding away — it reads as moving
+ * through the envelope into the invitation, which then rises out of the blur.
+ */
 .splash-leave-active {
   transition:
     opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.85s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.85s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  will-change: opacity, transform, filter;
 }
 
 .splash-leave-to {
   opacity: 0 !important;
-  transform: translateY(-6%) scale(0.97) !important;
+  transform: scale(1.08) !important;
+  filter: blur(8px) !important;
 }
 
 /* Cinematic entrance for Invitation Content */
@@ -106,6 +112,23 @@ const leftBackgroundStyle = computed(() => {
   opacity: 1;
   transform: translateY(0);
   filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-leave-active,
+  .invitation-content {
+    transition: opacity 0.2s linear !important;
+  }
+
+  .splash-leave-to {
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .invitation-content {
+    transform: none;
+    filter: none;
+  }
 }
 
 @media (min-width: 768px) {

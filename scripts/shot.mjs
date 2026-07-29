@@ -15,14 +15,27 @@ const VIEWPORTS = [
 const browser = await chromium.launch()
 const errors = []
 
+// reducedMotion pins the entrance stagger and the hint's breathing loop to their
+// end state, so these shots are deterministic *and* exercise the reduced-motion path.
 for (const [name, width, height] of VIEWPORTS) {
-  const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 2 })
+  const page = await browser.newPage({
+    viewport: { width, height },
+    deviceScaleFactor: 2,
+    reducedMotion: 'reduce',
+  })
   page.on('pageerror', (e) => errors.push(`[${name}] pageerror: ${e.message}`))
   await page.goto(URL, { waitUntil: 'networkidle' })
   await page.waitForTimeout(1500)
   await page.screenshot({ path: `${OUT}/web-${name}.png` })
   await page.close()
 }
+
+// One frame mid-stagger, to eyeball the entrance itself.
+const motion = await browser.newPage({ viewport: { width: 375, height: 812 }, deviceScaleFactor: 2 })
+await motion.goto(URL, { waitUntil: 'networkidle' })
+await motion.waitForTimeout(600)
+await motion.screenshot({ path: `${OUT}/web-entrance.png` })
+await motion.close()
 
 // The cover's only job is to open the invitation — assert it actually does.
 const page = await browser.newPage({ viewport: { width: 375, height: 812 }, deviceScaleFactor: 2 })
