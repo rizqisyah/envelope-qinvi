@@ -47,6 +47,20 @@ const opened = await page.locator('#invite').isVisible()
 const coverGone = (await page.locator('.opening').count()) === 0
 await page.screenshot({ path: `${OUT}/web-opened.png` })
 await page.close()
+
+// The invitation sheet at exactly 375 CSS px wide, so it lines up 1:1 with the
+// Figma frame render for a pixel diff. Reduced motion pins every reveal open.
+const sheet = await browser.newPage({
+  viewport: { width: 375, height: 900 },
+  deviceScaleFactor: 2,
+  reducedMotion: 'reduce',
+})
+await sheet.goto(URL, { waitUntil: 'networkidle' })
+await sheet.waitForTimeout(800)
+await sheet.click('.opening__envelope')
+await sheet.waitForTimeout(1500)
+await sheet.locator('.hero').screenshot({ path: `${OUT}/web-hero.png` })
+await sheet.close()
 await browser.close()
 
 console.log(`invite visible after click: ${opened}`)

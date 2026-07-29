@@ -1,0 +1,1983 @@
+{
+ "frame": {
+  "id": "2550:131",
+  "name": "Frame 242",
+  "w": 375,
+  "h": 8749,
+  "note": "Direct children of Frame 242 in Figma child order. z ascending = painted later = on top. Coordinates are frame-local. This is the authoritative z-order; frame242-layout.json is sorted by (depth,y) and does NOT carry it."
+ },
+ "children": [
+  {
+   "z": 0,
+   "id": "2550:130",
+   "type": "RECTANGLE",
+   "name": "Rectangle 125",
+   "x": 0,
+   "y": 13,
+   "w": 375,
+   "h": 9500,
+   "section": "page",
+   "styles": {
+    "fills": [
+     "#eae4e3"
+    ]
+   }
+  },
+  {
+   "z": 1,
+   "id": "2588:125",
+   "type": "RECTANGLE",
+   "name": "bac 2",
+   "x": -16,
+   "y": 679,
+   "w": 422,
+   "h": 704,
+   "section": "quote"
+  },
+  {
+   "z": 2,
+   "id": "2594:456",
+   "type": "RECTANGLE",
+   "name": "6eddb8304810f05300d9797958a02a04-Photoroom 5",
+   "x": -24,
+   "y": 1185.27,
+   "w": 81,
+   "h": 114,
+   "section": "quote"
+  },
+  {
+   "z": 3,
+   "id": "2560:276",
+   "type": "GROUP",
+   "name": "Group 233",
+   "x": -20,
+   "y": 2821,
+   "w": 405,
+   "h": 6683,
+   "section": "page"
+  },
+  {
+   "z": 4,
+   "id": "2594:455",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 15",
+   "x": 83,
+   "y": 1223,
+   "w": 66,
+   "h": 99,
+   "section": "quote"
+  },
+  {
+   "z": 5,
+   "id": "2594:479",
+   "type": "RECTANGLE",
+   "name": "mutiara last page",
+   "x": 277,
+   "y": 7638,
+   "w": 292,
+   "h": 146,
+   "section": "footer"
+  },
+  {
+   "z": 6,
+   "id": "2594:480",
+   "type": "RECTANGLE",
+   "name": "mutiara last page",
+   "x": 98,
+   "y": 7633,
+   "w": 292,
+   "h": 146,
+   "section": "footer"
+  },
+  {
+   "z": 7,
+   "id": "2594:477",
+   "type": "RECTANGLE",
+   "name": "d080b7df-cf20-4893-b9c6-c96c4cf97f88-Photoroom 5",
+   "x": 28.7,
+   "y": 7774,
+   "w": 63,
+   "h": 83,
+   "section": "footer"
+  },
+  {
+   "z": 8,
+   "id": "2594:478",
+   "type": "RECTANGLE",
+   "name": "d080b7df-cf20-4893-b9c6-c96c4cf97f88-Photoroom 6",
+   "x": 365.9,
+   "y": 7778,
+   "w": 63,
+   "h": 83,
+   "section": "footer"
+  },
+  {
+   "z": 9,
+   "id": "2551:184",
+   "type": "RECTANGLE",
+   "name": "background di bawah groom",
+   "x": 8,
+   "y": 1382,
+   "w": 360,
+   "h": 409,
+   "section": "groom"
+  },
+  {
+   "z": 10,
+   "id": "2551:186",
+   "type": "RECTANGLE",
+   "name": "background di bawah bride",
+   "x": 8,
+   "y": 2161,
+   "w": 360,
+   "h": 409,
+   "section": "bride"
+  },
+  {
+   "z": 11,
+   "id": "2551:183",
+   "type": "RECTANGLE",
+   "name": "WhatsApp Image 2026-04-25 at 00.47.13-Photoroom 1",
+   "x": 69,
+   "y": 1461,
+   "w": 237,
+   "h": 319,
+   "section": "groom"
+  },
+  {
+   "z": 12,
+   "id": "2550:136",
+   "type": "RECTANGLE",
+   "name": "css - Copy 1",
+   "x": 51,
+   "y": 213,
+   "w": 274,
+   "h": 457,
+   "section": "hero"
+  },
+  {
+   "z": 13,
+   "id": "2550:135",
+   "type": "RECTANGLE",
+   "name": "IMG_8300 1",
+   "x": 17,
+   "y": 270,
+   "w": 342,
+   "h": 342,
+   "section": "hero"
+  },
+  {
+   "z": 14,
+   "id": "2587:110",
+   "type": "GROUP",
+   "name": "Group 234",
+   "x": 0,
+   "y": -38,
+   "w": 375,
+   "h": 724,
+   "section": "hero"
+  },
+  {
+   "z": 15,
+   "id": "2550:137",
+   "type": "TEXT",
+   "name": "The Bride &\u2028The Groom",
+   "x": 58,
+   "y": 95,
+   "w": 269,
+   "h": 80,
+   "section": "hero",
+   "characters": "The Bride &\u2028The Groom",
+   "styles": {
+    "fills": [
+     "#ac6f28"
+    ],
+    "fontFamily": "Pinyon Script",
+    "fontSize": 40,
+    "fontStyle": "Regular",
+    "fontWeight": 400,
+    "lineHeight": {
+     "unit": "PIXELS",
+     "value": 40
+    },
+    "textAlignHorizontal": "CENTER"
+   }
+  },
+  {
+   "z": 16,
+   "id": "2594:171",
+   "type": "RECTANGLE",
+   "name": "sdvbsdbsddb 5",
+   "x": 50,
+   "y": 1383,
+   "w": 272,
+   "h": 397,
+   "section": "groom"
+  },
+  {
+   "z": 17,
+   "id": "2551:179",
+   "type": "RECTANGLE",
+   "name": "sdvbsdbsddb 2",
+   "x": 0,
+   "y": 1235,
+   "w": 375,
+   "h": 796,
+   "section": "groom"
+  },
+  {
+   "z": 18,
+   "id": "2551:198",
+   "type": "RECTANGLE",
+   "name": "WhatsApp Image 2026-04-25 at 00.47.13 (1)-Photoroom 1",
+   "x": 108,
+   "y": 2255,
+   "w": 160,
+   "h": 279,
+   "section": "bride"
+  },
+  {
+   "z": 19,
+   "id": "2551:189",
+   "type": "RECTANGLE",
+   "name": "sdvbsdbsddb 4",
+   "x": 42,
+   "y": 2162,
+   "w": 303,
+   "h": 397,
+   "section": "bride"
+  },
+  {
+   "z": 20,
+   "id": "2551:188",
+   "type": "RECTANGLE",
+   "name": "sdvbsdbsddb 3",
+   "x": 0,
+   "y": 2014,
+   "w": 375,
+   "h": 796,
+   "section": "bride"
+  },
+  {
+   "z": 21,
+   "id": "2560:278",
+   "type": "RECTANGLE",
+   "name": "VDSVZDSVD 1",
+   "x": 0,
+   "y": 2556,
+   "w": 391,
+   "h": 385,
+   "section": "glimpse"
+  },
+  {
+   "z": 22,
+   "id": "2558:121",
+   "type": "GROUP",
+   "name": "Group 214",
+   "x": 31,
+   "y": 2570,
+   "w": 325,
+   "h": 187,
+   "section": "bride"
+  },
+  {
+   "z": 23,
+   "id": "2560:175",
+   "type": "RECTANGLE",
+   "name": "1748a72d-9e93-4bd0-9914-fdb67a8d794c-Photoroom 1",
+   "x": 79.22,
+   "y": 2758,
+   "w": 216,
+   "h": 270,
+   "section": "glimpse"
+  },
+  {
+   "z": 24,
+   "id": "2555:109",
+   "type": "RECTANGLE",
+   "name": "cascasc 1",
+   "x": 7.39,
+   "y": 3029,
+   "w": 352,
+   "h": 419,
+   "section": "glimpse"
+  },
+  {
+   "z": 25,
+   "id": "2610:128",
+   "type": "RECTANGLE",
+   "name": "a127d5c7d1b2050af40986d63ff118d3 3",
+   "x": 44.13,
+   "y": 2868.06,
+   "w": 36,
+   "h": 133,
+   "section": "glimpse"
+  },
+  {
+   "z": 26,
+   "id": "2610:129",
+   "type": "RECTANGLE",
+   "name": "a127d5c7d1b2050af40986d63ff118d3 4",
+   "x": 28.97,
+   "y": 2913.38,
+   "w": 29.58,
+   "h": 109.27,
+   "section": "glimpse"
+  },
+  {
+   "z": 27,
+   "id": "2610:130",
+   "type": "RECTANGLE",
+   "name": "a127d5c7d1b2050af40986d63ff118d3 5",
+   "x": 77,
+   "y": 2912.24,
+   "w": 25.39,
+   "h": 93.81,
+   "section": "glimpse"
+  },
+  {
+   "z": 28,
+   "id": "2556:127",
+   "type": "GROUP",
+   "name": "Group 229",
+   "x": 18.39,
+   "y": 2969.58,
+   "w": 181.71,
+   "h": 278.4,
+   "section": "glimpse"
+  },
+  {
+   "z": 29,
+   "id": "2556:126",
+   "type": "GROUP",
+   "name": "Group 228",
+   "x": 145.39,
+   "y": 2941.91,
+   "w": 225.56,
+   "h": 278.62,
+   "section": "glimpse"
+  },
+  {
+   "z": 30,
+   "id": "2594:142",
+   "type": "RECTANGLE",
+   "name": "d080b7df-cf20-4893-b9c6-c96c4cf97f88-Photoroom 3",
+   "x": 26,
+   "y": 1901,
+   "w": 86,
+   "h": 95,
+   "section": "groom"
+  },
+  {
+   "z": 31,
+   "id": "2555:112",
+   "type": "RECTANGLE",
+   "name": "21ad99c2849d18205d6b5712c30e657b-Photoroom 1",
+   "x": 75.05,
+   "y": 3404.98,
+   "w": 346.11,
+   "h": 346.11,
+   "section": "gallery"
+  },
+  {
+   "z": 32,
+   "id": "2586:107",
+   "type": "RECTANGLE",
+   "name": "c63dfa4fd3d0f601bcb3a72ce82c3a41-Photoroom 3",
+   "x": 284.54,
+   "y": 3072,
+   "w": 135,
+   "h": 135,
+   "section": "glimpse"
+  },
+  {
+   "z": 33,
+   "id": "2556:128",
+   "type": "RECTANGLE",
+   "name": "1b7ad8aecf19552a533c5eab9baf6117-Photoroom 1",
+   "x": 145.39,
+   "y": 3228,
+   "w": 131,
+   "h": 128,
+   "section": "glimpse"
+  },
+  {
+   "z": 34,
+   "id": "2560:172",
+   "type": "RECTANGLE",
+   "name": "8b20970f62ea5a51c736570fa510237e-Photoroom 5",
+   "x": 111,
+   "y": 3247,
+   "w": 82,
+   "h": 82,
+   "section": "glimpse"
+  },
+  {
+   "z": 35,
+   "id": "2558:108",
+   "type": "RECTANGLE",
+   "name": "47027faf91638ae9d54adb481384d5d0-Photoroom 1",
+   "x": 85.83,
+   "y": 3134,
+   "w": 83.8,
+   "h": 97.12,
+   "section": "glimpse"
+  },
+  {
+   "z": 36,
+   "id": "2555:110",
+   "type": "RECTANGLE",
+   "name": "defcew 1",
+   "x": 21.39,
+   "y": 3024,
+   "w": 323,
+   "h": 408,
+   "section": "glimpse"
+  },
+  {
+   "z": 37,
+   "id": "2588:127",
+   "type": "RECTANGLE",
+   "name": "vdf 2",
+   "x": 323.3,
+   "y": 3313.26,
+   "w": 117.17,
+   "h": 208.06,
+   "section": "glimpse"
+  },
+  {
+   "z": 38,
+   "id": "2558:116",
+   "type": "RECTANGLE",
+   "name": "c63dfa4fd3d0f601bcb3a72ce82c3a41-Photoroom 2",
+   "x": 133,
+   "y": 3247,
+   "w": 110,
+   "h": 110,
+   "section": "glimpse"
+  },
+  {
+   "z": 39,
+   "id": "2555:115",
+   "type": "TEXT",
+   "name": "SAVE THE DATE",
+   "x": 54.44,
+   "y": 3159.11,
+   "w": 275,
+   "h": 46,
+   "section": "glimpse",
+   "characters": "SAVE THE DATE",
+   "styles": {
+    "fills": [
+     "#8a5d30"
+    ],
+    "fontFamily": "EB Garamond",
+    "fontSize": 24,
+    "fontStyle": "Regular",
+    "fontWeight": 400,
+    "lineHeight": {
+     "unit": "PIXELS",
+     "value": 48
+    },
+    "textAlignHorizontal": "CENTER"
+   }
+  },
+  {
+   "z": 40,
+   "id": "2560:174",
+   "type": "TEXT",
+   "name": "THE GLIMPSE OF US",
+   "x": 38.87,
+   "y": 2806,
+   "w": 275,
+   "h": 99.76,
+   "section": "glimpse",
+   "characters": "THE\nGLIMPSE OF\nUS",
+   "styles": {
+    "fills": [
+     "#000000"
+    ],
+    "fontFamily": "mixed",
+    "fontSize": "mixed",
+    "fontStyle": "mixed",
+    "fontWeight": 400,
+    "lineHeight": "mixed",
+    "textAlignHorizontal": "CENTER"
+   }
+  },
+  {
+   "z": 41,
+   "id": "2555:119",
+   "type": "TEXT",
+   "name": "We\u2019re getting married",
+   "x": 63.39,
+   "y": 3232.18,
+   "w": 275,
+   "h": 46,
+   "section": "glimpse",
+   "characters": "We\u2019re getting married",
+   "styles": {
+    "fills": [
+     "#8a5d30"
+    ],
+    "fontFamily": "Pinyon Script",
+    "fontSize": 24,
+    "fontStyle": "Regular",
+    "fontWeight": 400,
+    "lineHeight": {
+     "unit": "PIXELS",
+     "value": 48
+    },
+    "textAlignHorizontal": "CENTER"
+   }
+  },
+  {
+   "z": 42,
+   "id": "2558:109",
+   "type": "RECTANGLE",
+   "name": "7369a3f7-db24-48f3-9f72-451c062fb4d5-Photoroom 1",
+   "x": -38,
+   "y": 3051.78,
+   "w": 106,
+   "h": 159,
+   "section": "glimpse"
+  },
+  {
+   "z": 43,
+   "id": "2610:127",
+   "type": "RECTANGLE",
+   "name": "e057c4cdeabafe2debb69eaeb48c9b12 2",
+   "x": 228,
+   "y": 2916,
+   "w": 45,
+   "h": 113,
+   "section": "glimpse"
+  },
+  {
+   "z": 44,
+   "id": "2560:171",
+   "type": "RECTANGLE",
+   "name": "7369a3f7-db24-48f3-9f72-451c062fb4d5-Photoroom 4",
+   "x": 54.41,
+   "y": 3094,
+   "w": 77.03,
+   "h": 115.48,
+   "section": "glimpse"
+  },
+  {
+   "z": 45,
+   "id": "2555:118",
+   "type": "TEXT",
+   "name": "09. 09. 26",
+   "x": 63.38,
+   "y": 3192.7,
+   "w": 275,
+   "h": 46,
+   "section": "glimpse",
+   "characters": "09. 09. 26",
+   "styles": {
+    "fills": [
+     "#8a5d30"
+    ],
+    "fontFamily": "EB Garamond",
+    "fontSize": 36,
+    "fontStyle": "Regular",
+    "fontWeight": 400,
+    "lineHeight": {
+     "unit": "PIXELS",
+     "value": 48
+    },
+    "textAlignHorizontal": "CENTER"
+   }
+  },
+  {
+   "z": 46,
+   "id": "2558:110",
+   "type": "GROUP",
+   "name": "Group 213",
+   "x": 30,
+   "y": 1791,
+   "w": 321,
+   "h": 170,
+   "section": "groom"
+  },
+  {
+   "z": 47,
+   "id": "2560:162",
+   "type": "RECTANGLE",
+   "name": "47027faf91638ae9d54adb481384d5d0-Photoroom 4",
+   "x": 108.26,
+   "y": 1905,
+   "w": 160.36,
+   "h": 206.73,
+   "section": "divider"
+  },
+  {
+   "z": 48,
+   "id": "2560:146",
+   "type": "RECTANGLE",
+   "name": "86525d21-2b61-449a-a9a8-ec04431c34eb-Photoroom 3",
+   "x": -214,
+   "y": 1951,
+   "w": 812,
+   "h": 356,
+   "section": "divider"
+  },
+  {
+   "z": 49,
+   "id": "2560:151",
+   "type": "RECTANGLE",
+   "name": "47027faf91638ae9d54adb481384d5d0-Photoroom 2",
+   "x": 317.03,
+   "y": 1901,
+   "w": 116,
+   "h": 149,
+   "section": "divider"
+  },
+  {
+   "z": 50,
+   "id": "2560:152",
+   "type": "RECTANGLE",
+   "name": "47027faf91638ae9d54adb481384d5d0-Photoroom 3",
+   "x": 29.7,
+   "y": 1924,
+   "w": 116,
+   "h": 149,
+   "section": "divider"
+  },
+  {
+   "z": 51,
+   "id": "2560:153",
+   "type": "RECTANGLE",
+   "name": "7369a3f7-db24-48f3-9f72-451c062fb4d5-Photoroom 2",
+   "x": 45.38,
+   "y": 1899,
+   "w": 93.06,
+   "h": 139.52,
+   "section": "divider"
+  },
+  {
+   "z": 52,
+   "id": "2560:155",
+   "type": "RECTANGLE",
+   "name": "7369a3f7-db24-48f3-9f72-451c062fb4d5-Photoroom 3",
+   "x": -10.19,
+   "y": 1885,
+   "w": 72.75,
+   "h": 109.07,
+   "section": "groom"
+  },
+  {
+   "z": 53,
+   "id": "2560:157",
+   "type": "RECTANGLE",
+   "name": "79b2b3ba-d620-4e90-877b-8582253132d9-Photoroom 1",
+   "x": -8,
+   "y": 1981,
+   "w": 99,
+   "h": 87,
+   "section": "divider"
+  },
+  {
+   "z": 54,
+   "id": "2560:158",
+   "type": "RECTANGLE",
+   "name": "79b2b3ba-d620-4e90-877b-8582253132d9-Photoroom 2",
+   "x": 413,
+   "y": 2079,
+   "w": 91,
+   "h": 80,
+   "section": "divider"
+  },
+  {
+   "z": 55,
+   "id": "2560:178",
+   "type": "RECTANGLE",
+   "name": "5d8831b8-ba4a-4715-b846-b2eeee80b642-Photoroom 1",
+   "x": 383,
+   "y": 1837,
+   "w": 475,
+   "h": 267,
+   "section": "divider"
+  },
+  {
+   "z": 56,
+   "id": "2560:160",
+   "type": "RECTANGLE",
+   "name": "8b20970f62ea5a51c736570fa510237e-Photoroom 1",
+   "x": 287,
+   "y": 2042,
+   "w": 81,
+   "h": 81,
+   "section": "divider"
+  },
+  {
+   "z": 57,
+   "id": "2560:164",
+   "type": "RECTANGLE",
+   "name": "8b20970f62ea5a51c736570fa510237e-Photoroom 3",
+   "x": 50,
+   "y": 1967,
+   "w": 81,
+   "h": 81,
+   "section": "divider"
+  },
+  {
+   "z": 58,
+   "id": "2560:161",
+   "type": "RECTANGLE",
+   "name": "8b20970f62ea5a51c736570fa510237e-Photoroom 2",
+   "x": 5,
+   "y": 2041,
+   "w": 57,
+   "h": 57,
+   "section": "divider"
+  },
+  {
+   "z": 59,
+   "id": "2560:170",
+   "type": "RECTANGLE",
+   "name": "e4fa81bb3887856f767a38bcba66728d-Photoroom 2",
+   "x": 98.24,
+   "y": 3084,
+   "w": 82,
+   "h": 111,
+   "section": "glimpse"
+  },
+  {
+   "z": 60,
+   "id": "2560:163",
+   "type": "RECTANGLE",
+   "name": "e4fa81bb3887856f767a38bcba66728d-Photoroom 1",
+   "x": 368.19,
+   "y": 1841,
+   "w": 109,
+   "h": 147,
+   "section": "groom"
+  },
+  {
+   "z": 61,
+   "id": "2560:147",
+   "type": "TEXT",
+   "name": "And",
+   "x": 85,
+   "y": 2039.07,
+   "w": 202,
+   "h": 40,
+   "section": "divider",
+   "characters": "And",
+   "styles": {
+    "fills": [
+     "#905d2a"
+    ],
+    "fontFamily": "Pinyon Script",
+    "fontSize": 96,
+    "fontStyle": "Regular",
+    "fontWeight": 400,
+    "lineHeight": {
+     "unit": "PIXELS",
+     "value": 38
+    },
+    "textAlignHorizontal": "CENTER"
+   }
+  },
+  {
+   "z": 62,
+   "id": "2560:169",
+   "type": "RECTANGLE",
+   "name": "79b2b3ba-d620-4e90-877b-8582253132d9-Photoroom 3",
+   "x": 10,
+   "y": 3159,
+   "w": 69,
+   "h": 61,
+   "section": "glimpse"
+  },
+  {
+   "z": 63,
+   "id": "2560:168",
+   "type": "RECTANGLE",
+   "name": "8b20970f62ea5a51c736570fa510237e-Photoroom 4",
+   "x": 38,
+   "y": 3187,
+   "w": 82,
+   "h": 82,
+   "section": "glimpse"
+  },
+  {
+   "z": 64,
+   "id": "2560:182",
+   "type": "RECTANGLE",
+   "name": "5d8831b8-ba4a-4715-b846-b2eeee80b642-Photoroom 2",
+   "x": -40.71,
+   "y": 1745,
+   "w": 510.77,
+   "h": 287.46,
+   "section": "groom"
+  },
+  {
+   "z": 65,
+   "id": "2560:183",
+   "type": "GROUP",
+   "name": "Group 219",
+   "x": 12,
+   "y": 3501,
+   "w": 356.78,
+   "h": 367,
+   "section": "gallery"
+  },
+  {
+   "z": 66,
+   "id": "2588:131",
+   "type": "RECTANGLE",
+   "name": "vdf 1",
+   "x": 133.66,
+   "y": 1483.23,
+   "w": 95.8,
+   "h": 170.13,
+   "section": "groom"
+  },
+  {
+   "z": 67,
+   "id": "2588:135",
+   "type": "RECTANGLE",
+   "name": "vdf 3",
+   "x": 235,
+   "y": 2251.23,
+   "w": 95.8,
+   "h": 170.13,
+   "section": "bride"
+  },
+  {
+   "z": 68,
+   "id": "2592:136",
+   "type": "RECTANGLE",
+   "name": "38e50968-13f1-46ba-b7da-6cb7be29790c-Photoroom 1",
+   "x": 199,
+   "y": 2858,
+   "w": 134,
+   "h": 123,
+   "section": "glimpse"
+  },
+  {
+   "z": 69,
+   "id": "2594:179",
+   "type": "GROUP",
+   "name": "Group 239",
+   "x": 172,
+   "y": 722,
+   "w": 203,
+   "h": 203,
+   "section": "cover"
+  },
+  {
+   "z": 70,
+   "id": "2594:180",
+   "type": "RECTANGLE",
+   "name": "c63dfa4fd3d0f601bcb3a72ce82c3a41-Photoroom 7",
+   "x": 393.04,
+   "y": 836,
+   "w": 107.04,
+   "h": 107.04,
+   "section": "cover"
+  },
+  {
+   "z": 71,
+   "id": "2594:189",
+   "type": "RECTANGLE",
+   "name": "4612f626-b807-4f98-8d70-f87b1ddeeab2-Photoroom 1",
+   "x": 236,
+   "y": 848,
+   "w": 104,
+   "h": 130,
+   "section": "cover"
+  },
+  {
+   "z": 72,
+   "id": "2594:172",
+   "type": "GROUP",
+   "name": "Group 238",
+   "x": -26,
+   "y": 762,
+   "w": 419,
+   "h": 558,
+   "section": "quote"
+  },
+  {
+   "z": 73,
+   "id": "2594:437",
+   "type": "RECTANGLE",
+   "name": "e5748ce97e33b77996146a85adb73e3e-Photoroom 7",
+   "x": 201.47,
+   "y": 787,
+   "w": 94,
+   "h": 167,
+   "section": "cover"
+  },
+  {
+   "z": 74,
+   "id": "2594:141",
+   "type": "RECTANGLE",
+   "name": "d080b7df-cf20-4893-b9c6-c96c4cf97f88-Photoroom 2",
+   "x": 250,
+   "y": 910,
+   "w": 47,
+   "h": 49,
+   "section": "cover"
+  },
+  {
+   "z": 75,
+   "id": "2594:143",
+   "type": "RECTANGLE",
+   "name": "d080b7df-cf20-4893-b9c6-c96c4cf97f88-Photoroom 4",
+   "x": 178,
+   "y": 2920,
+   "w": 86,
+   "h": 86,
+   "section": "glimpse"
+  },
+  {
+   "z": 76,
+   "id": "2594:199",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 3",
+   "x": 324,
+   "y": 5604,
+   "w": 57,
+   "h": 85,
+   "section": "gift"
+  },
+  {
+   "z": 77,
+   "id": "2594:233",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 7",
+   "x": 324,
+   "y": 5757,
+   "w": 57,
+   "h": 85,
+   "section": "gift"
+  },
+  {
+   "z": 78,
+   "id": "2594:278",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 9",
+   "x": 324,
+   "y": 5910,
+   "w": 57,
+   "h": 85,
+   "section": "gift"
+  },
+  {
+   "z": 79,
+   "id": "2594:200",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 4",
+   "x": 351.23,
+   "y": 5647,
+   "w": 41,
+   "h": 61,
+   "section": "gift"
+  },
+  {
+   "z": 80,
+   "id": "2594:234",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 8",
+   "x": 351.23,
+   "y": 5800,
+   "w": 41,
+   "h": 61,
+   "section": "gift"
+  },
+  {
+   "z": 81,
+   "id": "2594:279",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 10",
+   "x": 351.23,
+   "y": 5953,
+   "w": 41,
+   "h": 61,
+   "section": "gift"
+  },
+  {
+   "z": 82,
+   "id": "2594:148",
+   "type": "GROUP",
+   "name": "Group 236",
+   "x": 25,
+   "y": 5485,
+   "w": 331,
+   "h": 568,
+   "section": "gift"
+  },
+  {
+   "z": 83,
+   "id": "2594:290",
+   "type": "FRAME",
+   "name": "Frame 224",
+   "x": 45,
+   "y": 6001,
+   "w": 170,
+   "h": 18,
+   "section": "gift",
+   "styles": {
+    "padding": {
+     "bottom": 0,
+     "left": 0,
+     "right": 0,
+     "top": 0
+    }
+   }
+  },
+  {
+   "z": 84,
+   "id": "2594:183",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 1",
+   "x": 311,
+   "y": 1061,
+   "w": 37,
+   "h": 56,
+   "section": "quote"
+  },
+  {
+   "z": 85,
+   "id": "2594:187",
+   "type": "RECTANGLE",
+   "name": "d77352ec44f5d78a5fbdd8ea61240614-Photoroom 4",
+   "x": 281,
+   "y": 1041,
+   "w": 85,
+   "h": 85,
+   "section": "quote"
+  },
+  {
+   "z": 86,
+   "id": "2594:182",
+   "type": "ELLIPSE",
+   "name": "Ellipse 9",
+   "x": 243,
+   "y": 1075,
+   "w": 97,
+   "h": 93,
+   "section": "quote",
+   "styles": {
+    "fills": [
+     "#374e46"
+    ]
+   }
+  },
+  {
+   "z": 87,
+   "id": "2594:184",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 2",
+   "x": 321,
+   "y": 1092,
+   "w": 37,
+   "h": 56,
+   "section": "quote"
+  },
+  {
+   "z": 88,
+   "id": "2594:185",
+   "type": "RECTANGLE",
+   "name": "e4fa81bb3887856f767a38bcba66728d-Photoroom 7",
+   "x": 336.63,
+   "y": 1103.82,
+   "w": 47,
+   "h": 63,
+   "section": "quote"
+  },
+  {
+   "z": 89,
+   "id": "2609:108",
+   "type": "RECTANGLE",
+   "name": "e4fa81bb3887856f767a38bcba66728d-Photoroom 12",
+   "x": 217,
+   "y": 1015.96,
+   "w": 62.08,
+   "h": 83.81,
+   "section": "quote"
+  },
+  {
+   "z": 90,
+   "id": "2594:196",
+   "type": "RECTANGLE",
+   "name": "ed742d1c38731a13260f54866e18013d-Photoroom 1",
+   "x": 323,
+   "y": 5681,
+   "w": 21,
+   "h": 21,
+   "section": "gift"
+  },
+  {
+   "z": 91,
+   "id": "2594:277",
+   "type": "RECTANGLE",
+   "name": "ed742d1c38731a13260f54866e18013d-Photoroom 2",
+   "x": 323,
+   "y": 5832,
+   "w": 21,
+   "h": 21,
+   "section": "gift"
+  },
+  {
+   "z": 92,
+   "id": "2594:292",
+   "type": "RECTANGLE",
+   "name": "7369a3f7-db24-48f3-9f72-451c062fb4d5-Photoroom 5",
+   "x": 304.72,
+   "y": 8074,
+   "w": 100,
+   "h": 150,
+   "section": "footer"
+  },
+  {
+   "z": 93,
+   "id": "2594:288",
+   "type": "RECTANGLE",
+   "name": "ed742d1c38731a13260f54866e18013d-Photoroom 3",
+   "x": 323,
+   "y": 5985,
+   "w": 21,
+   "h": 21,
+   "section": "gift"
+  },
+  {
+   "z": 94,
+   "id": "2594:211",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 5",
+   "x": -7,
+   "y": 8086.78,
+   "w": 78,
+   "h": 117,
+   "section": "footer"
+  },
+  {
+   "z": 95,
+   "id": "2594:212",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 6",
+   "x": 388.57,
+   "y": 8091.78,
+   "w": 78,
+   "h": 117,
+   "section": "footer"
+  },
+  {
+   "z": 96,
+   "id": "2594:202",
+   "type": "RECTANGLE",
+   "name": "e4fa81bb3887856f767a38bcba66728d-Photoroom 8",
+   "x": 260.46,
+   "y": 5748.2,
+   "w": 81,
+   "h": 76.36,
+   "section": "gift"
+  },
+  {
+   "z": 97,
+   "id": "2594:243",
+   "type": "RECTANGLE",
+   "name": "e4fa81bb3887856f767a38bcba66728d-Photoroom 10",
+   "x": 260.46,
+   "y": 5901.2,
+   "w": 81,
+   "h": 76.36,
+   "section": "gift"
+  },
+  {
+   "z": 98,
+   "id": "2594:289",
+   "type": "RECTANGLE",
+   "name": "e4fa81bb3887856f767a38bcba66728d-Photoroom 11",
+   "x": 260.46,
+   "y": 6054.2,
+   "w": 81,
+   "h": 76.36,
+   "section": "gift"
+  },
+  {
+   "z": 99,
+   "id": "2594:203",
+   "type": "RECTANGLE",
+   "name": "cascasc 2",
+   "x": 17,
+   "y": 8053,
+   "w": 349,
+   "h": 416,
+   "section": "footer"
+  },
+  {
+   "z": 100,
+   "id": "2594:207",
+   "type": "RECTANGLE",
+   "name": "b1cf62af-9d74-4120-8343-3a21cb19d33f 1",
+   "x": 56,
+   "y": 8021,
+   "w": 270,
+   "h": 408,
+   "section": "footer"
+  },
+  {
+   "z": 101,
+   "id": "2594:220",
+   "type": "RECTANGLE",
+   "name": "e4fa81bb3887856f767a38bcba66728d-Photoroom 9",
+   "x": 266,
+   "y": 8027,
+   "w": 93,
+   "h": 125,
+   "section": "footer"
+  },
+  {
+   "z": 102,
+   "id": "2594:215",
+   "type": "RECTANGLE",
+   "name": "vdf 4",
+   "x": -7,
+   "y": 8095,
+   "w": 122,
+   "h": 217,
+   "section": "footer"
+  },
+  {
+   "z": 103,
+   "id": "2594:216",
+   "type": "RECTANGLE",
+   "name": "vdf 5",
+   "x": 383,
+   "y": 8090,
+   "w": 122,
+   "h": 217,
+   "section": "footer"
+  },
+  {
+   "z": 104,
+   "id": "2594:214",
+   "type": "RECTANGLE",
+   "name": "6eddb8304810f05300d9797958a02a04-Photoroom 2",
+   "x": 355,
+   "y": 8122,
+   "w": 78,
+   "h": 109,
+   "section": "footer"
+  },
+  {
+   "z": 105,
+   "id": "2594:208",
+   "type": "RECTANGLE",
+   "name": "IMG_8300 1",
+   "x": 17,
+   "y": 8054,
+   "w": 342,
+   "h": 342,
+   "section": "footer"
+  },
+  {
+   "z": 106,
+   "id": "2594:213",
+   "type": "RECTANGLE",
+   "name": "6eddb8304810f05300d9797958a02a04-Photoroom 1",
+   "x": 28,
+   "y": 8122,
+   "w": 78,
+   "h": 109,
+   "section": "footer"
+  },
+  {
+   "z": 107,
+   "id": "2594:435",
+   "type": "RECTANGLE",
+   "name": "ca4424f59c4d8c1a89b8fb34590ed229-Photoroom 2",
+   "x": 283.01,
+   "y": 8199,
+   "w": 71,
+   "h": 71,
+   "section": "footer"
+  },
+  {
+   "z": 108,
+   "id": "2594:219",
+   "type": "RECTANGLE",
+   "name": "9a3a2a1b-fdd1-4e5d-8df2-d2eb0e3df36b-Photoroom 1",
+   "x": 276,
+   "y": 8176,
+   "w": 73,
+   "h": 98,
+   "section": "footer"
+  },
+  {
+   "z": 109,
+   "id": "2594:217",
+   "type": "RECTANGLE",
+   "name": "38e50968-13f1-46ba-b7da-6cb7be29790c-Photoroom 2",
+   "x": 188,
+   "y": 8214,
+   "w": 84,
+   "h": 182,
+   "section": "footer"
+  },
+  {
+   "z": 110,
+   "id": "2594:204",
+   "type": "RECTANGLE",
+   "name": "defcew 2",
+   "x": 33,
+   "y": 8053,
+   "w": 316,
+   "h": 417,
+   "section": "footer"
+  },
+  {
+   "z": 111,
+   "id": "2594:210",
+   "type": "RECTANGLE",
+   "name": "dd394a56-c64d-424d-a92b-31fe52e64004-Photoroom 2",
+   "x": 157,
+   "y": 8280,
+   "w": 69,
+   "h": 87,
+   "section": "footer"
+  },
+  {
+   "z": 112,
+   "id": "2594:218",
+   "type": "RECTANGLE",
+   "name": "d72f1100-c23f-4df1-9504-9b2546f283a6-Photoroom 1",
+   "x": 34,
+   "y": 8180,
+   "w": 67,
+   "h": 67,
+   "section": "footer"
+  },
+  {
+   "z": 113,
+   "id": "2594:295",
+   "type": "TEXT",
+   "name": "Antonio + Aliyah",
+   "x": 77,
+   "y": 7966,
+   "w": 230,
+   "h": 45,
+   "section": "footer",
+   "characters": "Antonio + Aliyah",
+   "styles": {
+    "fills": [
+     "#000000"
+    ],
+    "fontFamily": "Pinyon Script",
+    "fontSize": 36,
+    "fontStyle": "Regular",
+    "fontWeight": 400,
+    "textAlignHorizontal": "LEFT"
+   }
+  },
+  {
+   "z": 114,
+   "id": "2594:436",
+   "type": "TEXT",
+   "name": "Thank You !",
+   "x": 104,
+   "y": 7827,
+   "w": 181,
+   "h": 50,
+   "section": "footer",
+   "characters": "Thank You !",
+   "styles": {
+    "fills": [
+     "#000000"
+    ],
+    "fontFamily": "Pinyon Script",
+    "fontSize": 40,
+    "fontStyle": "Regular",
+    "fontWeight": 400,
+    "textAlignHorizontal": "LEFT"
+   }
+  },
+  {
+   "z": 115,
+   "id": "2594:296",
+   "type": "TEXT",
+   "name": "We sincerely thank you for your presence, prayers, and blessings on our special day.",
+   "x": 74,
+   "y": 7878,
+   "w": 249,
+   "h": 82,
+   "section": "footer",
+   "characters": "We sincerely thank you for your presence, prayers, and blessings on our special day.",
+   "styles": {
+    "fills": [
+     "#7c4a15"
+    ],
+    "fontFamily": "Pochaevsk",
+    "fontSize": 15,
+    "fontStyle": "Regular",
+    "fontWeight": 400,
+    "lineHeight": {
+     "unit": "PIXELS",
+     "value": 24
+    },
+    "textAlignHorizontal": "CENTER"
+   }
+  },
+  {
+   "z": 116,
+   "id": "2594:298",
+   "type": "GROUP",
+   "name": "RSVP",
+   "x": 35,
+   "y": 6173,
+   "w": 332,
+   "h": 560,
+   "section": "rsvp"
+  },
+  {
+   "z": 117,
+   "id": "2594:316",
+   "type": "RECTANGLE",
+   "name": "22478171c4efd7628bcca889ba8317ad-Photoroom 1",
+   "x": -37,
+   "y": 6413.35,
+   "w": 100,
+   "h": 98.98,
+   "section": "rsvp"
+  },
+  {
+   "z": 118,
+   "id": "2594:312",
+   "type": "RECTANGLE",
+   "name": "6eddb8304810f05300d9797958a02a04-Photoroom 3",
+   "x": 21,
+   "y": 6112,
+   "w": 133,
+   "h": 187,
+   "section": "rsvp"
+  },
+  {
+   "z": 119,
+   "id": "2594:313",
+   "type": "RECTANGLE",
+   "name": "d72f1100-c23f-4df1-9504-9b2546f283a6-Photoroom 2",
+   "x": 31,
+   "y": 6249,
+   "w": 60,
+   "h": 60,
+   "section": "rsvp"
+  },
+  {
+   "z": 120,
+   "id": "2594:311",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 11",
+   "x": -4,
+   "y": 6261.96,
+   "w": 67.69,
+   "h": 101.53,
+   "section": "rsvp"
+  },
+  {
+   "z": 121,
+   "id": "2594:314",
+   "type": "RECTANGLE",
+   "name": "d72f1100-c23f-4df1-9504-9b2546f283a6-Photoroom 3",
+   "x": 61,
+   "y": 6335,
+   "w": 47,
+   "h": 47,
+   "section": "rsvp"
+  },
+  {
+   "z": 122,
+   "id": "2594:315",
+   "type": "RECTANGLE",
+   "name": "vdf 6",
+   "x": 8,
+   "y": 6363,
+   "w": 48,
+   "h": 78,
+   "section": "rsvp"
+  },
+  {
+   "z": 123,
+   "id": "2594:371",
+   "type": "GROUP",
+   "name": "Group 245",
+   "x": 14,
+   "y": 4052,
+   "w": 390,
+   "h": 382,
+   "section": "akad"
+  },
+  {
+   "z": 124,
+   "id": "2594:370",
+   "type": "GROUP",
+   "name": "Group 244",
+   "x": 6,
+   "y": 4639,
+   "w": 390,
+   "h": 382,
+   "section": "resepsi"
+  },
+  {
+   "z": 125,
+   "id": "2594:400",
+   "type": "GROUP",
+   "name": "Ucapan Dan Harapan",
+   "x": 42,
+   "y": 6815,
+   "w": 309.96,
+   "h": 843,
+   "section": "wish"
+  },
+  {
+   "z": 126,
+   "id": "2594:429",
+   "type": "RECTANGLE",
+   "name": "e5748ce97e33b77996146a85adb73e3e-Photoroom 5",
+   "x": 340.42,
+   "y": 6674,
+   "w": 120,
+   "h": 214,
+   "section": "wish"
+  },
+  {
+   "z": 127,
+   "id": "2594:434",
+   "type": "RECTANGLE",
+   "name": "e5748ce97e33b77996146a85adb73e3e-Photoroom 6",
+   "x": 309,
+   "y": 6753.86,
+   "w": 76.98,
+   "h": 136.81,
+   "section": "wish"
+  },
+  {
+   "z": 128,
+   "id": "2594:430",
+   "type": "RECTANGLE",
+   "name": "22478171c4efd7628bcca889ba8317ad-Photoroom 4",
+   "x": -71,
+   "y": 6704,
+   "w": 188,
+   "h": 236,
+   "section": "wish"
+  },
+  {
+   "z": 129,
+   "id": "2594:431",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 14",
+   "x": 325,
+   "y": 6787.24,
+   "w": 77,
+   "h": 115,
+   "section": "wish"
+  },
+  {
+   "z": 130,
+   "id": "2594:432",
+   "type": "RECTANGLE",
+   "name": "6eddb8304810f05300d9797958a02a04-Photoroom 4",
+   "x": 123.19,
+   "y": 6860.72,
+   "w": 119,
+   "h": 167,
+   "section": "wish"
+  },
+  {
+   "z": 131,
+   "id": "2594:433",
+   "type": "RECTANGLE",
+   "name": "d72f1100-c23f-4df1-9504-9b2546f283a6-Photoroom 4",
+   "x": 348,
+   "y": 6858,
+   "w": 93,
+   "h": 93,
+   "section": "wish"
+  },
+  {
+   "z": 132,
+   "id": "2594:438",
+   "type": "TEXT",
+   "name": "We sincerely thank you for your presence, prayers, and blessings on our special day.",
+   "x": 66,
+   "y": 8539,
+   "w": 272,
+   "h": 41,
+   "section": "footer",
+   "characters": "We sincerely thank you for your presence, prayers, and blessings on our special day.",
+   "styles": {
+    "fills": [
+     "#7c4a15"
+    ],
+    "fontFamily": "Pochaevsk",
+    "fontSize": 12,
+    "fontStyle": "Regular",
+    "fontWeight": 400,
+    "lineHeight": {
+     "unit": "PIXELS",
+     "value": 17
+    },
+    "textAlignHorizontal": "CENTER"
+   }
+  },
+  {
+   "z": 133,
+   "id": "2594:439",
+   "type": "GROUP",
+   "name": "Group 176",
+   "x": 18,
+   "y": 8587,
+   "w": 357,
+   "h": 107.16,
+   "section": "footer"
+  },
+  {
+   "z": 134,
+   "id": "2594:459",
+   "type": "RECTANGLE",
+   "name": "38e50968-13f1-46ba-b7da-6cb7be29790c-Photoroom 3",
+   "x": 146,
+   "y": 7715,
+   "w": 102,
+   "h": 92,
+   "section": "footer"
+  },
+  {
+   "z": 135,
+   "id": "2594:462",
+   "type": "RECTANGLE",
+   "name": "6eddb8304810f05300d9797958a02a04-Photoroom 6",
+   "x": -19,
+   "y": 7608,
+   "w": 173,
+   "h": 219,
+   "section": "footer"
+  },
+  {
+   "z": 136,
+   "id": "2594:463",
+   "type": "RECTANGLE",
+   "name": "6eddb8304810f05300d9797958a02a04-Photoroom 7",
+   "x": 409,
+   "y": 7608,
+   "w": 173,
+   "h": 219,
+   "section": "footer"
+  },
+  {
+   "z": 137,
+   "id": "2594:466",
+   "type": "RECTANGLE",
+   "name": "e5748ce97e33b77996146a85adb73e3e-Photoroom 8",
+   "x": 353.89,
+   "y": 7763,
+   "w": 95,
+   "h": 168,
+   "section": "footer"
+  },
+  {
+   "z": 138,
+   "id": "2594:467",
+   "type": "RECTANGLE",
+   "name": "e5748ce97e33b77996146a85adb73e3e-Photoroom 9",
+   "x": 35.9,
+   "y": 7756,
+   "w": 95,
+   "h": 168,
+   "section": "footer"
+  },
+  {
+   "z": 139,
+   "id": "2594:475",
+   "type": "RECTANGLE",
+   "name": "d77352ec44f5d78a5fbdd8ea61240614-Photoroom 7",
+   "x": 291,
+   "y": 7834,
+   "w": 104,
+   "h": 104,
+   "section": "footer"
+  },
+  {
+   "z": 140,
+   "id": "2594:476",
+   "type": "RECTANGLE",
+   "name": "d77352ec44f5d78a5fbdd8ea61240614-Photoroom 8",
+   "x": 101,
+   "y": 7831,
+   "w": 104,
+   "h": 104,
+   "section": "footer"
+  },
+  {
+   "z": 141,
+   "id": "2594:471",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 16",
+   "x": 13.6,
+   "y": 7848,
+   "w": 51.32,
+   "h": 76.98,
+   "section": "footer"
+  },
+  {
+   "z": 142,
+   "id": "2594:472",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 17",
+   "x": 377.83,
+   "y": 7841,
+   "w": 51.32,
+   "h": 76.98,
+   "section": "footer"
+  },
+  {
+   "z": 143,
+   "id": "2594:469",
+   "type": "RECTANGLE",
+   "name": "8b20970f62ea5a51c736570fa510237e-Photoroom 6",
+   "x": 17,
+   "y": 7902,
+   "w": 58,
+   "h": 58,
+   "section": "footer"
+  },
+  {
+   "z": 144,
+   "id": "2594:470",
+   "type": "RECTANGLE",
+   "name": "8b20970f62ea5a51c736570fa510237e-Photoroom 7",
+   "x": 320,
+   "y": 7902,
+   "w": 58,
+   "h": 58,
+   "section": "footer"
+  },
+  {
+   "z": 145,
+   "id": "2594:473",
+   "type": "RECTANGLE",
+   "name": "79b2b3ba-d620-4e90-877b-8582253132d9-Photoroom 8",
+   "x": 335,
+   "y": 7772,
+   "w": 40,
+   "h": 35,
+   "section": "footer"
+  },
+  {
+   "z": 146,
+   "id": "2594:474",
+   "type": "RECTANGLE",
+   "name": "79b2b3ba-d620-4e90-877b-8582253132d9-Photoroom 9",
+   "x": 14,
+   "y": 7772,
+   "w": 40,
+   "h": 35,
+   "section": "footer"
+  },
+  {
+   "z": 147,
+   "id": "2609:109",
+   "type": "RECTANGLE",
+   "name": "38e50968-13f1-46ba-b7da-6cb7be29790c-Photoroom 4",
+   "x": 271,
+   "y": 1086,
+   "w": 66,
+   "h": 143,
+   "section": "quote"
+  },
+  {
+   "z": 148,
+   "id": "2610:111",
+   "type": "RECTANGLE",
+   "name": "download (1)-Photoroom 1",
+   "x": 0,
+   "y": 5119,
+   "w": 210,
+   "h": 281,
+   "section": "countdown"
+  },
+  {
+   "z": 149,
+   "id": "2610:131",
+   "type": "RECTANGLE",
+   "name": "6eddb8304810f05300d9797958a02a04-Photoroom 8",
+   "x": 145,
+   "y": 5123,
+   "w": 111,
+   "h": 157,
+   "section": "countdown"
+  },
+  {
+   "z": 150,
+   "id": "2610:112",
+   "type": "RECTANGLE",
+   "name": "sdc 1",
+   "x": 24,
+   "y": 5209,
+   "w": 348,
+   "h": 116,
+   "section": "countdown"
+  },
+  {
+   "z": 151,
+   "id": "2610:113",
+   "type": "RECTANGLE",
+   "name": "ed629534-ca5f-4bb1-b04d-dc02557a82c5-Photoroom 1",
+   "x": 53,
+   "y": 5217,
+   "w": 296,
+   "h": 99,
+   "section": "countdown"
+  },
+  {
+   "z": 152,
+   "id": "2610:119",
+   "type": "RECTANGLE",
+   "name": "a127d5c7d1b2050af40986d63ff118d3 1",
+   "x": -1,
+   "y": 5176,
+   "w": 38,
+   "h": 140,
+   "section": "countdown"
+  },
+  {
+   "z": 153,
+   "id": "2610:126",
+   "type": "RECTANGLE",
+   "name": "a127d5c7d1b2050af40986d63ff118d3 2",
+   "x": 34.8,
+   "y": 5189.93,
+   "w": 30.81,
+   "h": 113.84,
+   "section": "countdown"
+  },
+  {
+   "z": 154,
+   "id": "2610:114",
+   "type": "RECTANGLE",
+   "name": "e5748ce97e33b77996146a85adb73e3e-Photoroom 10",
+   "x": 289,
+   "y": 5157,
+   "w": 67,
+   "h": 119,
+   "section": "countdown"
+  },
+  {
+   "z": 155,
+   "id": "2610:115",
+   "type": "RECTANGLE",
+   "name": "67be6cb93ae729292ef432fd5a61b8ad-Photoroom 18",
+   "x": 70,
+   "y": 5226,
+   "w": 60,
+   "h": 90,
+   "section": "countdown"
+  },
+  {
+   "z": 156,
+   "id": "2610:116",
+   "type": "RECTANGLE",
+   "name": "7369a3f7-db24-48f3-9f72-451c062fb4d5-Photoroom 8",
+   "x": 321,
+   "y": 5167,
+   "w": 51,
+   "h": 77,
+   "section": "countdown"
+  },
+  {
+   "z": 157,
+   "id": "2610:117",
+   "type": "RECTANGLE",
+   "name": "ac9d28e4f3baf4db87da3206b3157f7c 1",
+   "x": 6,
+   "y": 5296,
+   "w": 45,
+   "h": 40,
+   "section": "countdown"
+  },
+  {
+   "z": 158,
+   "id": "2610:125",
+   "type": "RECTANGLE",
+   "name": "e057c4cdeabafe2debb69eaeb48c9b12 1",
+   "x": 33,
+   "y": 5285,
+   "w": 40,
+   "h": 100,
+   "section": "countdown"
+  },
+  {
+   "z": 159,
+   "id": "2610:122",
+   "type": "RECTANGLE",
+   "name": "f2d770ff0a252845a668d2c51d3f31e4 2",
+   "x": 29,
+   "y": 5305,
+   "w": 31,
+   "h": 28,
+   "section": "countdown"
+  },
+  {
+   "z": 160,
+   "id": "2610:118",
+   "type": "RECTANGLE",
+   "name": "ac9d28e4f3baf4db87da3206b3157f7c 2",
+   "x": 0,
+   "y": 5285,
+   "w": 35,
+   "h": 31,
+   "section": "countdown"
+  },
+  {
+   "z": 161,
+   "id": "2610:121",
+   "type": "RECTANGLE",
+   "name": "ac9d28e4f3baf4db87da3206b3157f7c 3",
+   "x": 12.73,
+   "y": 5301,
+   "w": 41.57,
+   "h": 36.99,
+   "section": "countdown"
+  },
+  {
+   "z": 162,
+   "id": "2610:120",
+   "type": "RECTANGLE",
+   "name": "f2d770ff0a252845a668d2c51d3f31e4 1",
+   "x": 45,
+   "y": 5280,
+   "w": 27,
+   "h": 25,
+   "section": "countdown"
+  },
+  {
+   "z": 163,
+   "id": "2610:123",
+   "type": "RECTANGLE",
+   "name": "a64cbd2ca28d4cf43108f90cd86c33fa 1",
+   "x": 25,
+   "y": 5285,
+   "w": 27,
+   "h": 28,
+   "section": "countdown"
+  },
+  {
+   "z": 164,
+   "id": "2610:124",
+   "type": "RECTANGLE",
+   "name": "a64cbd2ca28d4cf43108f90cd86c33fa 2",
+   "x": 339,
+   "y": 5244,
+   "w": 27,
+   "h": 28,
+   "section": "countdown"
+  }
+ ]
+}

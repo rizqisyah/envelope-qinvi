@@ -1,5 +1,8 @@
 import { ref } from 'vue'
 
+// The hero's couple portrait deduped into footer/, so the body glob misses it.
+import heroCouple from '../assets/footer/parts/21_2594-208_img-8300.webp'
+
 // Assets are discovered by glob so new slices need no edit here.
 // Cover = the splash screen (Frame 241 = opening/); body = the first screens behind it.
 // assets/cover/ is Frame 242's cover *section*, so it belongs to the body, not the splash.
@@ -18,6 +21,8 @@ const bodyImages = Object.values(
     { eager: true, import: 'default' },
   ),
 ) as string[]
+
+bodyImages.push(heroCouple)
 
 const coverLoaded = ref(false)
 const bodyLoaded = ref(false)

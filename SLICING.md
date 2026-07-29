@@ -23,6 +23,7 @@ All copy is data-driven via `useWedding()`, so these are placeholders only.
 | File | What it is |
 |------|------------|
 | `.figma-ref/frame241-layout.json` | Frame 241: every graphic + text node, with the verified render position of each and why three nodes were dropped |
+| `.figma-ref/frame242-zorder.json` | **Frame 242's 165 direct children in Figma child order** — the only file that carries z-order. Read this before building any band |
 | `.figma-ref/frame242-layout.json` | All 344 nodes incl. nested: id, type, name, parent, depth, x/y/w/h (frame-local), section, text, and `styles` (font family/size/weight/line-height/fills) |
 | `.figma-ref/frame242-raw.json` | Untouched `get_selection` dump — regenerate the layout from this rather than re-querying Figma |
 | `.figma-ref/asset-dedupe-map.json` | Which exports collapsed into which file (see "Deduped assets" below) |
@@ -65,11 +66,34 @@ pnpm dev & node scripts/shot.mjs   # 375×725, 375×812, 1440×900 + clicks the 
 then diff `.figma-tmp/web-mobile.png` against `.figma-tmp/frame241-full.png`. The built cover
 currently sits at a mean per-channel difference of **3.35 / 255** below the status-bar row.
 
+## Frame 242 — three things that will bite you
+
+**1. `frame242-layout.json` does not carry z-order.** It is sorted by `(depth, y)`, so its array
+order is meaningless for stacking, and at `depth >= 1` its x/y are parent-relative, not
+frame-local. Use `frame242-zorder.json` (child order = painted order, higher z = on top,
+coordinates always frame-local) whenever layers overlap. The hero was built wrong twice before
+this was noticed: `Group 234` paints *above* the two photos, and its transparent aperture is what
+crops them into the ornate frame.
+
+**2. Figma clips exports to the parent frame, silently.** `Group 234` is 375 × 724 at y −38, but
+exports 375 × 686 — the 38px above the frame is gone, so the asset belongs at **y 0**, not y −38.
+Always compare the export's pixel size against the node's declared size before placing it.
+
+**3. `section` in `frame242-layout.json` is incomplete.** 105 of 344 nodes have `section: null`,
+including ten top-level TEXT nodes that are real section headings — "The Bride & The Groom",
+"And", "THE GLIMPSE OF US", "SAVE THE DATE", "09. 09. 26", "We're getting married",
+"Thank You !", "Antonio + Aliyah". Never conclude a band has no text from that field alone.
+`frame242-zorder.json` derives `section` from y for all 165 top-level children.
+
+The two page-wide backdrops (`2550:130` paper at y 13, `2560:276` bg-strip at y 2821) are
+**scale-1 exports** (375 × 8736 and 375 × 5928) while every other asset is scale 2 — a 2× export
+of something 8700px tall exceeds what Figma will produce. Don't "fix" this by re-exporting.
+
 ## Frame 242 — section map
 
 | # | y range | Section | Assets |
 |---|---------|---------|--------|
-| 1 | 0–760 | Hero — "The Bride & The Groom", ornate frame, couple portrait | `hero/` (2) |
+| 1 | 0–760 | Hero — "The Bride & The Groom", ornate frame, couple portrait — **built** | `hero/` (2) + `footer/21_..._img-8300` |
 | 2 | 760–1000 | Cover — white envelope, "Wedding Invitation" stamp, "Save The Date" seal | `cover/` (5) |
 | 3 | 1000–1330 | Quote — QS Ar-Rum 21 card | `quote/` (10) |
 | 4 | 1330–1960 | Groom — Antonio | `groom/` (9) |
@@ -155,8 +179,10 @@ those two lines at y 532 / 553 instead of the reported 534 / 555.
   If pearls are missing along the footer, they are the reason.
 - `DEFAULT_SLUG` in `src/lib/api.ts` and the `name` field in `package.json` are both still
   `tema-elegan-putih`, carried over from the previous template. Neither is this project's slug.
-- Frame 242's components are still stubs — `InviteBody` and `BottomNav`. `CoverSection` is built
-  (Frame 241).
+- Frame 242: only the hero band is built. `InviteBody` renders it plus 14 placeholders, and owns
+  the two page-wide backdrops. `BottomNav` is still a stub. `CoverSection` (Frame 241) is done.
+- The hero band's y 679–760 shows plain paper because the "Wedding Invitation" stamp
+  (`2594:179`, z69, y 722) belongs to the cover band, which isn't built yet.
 
 ## Re-exporting from Figma
 
