@@ -1,0 +1,15 @@
+:root {
+  /* colors — from Figma */
+  --maroon-title: #900202;
+  --maroon-text: #961a1a;
+  --gold: #d9bf9d;
+
+  /* fonts */
+  --font-script: "Pinyon Script", cursive;
+  --font-hand: "Playball", cursive;
+
+  /* design frame reference (Figma cover) */
+  --frame-w: 375;
+  --frame-h: 725;
+  --card-max: 430px;
+}
