@@ -7,7 +7,8 @@
   "akadArtRows": "4052-4434, mean 2.93/255",
   "resepsiArtRows": "4639-5021, mean 2.93/255",
   "worstRow": "akad 4288 at 24.08, resepsi 4875 at 24.00 -- 4875-587=4288, the same row of the same picture",
-  "note": "The two bands scoring identically to two decimals, with the worst row landing at exactly the same offset, is the confirmation that the translation is right. A per-layer solve would only be re-deriving akad's already-verified numbers."
+  "note": "The two bands scoring identically to two decimals, with the worst row landing at exactly the same offset, is the confirmation that the translation is right. A per-layer solve would only be re-deriving akad's already-verified numbers.",
+  "unverified": "The rendered width of the string \"Resepsi Nikah\" itself. Its placement anchors are exact (x0/y0/y1 within 0.01px of the translation) and its left edge and baseline are proven, but how wide the glyphs run follows from the font, and this string appears in no reference image -- 2560:262 is hidden, so it is in neither the render nor any screenshot the design has given up. Consistency check rather than proof: Figma's node widths are 202 (Akad Nikah) and 234 (Resepsi Nikah); the browser's ink boxes are 183.5 and 209.6, ratios 0.908 and 0.896, so the two engines agree on relative metrics to about 1%. Closing this properly would mean toggling the node visible in the Figma file, which is a change to someone else's document and was not made."
  },
  "layers": [
   {

@@ -380,10 +380,17 @@ const mapsUrl = computed(() => event.value?.maps_url || '')
 }
 
 /*
- * Resepsi's five TEXT nodes ride Group 244's (-8, +587) like every other child of
- * the group, so only `left` differs and only by the group offset. Kept as a
- * modifier rather than a prop: it is the same shift the layer tables already carry,
- * and writing it once here is harder to get wrong than five more props.
+ * The one place this component is NOT band-agnostic. Resepsi's five TEXT nodes ride
+ * Group 244's (-8, +587) like every other child of the group, so only `left` differs
+ * and only by the group offset -- five values, written once here rather than
+ * threaded through as five more props.
+ *
+ * The cost is that a second band's name is hardcoded in a shared stylesheet. That is
+ * defensible for two bands and stops being so at three: a third ceremony card should
+ * turn these into a `textLeft` prop object rather than adding another modifier block.
+ * Nothing else in this file would notice if this block were dropped -- the copy would
+ * still be right and every content assertion would still pass while the whole card's
+ * text sat 8px off -- so check-ceremony.mjs pins these five x positions directly.
  */
 .band.resepsi .band__date,
 .band.resepsi .band__time {

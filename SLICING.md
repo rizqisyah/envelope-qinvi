@@ -384,10 +384,19 @@ have meant debugging a component written an hour earlier instead of plain code, 
 per-band exception would have had to be threaded through it under pressure.
 
 What the shared component takes is the machinery — markup, reveal choreography, text
-placement, the Maps control — and what it does not take is the coordinates. Each band
-keeps its own layer table. A `dx` prop would have saved about thirty lines and buried
-the two things this band proves are dangerous: that the numbers are the expensive part,
-and that not everything in a band shares one offset.
+placement, the Maps control. What it does not take is the layer geometry: each band
+keeps its own `behind`/`front` table, and the heading is its own prop. A `dx` prop
+would have saved about thirty lines and buried the two things this band proves are
+dangerous: that the numbers are the expensive part, and that not everything in a band
+shares one offset.
+
+One exception, worth knowing about rather than glossing: the five TEXT nodes *do* all
+ride the group offset, so their `left` values live in the shared stylesheet as a
+`.band.resepsi` modifier instead of a per-band table. That hardcodes a band name
+inside the shared component — fine at two bands, wrong at three, where it should
+become a prop. It is also invisible to every content assertion: drop the block and the
+copy is still correct while the whole card's text sits 8px off. Only a pixel diff would
+catch that, so `check-ceremony.mjs` pins those five x positions directly.
 
 ## Frame 242 — three things that will bite you
 

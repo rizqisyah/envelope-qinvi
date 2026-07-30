@@ -31,12 +31,14 @@ const BANDS = [
     index: 0,
     line2: 'Akad Nikah',
     want: { x0: 24.9, y0: 3937.1, x1: 281.3, y1: 4042.9 },
+    lefts: { date: 104, time: 104, venue: 68, address: 116, maps: 161.08 },
   },
   {
     name: 'resepsi',
     index: 1,
     line2: 'Resepsi Nikah',
     want: { x0: 24.88, y0: 4531.93, x1: 306.76, y1: 4637.79 },
+    lefts: { date: 96, time: 96, venue: 60, address: 108, maps: 153.1 },
   },
 ]
 
@@ -93,6 +95,14 @@ async function render(band, events, tz = 'Asia/Jakarta', motion = 'reduce') {
       .locator(`.${band.name} .band__address`)
       .evaluate((n) => n.scrollHeight - n.clientHeight),
     isLink: (await page.locator(`.${band.name} a.band__maps`).count()) === 1,
+    lefts: Object.fromEntries(
+      await Promise.all(
+        Object.keys(band.lefts).map(async (k) => [
+          k,
+          (await page.locator(`.${band.name} .band__${k}`).boundingBox()).x - sheet.x,
+        ]),
+      ),
+    ),
   }
   await page.close()
   return out
@@ -156,6 +166,18 @@ for (const band of BANDS) {
   // --- an end of 23:59 is how the API says "no end time" ---
   const open = await render(band, [{ event_date: '2029-04-21', event_time: '19:00 - 23:59' }])
   check(open.time === '19.00 WIB - Selesai', `open-ended range (got "${open.time}")`)
+
+  /*
+   * Resepsi's five TEXT nodes ride Group 244's -8 through a `.band.resepsi` modifier
+   * in the shared component, and nothing else here would notice if it were dropped:
+   * the copy would still be right, the headings would still be placed, and all the
+   * other assertions would still pass while the whole card's text sat 8px right.
+   * Only a fresh pixel diff would catch that, so pin the x positions here.
+   */
+  for (const [k, want] of Object.entries(band.lefts)) {
+    const off = Math.abs(live.lefts[k] - want)
+    check(off < 0.5, `${k} sits at x ${want} (got ${live.lefts[k].toFixed(2)})`)
+  }
 
   // --- the heading, which the pixel diff cannot score at all ---
   check(live.heads.length === 2, `both heading lines render (got ${live.heads.length})`)
