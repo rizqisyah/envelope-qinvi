@@ -75,9 +75,10 @@ for (let y = 0; y < sheetHeight; y += 400) {
 }
 await sheet.waitForTimeout(1500)
 // Every band below the fold is viewport-gated, so the scroll above is what fires
-// them. Check the deepest two actually opened.
+// them. Check the deepest few actually opened.
 const dividerRevealed = (await sheet.locator('.divider.is-in').count()) === 1
 const galleryRevealed = (await sheet.locator('.gallery.is-in').count()) === 1
+const akadRevealed = (await sheet.locator('.akad.is-in').count()) === 1
 await sheet.evaluate(() => window.scrollTo(0, 0))
 await sheet.waitForTimeout(400)
 await sheet.locator('.sheet').screenshot({ path: `${OUT}/web-sheet.png` })
@@ -89,5 +90,7 @@ console.log(`cover removed after transition: ${coverGone}`)
 console.log(`hero reveal fired: ${revealed}`)
 console.log(`divider reveal fired on scroll: ${dividerRevealed}`)
 console.log(`gallery reveal fired on scroll: ${galleryRevealed}`)
+console.log(`akad reveal fired on scroll: ${akadRevealed}`)
 if (errors.length) console.log(errors.join('\n'))
-if (!opened || !revealed || !dividerRevealed || !galleryRevealed) process.exitCode = 1
+if (!opened || !revealed || !dividerRevealed || !galleryRevealed || !akadRevealed)
+  process.exitCode = 1

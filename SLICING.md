@@ -90,6 +90,7 @@ python3 scripts/solve_band.py .figma-ref/bands/<band>.json    # a whole stack
 node   scripts/fit-text.mjs <port> <sel> <x> <y> <w> <h>      # where a text node's glyphs land
 python3 scripts/ink.py <clipX> <clipY> [bandY0]               # ...turned into a bounding box
 node   scripts/check-gallery.mjs <port>                       # the gallery carousel's own logic
+node   scripts/check-akad.mjs <port>                          # the akad card's live copy
 python3 scripts/crop-gallery-fallback.py                      # its stock photos, cut from its plate
 ```
 
@@ -175,6 +176,17 @@ in that material. Keep each band's array in Figma's z order and carry the
 animation delay on the layer; do not group layers by entrance, because the
 grouping silently reorders the stack and nothing downstream will flag it.
 
+**A clipped export can *prove* a coordinate.** Three of the akad band's florals
+report a width the export does not have — 81 → 69 at x 306, 98 → 69 at x 306,
+63 → 60 at x 315 — and in every case the export width is exactly `375 - x`. That is
+the frame clipping the right edge, which only happens if x is what Figma says, so
+those three needed no solving at all. The same rule runs the other way and is
+stronger: a rotated node whose export is *wider* than its declared box cannot sit
+where Figma claims if `x + exportWidth > 375` and the export came back unclipped.
+That caps x at `375 - exportWidth`, and for `2594:319` and `2594:328` the cap is
+also where they score best — the band solve had walked 328 out to x 341, which the
+clip rule rules out outright. Apply the cap before trusting a solver minimum.
+
 **Shadow bleed is not symmetric, so register off the art, not the box.** Group 219
 (the gallery carousel) declares 356.78 × 367 at (12, 3501) and exports 370.5 × 384.5 —
 its rounded rects carry a drop shadow that bleeds 7.5 left, 6.3 right, 4 up and 13.5
@@ -184,6 +196,28 @@ scale 2), and one child rect's declared position is enough to pin the origin fro
 there: `x0 = 34.05 − 59/2 = 4.55`, `y0 = 3501 − 8/2 = 3497`. Then confirm with a
 ±3px probe — a clean bowl, not a plateau. `solve_band.py` reports "no gradient" for
 both an already-optimal layer and a hopeless one, so it cannot make that call.
+
+## Placing live text on an exported card
+
+The akad card is the first band with a real text block on it, and the measurement
+is cheap enough that guessing is not worth it: place each TEXT node at its own
+declared y, screenshot, and compare ink rows against the render with a colour
+filter tight enough to exclude the artwork (`r - g > 35` picks the maroon copy out
+of both the green florals and the gold button). Frame 242's card came back with
+horizontal centres and glyph widths matching **to the pixel** on the first try — so
+only `top` ever needs correcting, and the correction is per-block, not global:
+6px for Meow Script 20/24, 4px for Ovo at line-height 24, 3px for Ovo 8/12.
+
+Two things the copy itself taught us:
+
+- **The design's mock data is not self-consistent.** The card reads "Saturday,
+  19 April 2029"; that date is a Thursday. So the fallback strings are the design's
+  literal text, and `scripts/check-akad.mjs` asserts them literally while testing
+  the formatter against a date that really is a Saturday.
+- **A bare `YYYY-MM-DD` is parsed as UTC midnight**, which renders as the day before
+  anywhere west of Greenwich — the wedding would read Friday to a guest in New York.
+  `src/lib/format.ts` builds date-only strings as local dates, and the check runs
+  one case under `America/New_York` to keep it that way.
 
 ## A band that is a component, not a picture
 
@@ -268,8 +302,8 @@ of something 8700px tall exceeds what Figma will produce. Don't "fix" this by re
 | 6 | 2014–2810 | Bride — Allysa — **built** | `bride/` (6) + `glimpse/00_..._vdsvzdsvd-1` |
 | 7 | 2810–3501 | Glimpse of Us — polaroids, green envelope, "09.09.26" — **built** | `glimpse/` (22) + `gallery/00_2555-112` |
 | 8 | 3501–4052 | Gallery — photo carousel — **built, one plate + live overlays** | `gallery/01_..._group-219` |
-| 9 | 4052–4560 | Akad | `akad/` (1) |
-| 10 | 4560–5180 | Resepsi | `resepsi/` (1) |
+| 9 | 4052–4639 | Akad — envelope + scalloped card, live event copy — **built** | `akad/` (14) |
+| 10 | 4639–5180 | Resepsi — the same composition again | `resepsi/` (14) |
 | 11 | 5180–5420 | Countdown — silver tray | `countdown/` (17) |
 | 12 | 5420–6130 | Wedding Gift — bank cards + address | `gift/` (6) |
 | 13 | 6130–6760 | RSVP — olive arch form | `rsvp/` (7) |
@@ -368,9 +402,25 @@ declared height tells you nothing about where the glyphs land.
   If pearls are missing along the footer, they are the reason.
 - `DEFAULT_SLUG` in `src/lib/api.ts` and the `name` field in `package.json` are both still
   `tema-elegan-putih`, carried over from the previous template. Neither is this project's slug.
-- Frame 242: the hero, envelope, groom, divider, bride, glimpse and gallery bands are built.
-  `InviteBody` renders them plus 7 placeholders and owns the two page-wide backdrops. `BottomNav`
-  is still a stub. `CoverSection` (Frame 241) is done.
+- Frame 242: the hero, envelope, groom, divider, bride, glimpse, gallery and akad bands are
+  built. `InviteBody` renders them plus 6 placeholders and owns the two page-wide backdrops.
+  `BottomNav` is still a stub. `CoverSection` (Frame 241) is done.
+- `2594:329`, a white orchid spray in the akad band, paints below the card and is 98% covered by
+  it — measured against the card export's own alpha, not inferred from its 0.000 leave-one-out,
+  which would look identical if the coordinates were simply wrong somewhere covered. A probe does
+  prefer x 20 by 0.26/255, but that is the window's edge and is the white-on-white false minimum
+  this file warns about. Kept in the stack so the paint order matches Figma.
+- The akad address box is exactly the design's three lines with no slack, so `useFitText` scales
+  its `line-height` as well as its `font-size` — shrinking only the glyphs cannot buy a fourth
+  line. `check-akad.mjs` pushes a 180-character address through it, which lands with 1px to
+  spare at the composable's `MIN_SCALE` of 0.72. Longer than that will overflow the card.
+- Resepsi (Group 244) is the akad composition again from y 4639, with its own copies of all 14
+  assets at different coordinates. `AkadSection` is deliberately *not* generalised yet — extract
+  the shared parts when that band lands and it is clear what actually varies.
+- The akad card's Maps button (`2594:342`) is a flat `#eed891` rounded rect with uniform radius 6
+  and no effects, so it is drawn in CSS rather than shipped as the exported image — which also
+  makes it a real link with real states. With no `maps_url` it renders as an inert `<span>`
+  rather than a dead link.
 - The gallery band's height (551) assumes Akad has no art above y 4052, which is where its group
   box starts — rows 3868–4052 are bare paper in the render. Re-check when the Akad band lands.
 - The gallery band's two nav circles are `Rectangle 118` fills, not icons: the design draws no
@@ -399,9 +449,11 @@ declared height tells you nothing about where the glyphs land.
   composition, so stretching it drags the flap, the Save The Date sub-card and the wax seal down
   with it. +4% takes the band from 6.3 to 13.1 / 255 against the design, +7% to 15.8. Change
   `{ src: card, ... h: 566 }` in `EnvelopeSection.vue` if that trade is ever wanted.
-- `GlimpseSection` hardcodes the date as `09. 09. 26`. `useWedding().acara` is typed
-  `any[]` and no built band has pinned down which field carries a display date, so a
-  guess here would fail silently. Bind it when the Akad band establishes the shape.
+- `GlimpseSection` still hardcodes the date as `09. 09. 26`. The akad band has now pinned the
+  `acara` shape — `{ title, event_date, event_time, location_name, address, maps_url }` — so this
+  can be bound to `acara[0].event_date` through `formatEventDate`. The design prints it as
+  `09. 09. 26`, which is neither of the formats `src/lib/format.ts` produces, so it needs a third
+  formatter rather than a straight swap.
 - The glimpse band's title is rotated **9.9° clockwise** — measured off the tag
   export's own alpha edge, which is the only high-contrast straight line available.
   The tag's export carries its rotation; the title is live text, so `GlimpseSection`

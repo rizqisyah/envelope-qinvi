@@ -24,6 +24,7 @@ const bodyImages = Object.values(
       // Both files here are in use: the carousel plate, and the glimpse band's
       // date plate, which is filed under gallery/ -- see GlimpseSection.vue.
       '../assets/gallery/**/*.webp',
+      '../assets/akad/**/*.webp',
     ],
     { eager: true, import: 'default' },
   ),

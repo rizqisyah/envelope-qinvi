@@ -1,0 +1,183 @@
+{
+ "y0": 4040,
+ "y1": 4639,
+ "note": "Frame 242 akad band = Group 245 (2594:371) at (14, 4052) 390x382: olive envelope, white scalloped card, florals over both edges, and five TEXT nodes exported around as g245_* parts. Layers in the group's own child order (first child = bottom). Resepsi (Group 244) is the same composition again from y 4639, so the band stops there. Nothing from the gallery band above reaches past y 3868.",
+ "layers": [
+  {
+   "id": "2550:130",
+   "z": 0,
+   "asset": "src/assets/page/parts/00_2550-130_paper-bg.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 13
+  },
+  {
+   "id": "2560:276",
+   "z": 3,
+   "asset": "src/assets/page/parts/01_2560-276_bg-strip.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 2821
+  },
+  {
+   "id": "2594:323",
+   "z": 1231,
+   "asset": "src/assets/akad/parts/g245_2594-323.webp",
+   "x": 306,
+   "y": 4137,
+   "note": "green hops stem. Declared 81 wide at x 306, exported 69 = 375-306, so the clip width proves x; no solve needed"
+  },
+  {
+   "id": "2594:318",
+   "z": 1232,
+   "asset": "src/assets/akad/parts/g245_2594-318_envelope.webp",
+   "x": 32,
+   "y": 4052,
+   "note": "the olive envelope, export matches its declared 316x382 exactly"
+  },
+  {
+   "id": "2594:319",
+   "z": 1233,
+   "asset": "src/assets/akad/parts/g245_2594-319.webp",
+   "x": 233,
+   "y": 4080,
+   "search": 60,
+   "solve": true,
+   "note": "lily of the valley, rotated (declared 100x178, export 142x204). Declared x 308 is impossible: 308+142 overshoots the frame and the export is not clipped, so x <= 233. Paints below the card, so most of it is buried"
+  },
+  {
+   "id": "2594:329",
+   "z": 1234,
+   "asset": "src/assets/akad/parts/g245_2594-329.webp",
+   "x": 84,
+   "y": 4143,
+   "note": "white orchid spray, size exact. Paints below the card and sits entirely inside it, so it is invisible in the composite -- pinned at its declared position"
+  },
+  {
+   "id": "2594:320",
+   "z": 1235,
+   "asset": "src/assets/akad/parts/g245_2594-320.webp",
+   "x": 32,
+   "y": 4091,
+   "search": 12,
+   "solve": true,
+   "note": "the scalloped card. 315x315 declared, 316x319.5 exported -- a shadow grew the box"
+  },
+  {
+   "id": "2594:342",
+   "z": 1236,
+   "asset": "src/assets/akad/parts/g245_2594-342_maps-btn.webp",
+   "x": 161.08,
+   "y": 4323
+  },
+  {
+   "id": "2594:344",
+   "z": 1237,
+   "asset": "src/assets/akad/parts/g245_2594-344_pin.webp",
+   "x": 182,
+   "y": 4220
+  },
+  {
+   "id": "2594:321",
+   "z": 1238,
+   "asset": "src/assets/akad/parts/g245_2594-321_vdf-7.webp",
+   "x": 44,
+   "y": 4091,
+   "search": 12,
+   "solve": true
+  },
+  {
+   "id": "2594:326",
+   "z": 1239,
+   "asset": "src/assets/akad/parts/g245_2594-326.webp",
+   "x": 277,
+   "y": 4143,
+   "search": 20,
+   "solve": true
+  },
+  {
+   "id": "2594:324",
+   "z": 1240,
+   "asset": "src/assets/akad/parts/g245_2594-324.webp",
+   "x": 306,
+   "y": 4198,
+   "note": "sweet pea. Clipped to 69 = 375-306, so x is proven"
+  },
+  {
+   "id": "2594:325",
+   "z": 1241,
+   "asset": "src/assets/akad/parts/g245_2594-325.webp",
+   "x": 315,
+   "y": 4228,
+   "note": "big white rose. Clipped to 60 = 375-315, so x is proven"
+  },
+  {
+   "id": "2594:330",
+   "z": 1242,
+   "asset": "src/assets/akad/parts/g245_2594-330.webp",
+   "x": 44,
+   "y": 4171,
+   "note": "small white rose. Declared x 88 is 44px out -- one asset width -- and the solver window (+/-20) never reached the truth. locate.py and a 36-100 probe both land on x 44, worth 21/255 in its own box. Declared y is untouched"
+  },
+  {
+   "id": "2594:327",
+   "z": 1243,
+   "asset": "src/assets/akad/parts/g245_2594-327.webp",
+   "x": 315,
+   "y": 4270,
+   "search": 40,
+   "solve": true,
+   "note": "calla lily, rotated (declared 49.56x74.34 at x 374.26, export 59.5x80.5). x 374 would clip to under 1px, so it is wrong"
+  },
+  {
+   "id": "2594:328",
+   "z": 1244,
+   "asset": "src/assets/akad/parts/g245_2594-328.webp",
+   "x": 285,
+   "y": 4288,
+   "note": "gypsophila, rotated (declared 87x87 at x 319.21, export 90x114.5). Unclipped at 90 wide means x <= 285, and 285 is a sharp minimum -- the band solve walked to 341, which the clip rules out. Declared y is untouched"
+  }
+ ],
+ "textMasks": [
+  {
+   "id": "2594:335",
+   "note": "Saturday, / 19 April 2029",
+   "x": 100,
+   "y": 4126,
+   "w": 180,
+   "h": 60
+  },
+  {
+   "id": "2594:337",
+   "note": "10.00 WIB - 12.00 WIB",
+   "x": 100,
+   "y": 4184,
+   "w": 180,
+   "h": 30
+  },
+  {
+   "id": "2594:339",
+   "note": "Rumah mempelai wanita",
+   "x": 64,
+   "y": 4238,
+   "w": 250,
+   "h": 30
+  },
+  {
+   "id": "2594:341",
+   "note": "the three address lines",
+   "x": 100,
+   "y": 4262,
+   "w": 180,
+   "h": 56
+  },
+  {
+   "id": "2594:343",
+   "note": "the Maps label, on top of its own plate",
+   "x": 145,
+   "y": 4324,
+   "w": 92,
+   "h": 24
+  }
+ ]
+}
