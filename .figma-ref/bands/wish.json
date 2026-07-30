@@ -1,0 +1,148 @@
+{
+ "y0": 6600,
+ "y1": 7700,
+ "note": "Frame 242 Wedding Wish band, y 6760-7700 = Group 2594:400 plus six florals that are NOT its children (z 126-131 against the group's 125, so every floral paints OVER it). The group has NO shipped export: its own 666x1705 export was deleted because it wraps every TEXT node in the band, and the wishes panel is live data anyway. So this job composites only the two flat form plates plus the florals, and the panel is drawn in CSS. Four of the six florals have their x proven by the clip rule; only 2594:429 and 2594:432 needed probing. The RSVP arch (2594:299) is composited here as CONTEXT only; RsvpSection owns it.",
+ "layers": [
+  {
+   "id": "2550:130",
+   "z": 0,
+   "asset": "src/assets/page/parts/00_2550-130_paper-bg.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 13
+  },
+  {
+   "id": "2560:276",
+   "z": 3,
+   "asset": "src/assets/page/parts/01_2560-276_bg-strip.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 2821
+  },
+  {
+   "id": "2594:299",
+   "z": 116,
+   "asset": "src/assets/rsvp/parts/rsvp_2594-299_arch.webp",
+   "x": 35,
+   "y": 6173,
+   "note": "context only, owned by RsvpSection: the olive arch runs to y 6733, so rows 6674-6733 of this window are arch, not paper. Leaving it out put the window's error at 67/255 and made 2594:429 -- which paints on top of it -- unsolvable"
+  },
+  {
+   "id": "2594:425",
+   "z": 125,
+   "asset": "src/assets/wish/parts/wish_2594-425_input.webp",
+   "x": 48,
+   "y": 6979,
+   "note": "solve-only: flat #ffffff 285.3x36 at radius 10, ships as a live <input>"
+  },
+  {
+   "id": "2594:426",
+   "z": 125,
+   "asset": "src/assets/wish/parts/wish_2594-426_textarea.webp",
+   "x": 47,
+   "y": 7086,
+   "note": "solve-only: flat #ffffff 286.1x84 at radius 10, ships as a live <textarea>"
+  },
+  {
+   "id": "2594:429",
+   "z": 126,
+   "asset": "src/assets/wish/parts/00_2594-429.webp",
+   "x": 278,
+   "y": 6674,
+   "note": "rotated: declared 120x214 at x 340.4, exported 97x240. NOT clipped (a clip at 340.4 would give 34.6 wide), so x <= 375-97 = 278, and 278 is where it lands. Unsolvable until the RSVP arch was composited as context: it paints on top of the arch, and against bare paper the worth landscape was flat at +1.6 across the whole window. With the arch there it peaks at +3.03 against 1.78/1.64 either side. locate.py cannot place it (err 97) -- it is under all five of the other florals"
+  },
+  {
+   "id": "2594:434",
+   "z": 127,
+   "asset": "src/assets/wish/parts/02_2594-434.webp",
+   "x": 309,
+   "y": 6753,
+   "note": "declared 76.98x136.81 at x 309; exported 66 = 375-309 exactly, so the right clip proves x. y 6753 by worth (+3.41); locate.py fails here (err 91) because 430/431/432/433 all paint over it"
+  },
+  {
+   "id": "2594:430",
+   "z": 128,
+   "asset": "src/assets/wish/parts/01_2594-430.webp",
+   "x": 0,
+   "y": 6704,
+   "note": "declared 188x236 at x -71; exported 117 = 188-71, so it is LEFT-clipped -- and a left clip means the export BEGINS at frame x 0, not at the node's negative x. Place it at 0. locate.py independently returns (0,6704) at err 14.85"
+  },
+  {
+   "id": "2594:431",
+   "z": 129,
+   "asset": "src/assets/wish/parts/03_2594-431.webp",
+   "x": 325,
+   "y": 6769,
+   "note": "declared 77x115 at x 325; exported 50 = 375-325 exactly, so the clip proves x. Height 130 vs 115 means it is rotated, so y still needs solving"
+  },
+  {
+   "id": "2594:432",
+   "z": 130,
+   "asset": "src/assets/wish/parts/06_2594-432.webp",
+   "x": 0,
+   "y": 6774,
+   "note": "rotated: declared 119x167 at x 123.19, exported 123.5x201.5. Nowhere near its declared spot -- locate.py puts it at (0,6774) err 15.41, and worth was negative everywhere around the declared x, which is what probing the wrong region looks like"
+  },
+  {
+   "id": "2594:433",
+   "z": 131,
+   "asset": "src/assets/wish/parts/05_2594-433.webp",
+   "x": 348,
+   "y": 6858,
+   "note": "declared 93x93 at x 348; exported 27 = 375-348 exactly, so the clip proves x"
+  }
+ ],
+ "textMasks": [
+  {
+   "id": "2594:423",
+   "note": "\"Wedding Wish\", Pinyon Script 40/41.6",
+   "x": 70,
+   "y": 6800,
+   "w": 256,
+   "h": 66
+  },
+  {
+   "id": "2594:424",
+   "note": "the two body lines, EB Garamond SemiBold 16/22.4",
+   "x": 40,
+   "y": 6860,
+   "w": 314,
+   "h": 60
+  },
+  {
+   "id": "2594:428",
+   "note": "\"Nama\"",
+   "x": 43,
+   "y": 6943,
+   "w": 60,
+   "h": 30
+  },
+  {
+   "id": "2594:427",
+   "note": "the two-line textarea label",
+   "x": 42,
+   "y": 7030,
+   "w": 232,
+   "h": 52
+  },
+  {
+   "id": "2594:401",
+   "note": "the whole wishes panel: a CSS plate with four live cards, so none of it can be composited",
+   "x": 40,
+   "y": 7228,
+   "w": 316,
+   "h": 434
+  }
+ ],
+ "verification": {
+  "canonical": "art rows 6674-7660: 6.142/255 as shipped, via `node scripts/sheet-shot.mjs` then `python3 scripts/band-diff.py 6674 7660`. Art rows start at 6674, not the band's own 6760, because 2594:429 hangs 86 rows above it.",
+  "note": "6.142 is the highest figure in the file and 3.4 of it is one deliberate addition. Excluding the added Send button's rows (7172-7226) the same window scores 3.400; those 54 rows alone score 53.464, because the design draws absolutely nothing there. Quote 6.142 as what ships and 3.400 as what the slicing achieved -- both, not one.",
+  "rows": "6674-6760 (the RSVP arch's last rows, drawn by RsvpSection) 0.711. 6760-6820 1.902. 6820-6880 (heading) 2.535. 6880-6945 (body) 3.285. 6945-7030 (Nama + input) 1.333. 7030-7090 (the two-line label) 5.978. 7090-7230 20.928 -- all of it the added button. 7230-7660 (the wishes panel) 4.915.",
+  "method": "worth probe with the RSVP arch composited as context, each result cross-checked against scripts/locate.py. The two methods agree to the pixel on 430 and 432; on 429 and 434 locate.py returns err 91-97 because both are buried under the rest of the cascade, so worth is the only method that can place them. Text tops were swept on the LIVE band with scripts/sweep-text.mjs.",
+  "textFindings": "Neither the heading nor the body sits at its node y, and for the same reason: Figma centres the line box inside an auto-height node. Heading 51 against node 55 (41.6 line in a 32 box: 55-4.8=50.2), body 123 against node 101 (two 22.4 lines in an 87 box: 101+21.1=122.1). Both are sharp sweep minima. The Nama label IS at its node y (188). The two-line label needed line-height 23 rather than the node's 22.4 -- line 1 matched at 22.4 and only line 2 drifted.",
+  "panel": "Frame 237 is a FIXED 428 with radius 17, and its four cards total 432 -- the design clips the last one, which is the affordance that there is more. It scrolls; it must not grow, or every band below it moves. Card height is exactly 72 + lines*18 (12 pad + 20 name + 4 + 20 time + 4 + message + 12 pad), which reproduces the design's 144/108/90/90 at 4/2/1/1 lines. The card text column is 262 (x 66-328), measured off the render's own ink -- NOT the design's per-card paddings (right 24/45/24/24), which are Figma hug artifacts: its TEXT nodes are 291/296/327 wide and overflow their own content boxes.",
+  "unshipped": "wish_2594-425_input.webp and wish_2594-426_textarea.webp are flat #ffffff plates at radius 10 -- pictures of form controls. Layers here because 2594:432 and 2594:433 reach those rows; excluded from usePreloadAssets by negative glob and asserted never-fetched by scripts/check-wish.mjs.",
+  "additions": "The design draws NO submit control -- the form it shows cannot be sent. A 150x44 olive button sits in the 60 empty rows between the textarea (ends 7170) and the panel (starts 7230). This is the band's only addition and it is the whole difference between 6.142 and 3.400.",
+  "deviations": "Card 1's message keeps the design's own line COUNT (4) but breaks at different words: Figma rasterised its emoji with its own font and the browser uses Apple Color Emoji, which is wider, so \"kalian\" falls to line 2. No column width fixes it -- the browser's line is wider than the render's 286px ink at every setting. Card heights and the whole panel geometry are unaffected, which is what the check asserts. The textarea has resize: none, because a user-draggable box would move the panel and every band below it."
+ }
+}

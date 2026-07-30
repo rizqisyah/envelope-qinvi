@@ -97,6 +97,7 @@ node   scripts/check-ceremony.mjs <port>                      # the akad + resep
 node   scripts/check-countdown.mjs <port>                     # that the clock is a clock, not a picture
 node   scripts/check-gift.mjs <port>                          # the account cards + the clipboard
 node   scripts/check-rsvp.mjs <port>                          # the form's payload, failures + a11y
+node   scripts/check-wish.mjs <port>                          # the ucapan key, the panel, the wrap
 node   scripts/sheet-shot.mjs <port>                          # the live sheet at 375 x dsf 1
 python3 scripts/band-diff.py <y0> <y1> [x0] [x1]              # ...scored against the render
 python3 scripts/crop-gallery-fallback.py                      # its stock photos, cut from its plate
@@ -231,6 +232,28 @@ where Figma claims if `x + exportWidth > 375` and the export came back unclipped
 That caps x at `375 - exportWidth`, and for `2594:319` and `2594:328` the cap is
 also where they score best — the band solve had walked 328 out to x 341, which the
 clip rule rules out outright. Apply the cap before trusting a solver minimum.
+
+**A LEFT clip proves the coordinate too, but the coordinate it proves is 0.** Every
+case above is a right-edge clip, where the export begins at the node's own x and runs
+to 375, so you place it at that x. A left clip is the mirror image and the CSS is
+*not* the declared x: the wish band's `2594:430` is 188 wide at x −71 and exports
+117 = 188 − 71, so the export is the part of the node from frame x 0 rightwards — it
+goes at **x 0**, not at −71. Placing it at the declared −71 would slide it a further
+71px off the frame. `locate.py` returns exactly (0, 6704) for it, independently.
+
+| Clip | Export width | Where the export starts | CSS x |
+|------|--------------|-------------------------|-------|
+| right | `375 − x` | at the node's x | `x` |
+| left | `w + x` (x negative) | at frame x 0 | `0` |
+
+**A layer can be unsolvable purely because the band under it is missing.** The wish
+band's `2594:429` paints on top of the RSVP band's olive arch, which ends 27 rows into
+this band's window. With the arch left out, the worth landscape was dead flat at +1.6
+across a 78 × 160 window — no signal at all, and it read like a buried layer with
+nothing to recover. Compositing the neighbouring band's arch as a **context layer**
+(marked as such in the job, owned by the other component) made it peak sharply at
++3.03. So: when a band's window overlaps the one above it, put the overlapping art in
+the job. It also cost 67/255 of window error until it went in.
 
 **Shadow bleed is not symmetric, so register off the art, not the box.** Group 219
 (the gallery carousel) declares 356.78 × 367 at (12, 3501) and exports 370.5 × 384.5 —
@@ -611,7 +634,7 @@ of something 8700px tall exceeds what Figma will produce. Don't "fix" this by re
 | 11 | 5119–5485 | Countdown — silver tray, ticket, **live clock** — **built** | `countdown/` (16 of 17) |
 | 12 | 5485–6173 | Wedding Gift — 3 account cards, live copy + clipboard — **built** | `gift/` (10, 2 unshipped) |
 | 13 | 6173–6760 | RSVP — olive arch, **live form posting to `hadir2`** — **built** | `rsvp/` (7, 4 unshipped) |
-| 14 | 6760–7700 | Wedding Wish — form + wishes list | `wish/` (7) |
+| 14 | 6760–7700 | Wedding Wish — **live form + live wishes panel, both CSS** — **built** | `wish/` (6, 2 unshipped) |
 | 15 | 7700–8749 | Footer / Thank You + credits + IG/WA | `footer/` (32) |
 | — | full page | Paper texture backdrop + long bg strip | `page/` (2) |
 
@@ -710,6 +733,28 @@ declared height tells you nothing about where the glyphs land.
   countdown, gift and rsvp bands are built. `InviteBody` renders them plus 2 placeholders (wish,
   footer) and owns the two page-wide backdrops. The sheet is 7240 design px tall so far.
   `BottomNav` is still a stub. `CoverSection` (Frame 241) is done.
+- **The wish list's API key is `ucapan`, not `wishes`.** `useWedding` read `data.wishes` for
+  several bands' worth of work and it was always empty — and no pixel diff could ever catch it,
+  because an empty list falls back to the design's own four cards and therefore scores
+  *perfectly*. It now reads `data.ucapan ?? data.wishes`. When a band's fallback IS the design,
+  a passing diff is evidence of nothing; only a mock that sends the real key is.
+- The wish band's four cards are a flow layout, not positioned art: card height is exactly
+  `72 + lines × 18`, which reproduces the design's 144/108/90/90 at 4/2/1/1 lines. Its text
+  column is 262 (ink x 66–328, measured off the render) — **not** the design's per-card
+  paddings (right 24/45/24/24), which are Figma auto-layout hug artifacts: the TEXT nodes are
+  291/296/327 wide and overflow their own content boxes.
+- Card 1's message keeps the design's line *count* but breaks at different words. Figma
+  rasterised 💐 ✨ 🙏🏻 with its own emoji font; the browser uses Apple Color Emoji, which is
+  wider, so "kalian" falls to line 2. No column width fixes it. The count is what matters —
+  a fifth line would move every card below it and the panel with them, which
+  `check-wish.mjs` asserts against.
+- The wish panel is a **fixed** 428 that scrolls. Its four design cards total 432 and the
+  design clips the last one; that clipped edge is the affordance that there is more. Growing
+  it with the API's list length would move every band below it.
+- The wish band has **no submit control in the design** — the form as drawn cannot be sent.
+  The added 150 × 44 olive button sits in the 60 empty rows between the textarea and the
+  panel, and it is the entire difference between the band's shipped 6.142 and the 3.400 the
+  slicing itself achieved. Additions cost real diff; report both numbers.
 - The RSVP band is the first one that posts to the server. Its payload shape is pinned against
   the production app (`qinvi-fe-2`): `{ guest_name, phone, attendance_status, guest_count }` to
   `/v1/service/menu/hadir2/<slug>`. The design draws no guest-count field, so an attending guest

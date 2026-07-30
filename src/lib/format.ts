@@ -97,3 +97,41 @@ export function formatEventTime(raw?: string | null): string {
   if (!end || end === '00.00' || end === '23.59') return `${clockOf(from)} ${ZONE} - Selesai`
   return `${clockOf(from)} ${ZONE} - ${end} ${ZONE}`
 }
+
+/*
+ * "2 hari lalu" — the wish list's timestamps. The design prints Indonesian relative
+ * time, and unlike the dates above it does not switch to English.
+ */
+const AGO: [seconds: number, unit: string][] = [
+  [60, 'menit'],
+  [3600, 'jam'],
+  [86400, 'hari'],
+  [2592000, 'bulan'],
+  [31536000, 'tahun'],
+]
+
+export function relativeTime(value?: string | Date | null, now: number = Date.now()): string {
+  if (!value) return ''
+  /*
+   * The API sends MySQL-style "2026-07-28 10:00:00" — a space, no T, no zone. Chromium
+   * parses that; WebKit returns NaN, which would blank every timestamp on iPhone. The
+   * ISO form is understood by both, so normalise before parsing. A bare date with no
+   * zone is read as local time by both engines, which is what the guest expects.
+   */
+  const at =
+    value instanceof Date
+      ? value
+      : new Date(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}/.test(value) ? value.replace(' ', 'T') : value)
+  if (Number.isNaN(at.getTime())) return ''
+
+  // Under a minute, and also anything in the future: a guest's clock skewed ahead of
+  // the server would otherwise read "-3 menit lalu".
+  const secs = Math.floor((now - at.getTime()) / 1000)
+  if (secs < 60) return 'baru saja'
+
+  for (let i = AGO.length - 1; i >= 0; i--) {
+    const [step, unit] = AGO[i]
+    if (secs >= step) return `${Math.floor(secs / step)} ${unit} lalu`
+  }
+  return 'baru saja'
+}

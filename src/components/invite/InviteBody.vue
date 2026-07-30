@@ -15,6 +15,7 @@ import ResepsiSection from '../sections/ResepsiSection.vue'
 import CountdownSection from '../sections/CountdownSection.vue'
 import GiftSection from '../sections/GiftSection.vue'
 import RsvpSection from '../sections/RsvpSection.vue'
+import WishSection from '../sections/WishSection.vue'
 
 import paperBg from '../../assets/page/parts/00_2550-130_paper-bg.webp' // z0, y 13
 import quoteBg from '../../assets/quote/parts/00_2588-125_bac-2.webp' // z1, (-16, 679)
@@ -22,7 +23,6 @@ import bgStrip from '../../assets/page/parts/01_2560-276_bg-strip.webp' // z3, y
 
 // Bands still to build, in frame order.
 const pending = [
-  'Wish',
   'Footer',
 ]
 </script>
@@ -51,6 +51,7 @@ const pending = [
     <CountdownSection />
     <GiftSection />
     <RsvpSection />
+    <WishSection />
 
     <section v-for="name in pending" :key="name" class="sheet__placeholder">
       {{ name }}

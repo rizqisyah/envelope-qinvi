@@ -52,6 +52,13 @@ const bodyImages = Object.values(
       '!../assets/rsvp/parts/rsvp_2594-304_input.webp',
       '!../assets/rsvp/parts/rsvp_2594-308_input.webp',
       '!../assets/rsvp/parts/rsvp_2594-309_input.webp',
+      '../assets/wish/**/*.webp',
+      /*
+       * Same rule again: the wish band's Input and Textarea frames are flat #ffffff
+       * plates, and the band renders a real <input> and <textarea>.
+       */
+      '!../assets/wish/parts/wish_2594-425_input.webp',
+      '!../assets/wish/parts/wish_2594-426_textarea.webp',
     ],
     { eager: true, import: 'default' },
   ),

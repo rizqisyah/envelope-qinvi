@@ -1,5 +1,5 @@
 import { ref, computed, onMounted } from 'vue'
-import { resolveSlug, getHome } from '../lib/api'
+import { resolveSlug, getHome, submitUcapan } from '../lib/api'
 
 const state = ref<{
   loading: boolean
@@ -73,7 +73,38 @@ export function useWedding() {
   const acara = computed(() => state.value.data?.acara ?? [])
   const gallery = computed(() => state.value.data?.gallery ?? [])
   const gift = computed(() => state.value.data?.gift ?? [])
-  const wishes = computed(() => state.value.data?.wishes ?? [])
+  /*
+   * The API calls this `ucapan`; `wishes` was a guess and read empty against every real
+   * payload — which no pixel diff could catch, because an empty list falls back to the
+   * design's own four cards and scores perfectly. Read both so it works either way.
+   */
+  const wishes = computed(() => state.value.data?.ucapan ?? state.value.data?.wishes ?? [])
+
+  /**
+   * Post a wish and get it into the list without a refetch. The API may answer with the
+   * refreshed list, with just the created row, or with neither, so all three are handled
+   * — otherwise a guest submits and sees nothing happen.
+   */
+  async function sendWish(body: { guest_name: string; message: string }): Promise<any> {
+    const res = await submitUcapan(slug.value, body)
+    if (!state.value.data) return res
+
+    const list = Array.isArray(res) ? res : Array.isArray(res?.data) ? res.data : null
+    if (list) {
+      state.value.data = { ...state.value.data, ucapan: list }
+      return res
+    }
+
+    const row =
+      res?.data && typeof res.data === 'object' && !Array.isArray(res.data)
+        ? res.data
+        : { id: `local-${Date.now()}`, ...body, created_at: new Date().toISOString() }
+    state.value.data = {
+      ...state.value.data,
+      ucapan: [row, ...(Array.isArray(wishes.value) ? wishes.value : [])],
+    }
+    return res
+  }
 
   const groom = computed(() => pengantin.value.find((p: any) => p.type === 'groom') || null)
   const bride = computed(() => pengantin.value.find((p: any) => p.type === 'bride') || null)
@@ -113,6 +144,7 @@ export function useWedding() {
     gallery,
     gift,
     wishes,
+    sendWish,
     groom,
     bride,
     coupleNickname,
