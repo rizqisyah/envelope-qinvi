@@ -89,6 +89,7 @@ python3 scripts/locate.py <asset> <hintX> <hintY>            # one asset, if not
 python3 scripts/solve_band.py .figma-ref/bands/<band>.json    # a whole stack
 node   scripts/fit-text.mjs <port> <sel> <x> <y> <w> <h>      # where a text node's glyphs land
 python3 scripts/ink.py <clipX> <clipY> [bandY0]               # ...turned into a bounding box
+node   scripts/check-gallery.mjs <port>                       # the gallery carousel's own logic
 ```
 
 `locate.py` only works when the asset is the topmost thing at its spot. In a dense
@@ -173,6 +174,46 @@ in that material. Keep each band's array in Figma's z order and carry the
 animation delay on the layer; do not group layers by entrance, because the
 grouping silently reorders the stack and nothing downstream will flag it.
 
+**Shadow bleed is not symmetric, so register off the art, not the box.** Group 219
+(the gallery carousel) declares 356.78 × 367 at (12, 3501) and exports 370.5 × 384.5 —
+its rounded rects carry a drop shadow that bleeds 7.5 left, 6.3 right, 4 up and 13.5
+down. Splitting the difference would have put it ~4px out. The main photo's own
+edges are in the export as a hard alpha step (straight run x 59–672, rows 8–586 at
+scale 2), and one child rect's declared position is enough to pin the origin from
+there: `x0 = 34.05 − 59/2 = 4.55`, `y0 = 3501 − 8/2 = 3497`. Then confirm with a
+±3px probe — a clean bowl, not a plateau. `solve_band.py` reports "no gradient" for
+both an already-optimal layer and a hopeless one, so it cannot make that call.
+
+## A band that is a component, not a picture
+
+The gallery band is the first one whose content is *data*, and it needs a different
+shape from the seven above it. `2560:183` contains nothing but rounded-rect photo
+masks and two white circles — no floral z-order to recover — so the whole group
+ships as **one plate** and the live photos are absolutely positioned over the slot
+rects, which are exact (nothing in the group is rotated). Three things follow:
+
+- **The plate is also the empty state.** With no photos configured the overlays do
+  not render at all and the design's own stock shots show through, which is what
+  keeps the band's pixel diff meaningful. No cropped fallback assets needed.
+- **Redraw whatever an overlay covers.** The live main photo hides 20px of the
+  left circle and 15px of the right one, and in Figma both circles paint *above*
+  the photo — so they are re-drawn in CSS (`#fff`, radius 29, sampled off the
+  render) instead of being left to the plate. Each slot also carries `Rectangle
+  118`'s own `#d9d9d9` fill, so a slow or 404 photo degrades to the design's
+  placeholder rather than uncovering the baked stock couple.
+- **Animate the stage, not the overlays.** The overlays are glued to the plate's
+  slots; anything that moves one alone slides the baked art into view underneath.
+  The reveal moves `.gallery__stage` as one piece, and the per-photo zoom lives on
+  the `<img>` inside each clipping slot.
+
+**The pixel diff cannot see any of this.** It runs with an empty API, so the
+carousel would ship unexercised. `scripts/check-gallery.mjs` stubs `getHome` with a
+three-photo payload and asserts what the diff structurally can't: every overlay's
+box against its Figma slot rect, thumb → main binding, prev/next wrapping at both
+ends, and that the lightbox is teleported out of `.sheet` — `container-type:
+inline-size` makes `.sheet` the containing block for fixed descendants, so an
+untelported `position: fixed` overlay is clipped to the card.
+
 ## Frame 242 — three things that will bite you
 
 **1. `frame242-layout.json` does not carry z-order.** It is sorted by `(depth, y)`, so its array
@@ -206,8 +247,8 @@ of something 8700px tall exceeds what Figma will produce. Don't "fix" this by re
 | 5 | 1899–2160 | Divider — drape + pearls + "And" — **built, overlay only** | `divider/` (10) + 3 of `groom/` |
 | 6 | 2014–2810 | Bride — Allysa — **built** | `bride/` (6) + `glimpse/00_..._vdsvzdsvd-1` |
 | 7 | 2810–3501 | Glimpse of Us — polaroids, green envelope, "09.09.26" — **built** | `glimpse/` (22) + `gallery/00_2555-112` |
-| 8 | 3501–3980 | Gallery — hero photo + thumbnails | `gallery/01_..._group-219` |
-| 9 | 3980–4560 | Akad | `akad/` (1) |
+| 8 | 3501–4052 | Gallery — photo carousel — **built, one plate + live overlays** | `gallery/01_..._group-219` |
+| 9 | 4052–4560 | Akad | `akad/` (1) |
 | 10 | 4560–5180 | Resepsi | `resepsi/` (1) |
 | 11 | 5180–5420 | Countdown — silver tray | `countdown/` (17) |
 | 12 | 5420–6130 | Wedding Gift — bank cards + address | `gift/` (6) |
@@ -307,9 +348,15 @@ declared height tells you nothing about where the glyphs land.
   If pearls are missing along the footer, they are the reason.
 - `DEFAULT_SLUG` in `src/lib/api.ts` and the `name` field in `package.json` are both still
   `tema-elegan-putih`, carried over from the previous template. Neither is this project's slug.
-- Frame 242: the hero, envelope, groom, divider, bride and glimpse bands are built. `InviteBody`
-  renders them plus 8 placeholders and owns the two page-wide backdrops. `BottomNav` is still a stub.
-  `CoverSection` (Frame 241) is done.
+- Frame 242: the hero, envelope, groom, divider, bride, glimpse and gallery bands are built.
+  `InviteBody` renders them plus 7 placeholders and owns the two page-wide backdrops. `BottomNav`
+  is still a stub. `CoverSection` (Frame 241) is done.
+- The gallery band's height (551) assumes Akad has no art above y 4052, which is where its group
+  box starts — rows 3868–4052 are bare paper in the render. Re-check when the Akad band lands.
+- The gallery band's two nav circles are `Rectangle 118` fills, not icons: the design draws no
+  arrows inside them. They ship as `aria-label`led buttons with a focus ring and no glyph, which
+  is faithful but gives a sighted mouse user no affordance beyond the thumbnails. Add a chevron
+  only if the design is allowed to change.
 - `BrideSection` paints `2560:278`, the glimpse band's backdrop. It is a top-to-bottom alpha
   gradient that sits above the bride's paper (z20 < z21) and below her name block (z21 < z22), so
   it can only be drawn between them — **`GlimpseSection` must not draw it again.** Same reasoning

@@ -1,0 +1,87 @@
+{
+ "y0": 3477,
+ "y1": 4060,
+ "note": "Frame 242 gallery band. The whole carousel is a single Figma group (2560:183 Group 219) whose only children are rounded-rect photo masks and two white circles, so it ships as one plate with live photos overlaid on the slot rects -- see GallerySection.vue. No text nodes, and no floral from the glimpse band above reaches past y 3495, so the only other layers here are the two page-wide backdrops. Rows 3868-4052 are bare paper, and the shipped component's height of 551 is provisional on Akad having no art above its group box at y 4052.",
+ "layers": [
+  {
+   "id": "2550:130",
+   "z": 0,
+   "asset": "src/assets/page/parts/00_2550-130_paper-bg.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 13
+  },
+  {
+   "id": "2560:276",
+   "z": 3,
+   "asset": "src/assets/page/parts/01_2560-276_bg-strip.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 2821
+  },
+  {
+   "id": "2560:183",
+   "z": 65,
+   "asset": "src/assets/gallery/parts/01_2560-183_group-219.webp",
+   "x": 5,
+   "y": 3497,
+   "search": 14,
+   "solve": true,
+   "note": "group box is (12, 3501) 356.78x367 but the export is 370.5x384.5: the rounded rects carry a drop shadow, which bleeds 7.5 left / 6.3 right / 4 up / 13.5 down. Origin read off the main photo's own edges in the export (straight run x 59-672, rows 8-586 at scale 2) rather than from the group box"
+  }
+ ],
+ "slots": {
+  "note": "Live-DOM geometry, in frame coordinates. Radius 29 on every rect; the two circles are Rectangle 118 fills, not icons -- the design draws no arrows.",
+  "main": {
+   "id": "2560:189",
+   "x": 34.05,
+   "y": 3501,
+   "w": 307.59,
+   "h": 288.73
+  },
+  "prev": {
+   "id": "2560:192",
+   "x": 13.39,
+   "y": 3623.63,
+   "w": 40.39,
+   "h": 41.28
+  },
+  "next": {
+   "id": "2560:194",
+   "x": 327.12,
+   "y": 3623.63,
+   "w": 40.39,
+   "h": 41.28
+  },
+  "thumbs": [
+   {
+    "id": "2560:196",
+    "x": 43.49,
+    "y": 3797.14,
+    "w": 68.82,
+    "h": 70.86
+   },
+   {
+    "id": "2560:199",
+    "x": 116.78,
+    "y": 3797.14,
+    "w": 68.82,
+    "h": 70.86
+   },
+   {
+    "id": "2560:202",
+    "x": 190.07,
+    "y": 3797.14,
+    "w": 68.82,
+    "h": 70.86
+   },
+   {
+    "id": "2560:205",
+    "x": 263.36,
+    "y": 3797.14,
+    "w": 68.82,
+    "h": 70.86
+   }
+  ]
+ }
+}

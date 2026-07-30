@@ -3,9 +3,6 @@ import { ref } from 'vue'
 // The hero's couple portrait deduped into footer/, so the body glob misses it.
 import heroCouple from '../assets/footer/parts/21_2594-208_img-8300.webp'
 
-// The glimpse band's date plate lives under gallery/ -- see GlimpseSection.vue.
-import datePlate from '../assets/gallery/parts/00_2555-112.webp'
-
 // Assets are discovered by glob so new slices need no edit here.
 // Cover = the splash screen (Frame 241 = opening/); body = the first screens behind it.
 // assets/cover/ is Frame 242's cover *section*, so it belongs to the body, not the splash.
@@ -24,12 +21,15 @@ const bodyImages = Object.values(
       '../assets/bride/**/*.webp',
       '../assets/divider/**/*.webp',
       '../assets/glimpse/**/*.webp',
+      // Both files here are in use: the carousel plate, and the glimpse band's
+      // date plate, which is filed under gallery/ -- see GlimpseSection.vue.
+      '../assets/gallery/**/*.webp',
     ],
     { eager: true, import: 'default' },
   ),
 ) as string[]
 
-bodyImages.push(heroCouple, datePlate)
+bodyImages.push(heroCouple)
 
 const coverLoaded = ref(false)
 const bodyLoaded = ref(false)

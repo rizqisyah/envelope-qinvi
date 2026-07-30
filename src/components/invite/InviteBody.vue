@@ -9,6 +9,7 @@ import GroomSection from '../sections/GroomSection.vue'
 import DividerSection from '../sections/DividerSection.vue'
 import BrideSection from '../sections/BrideSection.vue'
 import GlimpseSection from '../sections/GlimpseSection.vue'
+import GallerySection from '../sections/GallerySection.vue'
 
 import paperBg from '../../assets/page/parts/00_2550-130_paper-bg.webp' // z0, y 13
 import quoteBg from '../../assets/quote/parts/00_2588-125_bac-2.webp' // z1, (-16, 679)
@@ -16,7 +17,6 @@ import bgStrip from '../../assets/page/parts/01_2560-276_bg-strip.webp' // z3, y
 
 // Bands still to build, in frame order.
 const pending = [
-  'Gallery',
   'Akad',
   'Resepsi',
   'Countdown',
@@ -45,6 +45,7 @@ const pending = [
     <DividerSection />
     <BrideSection />
     <GlimpseSection />
+    <GallerySection />
 
     <section v-for="name in pending" :key="name" class="sheet__placeholder">
       {{ name }}

@@ -68,14 +68,16 @@ await sheet.waitForTimeout(2500)
 await sheet.locator('.hero').screenshot({ path: `${OUT}/web-hero.png` })
 // Scroll the whole sheet past the viewport first: the reveals are viewport-gated
 // and the fit-to-box pass needs each block to have been rendered at least once.
-for (let y = 0; y < 4200; y += 400) {
+const sheetHeight = await sheet.evaluate(() => document.documentElement.scrollHeight)
+for (let y = 0; y < sheetHeight; y += 400) {
   await sheet.evaluate((to) => window.scrollTo(0, to), y)
   await sheet.waitForTimeout(250)
 }
 await sheet.waitForTimeout(1500)
 // Every band below the fold is viewport-gated, so the scroll above is what fires
-// them. Check one of the deep ones actually opened.
+// them. Check the deepest two actually opened.
 const dividerRevealed = (await sheet.locator('.divider.is-in').count()) === 1
+const galleryRevealed = (await sheet.locator('.gallery.is-in').count()) === 1
 await sheet.evaluate(() => window.scrollTo(0, 0))
 await sheet.waitForTimeout(400)
 await sheet.locator('.sheet').screenshot({ path: `${OUT}/web-sheet.png` })
@@ -86,5 +88,6 @@ console.log(`invite visible after click: ${opened}`)
 console.log(`cover removed after transition: ${coverGone}`)
 console.log(`hero reveal fired: ${revealed}`)
 console.log(`divider reveal fired on scroll: ${dividerRevealed}`)
+console.log(`gallery reveal fired on scroll: ${galleryRevealed}`)
 if (errors.length) console.log(errors.join('\n'))
-if (!opened || !revealed || !dividerRevealed) process.exitCode = 1
+if (!opened || !revealed || !dividerRevealed || !galleryRevealed) process.exitCode = 1
