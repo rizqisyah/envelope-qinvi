@@ -73,26 +73,26 @@ async function render(band, events, tz = 'Asia/Jakarta', motion = 'reduce') {
   const text = async (sel) => (await page.locator(sel).innerText()).replace(/\s+/g, ' ').trim()
   const sheet = await page.locator('.sheet').boundingBox()
   const heads = []
-  for (const h of await page.locator(`.${band.name}__heading span`).all()) {
+  for (const h of await page.locator(`.${band.name} .band__heading span`).all()) {
     const b = await h.boundingBox()
     heads.push({ x: b.x - sheet.x, y: b.y - sheet.y, w: b.width, h: b.height })
   }
   const out = {
     heads,
-    line2: await text(`.${band.name}__heading-b`),
+    line2: await text(`.${band.name} .band__heading-b`),
     opacity: await page
-      .locator(`.${band.name}__heading span`)
+      .locator(`.${band.name} .band__heading span`)
       .first()
       .evaluate((n) => getComputedStyle(n).opacity),
-    date: await text(`.${band.name}__date`),
-    time: await text(`.${band.name}__time`),
-    venue: await text(`.${band.name}__venue`),
-    address: await text(`.${band.name}__address`),
-    href: await page.locator(`.${band.name}__maps`).getAttribute('href'),
+    date: await text(`.${band.name} .band__date`),
+    time: await text(`.${band.name} .band__time`),
+    venue: await text(`.${band.name} .band__venue`),
+    address: await text(`.${band.name} .band__address`),
+    href: await page.locator(`.${band.name} .band__maps`).getAttribute('href'),
     addressOverflow: await page
-      .locator(`.${band.name}__address`)
+      .locator(`.${band.name} .band__address`)
       .evaluate((n) => n.scrollHeight - n.clientHeight),
-    isLink: (await page.locator(`a.${band.name}__maps`).count()) === 1,
+    isLink: (await page.locator(`.${band.name} a.band__maps`).count()) === 1,
   }
   await page.close()
   return out

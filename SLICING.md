@@ -378,6 +378,17 @@ plausible if you derive one from the other, and wrong enough to fail an ink chec
 Measure each independently. In a shared component this must be a separate prop, never
 computed from the layer offset.
 
+**Verify first, extract second.** The two bands now share `CeremonyBand.vue`, but that
+landed as a separate commit *after* Resepsi's diff was green. Extracting first would
+have meant debugging a component written an hour earlier instead of plain code, and any
+per-band exception would have had to be threaded through it under pressure.
+
+What the shared component takes is the machinery — markup, reveal choreography, text
+placement, the Maps control — and what it does not take is the coordinates. Each band
+keeps its own layer table. A `dx` prop would have saved about thirty lines and buried
+the two things this band proves are dangerous: that the numbers are the expensive part,
+and that not everything in a band shares one offset.
+
 ## Frame 242 — three things that will bite you
 
 **1. `frame242-layout.json` does not carry z-order.** It is sorted by `(depth, y)`, so its array
