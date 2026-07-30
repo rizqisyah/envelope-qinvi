@@ -1,7 +1,7 @@
 {
  "y0": 4040,
  "y1": 4639,
- "note": "Frame 242 akad band = Group 245 (2594:371) at (14, 4052) 390x382: olive envelope, white scalloped card, florals over both edges, and five TEXT nodes exported around as g245_* parts. Layers in the group's own child order (first child = bottom). Resepsi (Group 244) is the same composition again from y 4639, so the band stops there. Nothing from the gallery band above reaches past y 3868.",
+ "note": "Frame 242 akad band = Group 245 (2594:371) at (14, 4052) 390x382: olive envelope, white scalloped card, florals over both edges, and five TEXT nodes exported around as g245_* parts. Layers in the group's own child order (first child = bottom). Resepsi (Group 244) is the same composition again from y 4639, so the band stops there. Nothing from the gallery band above reaches past y 3868. The band also owns the hidden heading nodes 2560:211/2560:213 (\"It's the day! / Akad Nikah\"), which sit at frame y 3939-4033, above this band's own top. They are hidden in Figma so they are in neither the export nor the render, and nothing here can score them -- scripts/check-akad.mjs guards their geometry instead.",
  "layers": [
   {
    "id": "2550:130",
@@ -49,15 +49,15 @@
    "id": "2594:329",
    "z": 1234,
    "asset": "src/assets/akad/parts/g245_2594-329.webp",
-   "x": 84,
+   "x": 14,
    "y": 4143,
-   "note": "white orchid spray, size exact. Paints below the card and sits entirely inside it, so it is invisible in the composite -- pinned at its declared position"
+   "note": "white orchid spray, size exact. Declared x 84 is 70 out -- exactly its own width, the same signature as 2594:330 -- which put it under the card and made it look invisible. locate.py and a -30..120 probe both land on x 14, worth 1.79/255. Declared y is untouched. Every other size-exact layer in this band was re-probed for the same shift and sits at its declared x"
   },
   {
    "id": "2594:320",
    "z": 1235,
    "asset": "src/assets/akad/parts/g245_2594-320.webp",
-   "x": 32,
+   "x": 31,
    "y": 4091,
    "search": 12,
    "solve": true,

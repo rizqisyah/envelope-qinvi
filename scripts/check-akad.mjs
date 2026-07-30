@@ -34,7 +34,15 @@ async function render(acara, tz = 'Asia/Jakarta') {
   await page.locator('.akad').scrollIntoViewIfNeeded()
   await page.waitForTimeout(500)
   const text = async (sel) => (await page.locator(sel).innerText()).replace(/\s+/g, ' ').trim()
+  const sheet = await page.locator('.sheet').boundingBox()
+  const headings = await page.locator('.akad__heading span').all()
+  const heads = []
+  for (const h of headings) {
+    const b = await h.boundingBox()
+    heads.push({ x: b.x - sheet.x, y: b.y - sheet.y, w: b.width, h: b.height })
+  }
   const out = {
+    heads,
     date: await text('.akad__date'),
     time: await text('.akad__time'),
     venue: await text('.akad__venue'),
@@ -91,6 +99,30 @@ check(live.addressOverflow <= 1, `the design's own address stays in its box (ove
 // --- an end of 23:59 is how the API says "no end time" ---
 const open = await render([{ event_date: '2029-04-21', event_time: '19:00 - 23:59' }])
 check(open.time === '19.00 WIB - Selesai', `open-ended range (got "${open.time}")`)
+
+/*
+ * "It's the day! / Akad Nikah" is hidden in Figma, so it is in neither the export nor
+ * the reference render and the pixel diff cannot score it at all -- these boxes are
+ * the whole verification. Frame coordinates, from the design screenshot registered by
+ * the envelope apex it happens to include. The rotation has to survive the reveal's
+ * end state, so a flattened heading shows up here as a box of the wrong shape.
+ */
+check(live.heads.length === 2, `both heading lines render (got ${live.heads.length})`)
+const block = {
+  x0: Math.min(...live.heads.map((h) => h.x)),
+  y0: Math.min(...live.heads.map((h) => h.y)),
+  x1: Math.max(...live.heads.map((h) => h.x + h.w)),
+  y1: Math.max(...live.heads.map((h) => h.y + h.h)),
+}
+/*
+ * Layout AABB, not ink: `boundingBox()` includes the line box and both side bearings,
+ * so these are wider and taller than the ink the placement was measured from. Captured
+ * from the state whose *ink* was verified against the screenshot to under a pixel
+ * (block ink x 31..279, y 3939..4032) -- this is the regression guard for that state.
+ */
+const want = { x0: 24.9, y0: 3937.1, x1: 281.3, y1: 4042.9 }
+const off = Math.max(...Object.keys(want).map((k) => Math.abs(block[k] - want[k])))
+check(off < 2, `heading block where its ink was verified (max off ${off.toFixed(1)}px)`)
 
 // --- with no acara the card shows the copy Frame 242 was drawn with ---
 const bare = await render([])

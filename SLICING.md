@@ -176,6 +176,17 @@ in that material. Keep each band's array in Figma's z order and carry the
 animation delay on the layer; do not group layers by entrance, because the
 grouping silently reorders the stack and nothing downstream will flag it.
 
+**Figma's x can be off by exactly the asset's own width.** Two akad florals
+(`2594:329`, `2594:330`) are size-exact — no rotation, no clipping, so by every rule
+above their coordinates should be trustworthy — and both are placed one asset width
+too far right: 84 → 14 for a 70-wide spray, 88 → 44 for a 44-wide rose. Worse, at the
+declared x the orchid lands *under the card*, which reads exactly like a deliberately
+hidden layer: 0.000 leave-one-out, no hole in the band, a plausible story. It was not
+hidden, it was 70px out. When a size-exact layer contributes nothing, probe it at
+`x - width` before concluding anything, and re-probe every other size-exact layer in
+the band for the same shift — in the akad band the other five were all at their
+declared x.
+
 **A clipped export can *prove* a coordinate.** Three of the akad band's florals
 report a width the export does not have — 81 → 69 at x 306, 98 → 69 at x 306,
 63 → 60 at x 315 — and in every case the export width is exactly `375 - x`. That is
@@ -218,6 +229,42 @@ Two things the copy itself taught us:
   anywhere west of Greenwich — the wedding would read Friday to a guest in New York.
   `src/lib/format.ts` builds date-only strings as local dates, and the check runs
   one case under `America/New_York` to keep it that way.
+
+## The design has content the render does not
+
+`scan_text_nodes` on Frame 242 returns 64 text nodes; `search_nodes` across the
+document returns four more that belong to it and are in neither that list, the
+344-node dump, nor `frame242-full.png`. They are **hidden layers** — `get_screenshot`
+on one answers "No nodes to export". Two of them are the akad band's heading:
+
+| Node | Frame-local box | Text |
+|------|-----------------|------|
+| `2560:211` | (11.05, 3977.09) 202 × 40 | It's the day! |
+| `2560:213` | (84, 4007.94) 202 × 40 | Akad Nikah |
+| `2560:261` | (11, 4571.94) 202 × 40 | It's the day! — Resepsi's |
+| `2560:262` | (83.95, 4602.79) 234 × 40 | Resepsi Nikah |
+
+Both pairs sit exactly 594.85 apart, so the Resepsi heading places off the akad one.
+All four are Pinyon Script 40/38, `#000000`, centred — and all four are rotated, so
+those declared boxes say nothing about where the art lands.
+
+Three consequences worth knowing before you meet the next one:
+
+- **`search_nodes` returns absolute canvas coordinates, everything else is
+  frame-local.** Frame 242 sits at canvas (2548, −3230), so subtract that. A node
+  reported at x 2559 is not off-canvas, it is at frame x 11.
+- **Nothing can be solved against the render, because the render does not contain
+  it.** Geometry has to come from a screenshot of the design instead. Recover the
+  angle by deskew — rotate the ink and take the angle whose row histogram is
+  sharpest (−12.25° here) — and the scale by rendering the same string at the same
+  size in the browser and comparing ink widths (1.746 here, agreeing to 0.1% across
+  both lines). For the absolute anchor, find something in the crop that *is* in the
+  render: this one clipped the envelope's apex, which the asset's own alpha puts at
+  frame (187, 4062). Then place, screenshot, measure the same extremal ink pixels,
+  and shift — it converged in one iteration to under half a pixel.
+- **Adding it makes the pixel diff worse, and that is correct.** The gallery band
+  went 4.07 → 6.25 because rows 3900–4052 now carry copy the reference render does
+  not have. Score the comparable rows instead: 3501–3900 is 4.96, unchanged.
 
 ## A band that is a component, not a picture
 
@@ -301,7 +348,7 @@ of something 8700px tall exceeds what Figma will produce. Don't "fix" this by re
 | 5 | 1899–2160 | Divider — drape + pearls + "And" — **built, overlay only** | `divider/` (10) + 3 of `groom/` |
 | 6 | 2014–2810 | Bride — Allysa — **built** | `bride/` (6) + `glimpse/00_..._vdsvzdsvd-1` |
 | 7 | 2810–3501 | Glimpse of Us — polaroids, green envelope, "09.09.26" — **built** | `glimpse/` (22) + `gallery/00_2555-112` |
-| 8 | 3501–4052 | Gallery — photo carousel — **built, one plate + live overlays** | `gallery/01_..._group-219` |
+| 8 | 3501–4052 | Gallery — photo carousel — **built, one plate + live overlays**. Rows 3900–4052 carry the akad heading, which `AkadSection` owns | `gallery/01_..._group-219` |
 | 9 | 4052–4639 | Akad — envelope + scalloped card, live event copy — **built** | `akad/` (14) |
 | 10 | 4639–5180 | Resepsi — the same composition again | `resepsi/` (14) |
 | 11 | 5180–5420 | Countdown — silver tray | `countdown/` (17) |

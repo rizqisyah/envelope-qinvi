@@ -50,16 +50,13 @@ const behind: Layer[] = [
   { src: envelope, x: 32, y: 0, w: 316, h: 382, kind: 'envelope', in: 0 },
   { src: lilyBack, x: 233, y: 28, w: 142, h: 204, kind: 'right', in: 1000 },
   /*
-   * 2594:329 paints below the card, and at this position 98% of its ink falls inside
-   * the card's opaque alpha -- checked directly against the card's own mask, because
-   * a 0.000 leave-one-out alone would look the same if the coordinates were simply
-   * wrong somewhere covered. A probe does report a marginally better x of 20, but
-   * that is the window's edge and worth only 0.26/255: white orchid matching the
-   * other white florals, the low-contrast false minimum SLICING.md warns about.
-   * Kept so the paint order matches Figma; if it ever shows, the card moved.
+   * Declared x 84 is 70 out -- exactly this asset's own width, the same signature as
+   * 2594:330 below. At 84 it lands under the card, which made it look like a hidden
+   * layer; it is not, it is the orchid spray that sits left of the card over the
+   * envelope. locate.py and a -30..120 probe both land on 14, worth 1.79/255.
    */
-  { src: orchid, x: 84, y: 91, w: 70, h: 95, kind: 'left', in: 700 },
-  { src: card, x: 32, y: 39, w: 316, h: 319.5, kind: 'card', in: 350 },
+  { src: orchid, x: 14, y: 91, w: 70, h: 95, kind: 'left', in: 700 },
+  { src: card, x: 31, y: 39, w: 316, h: 319.5, kind: 'card', in: 350 },
 ]
 
 // The pin, then the florals that paint over the card's edges.
@@ -108,7 +105,7 @@ const mapsUrl = computed(() => event.value?.maps_url || '')
 </script>
 
 <template>
-  <section :ref="el" class="akad" :class="{ 'is-in': shown }" aria-labelledby="akad-venue">
+  <section :ref="el" class="akad" :class="{ 'is-in': shown }" aria-labelledby="akad-heading">
     <img
       v-for="(l, i) in behind"
       :key="`b${i}`"
@@ -119,9 +116,14 @@ const mapsUrl = computed(() => event.value?.maps_url || '')
       :class="`lyr--${l.kind}`"
     />
 
+    <h2 id="akad-heading" class="akad__heading">
+      <span class="akad__heading-a">It’s the day!</span>
+      <span class="akad__heading-b">Akad Nikah</span>
+    </h2>
+
     <p class="akad__date">{{ when.weekday }},<br />{{ when.date }}</p>
     <p class="akad__time">{{ time }}</p>
-    <h2 id="akad-venue" class="akad__venue">{{ venue }}</h2>
+    <p class="akad__venue">{{ venue }}</p>
     <p :ref="fitAddress" class="akad__address">{{ address }}</p>
 
     <!--
@@ -168,6 +170,45 @@ const mapsUrl = computed(() => event.value?.maps_url || '')
 
 .lyr {
   pointer-events: none;
+}
+
+/*
+ * "It's the day! / Akad Nikah" -- two independently placed Pinyon Script lines
+ * rotated together, in the bare-paper gap ABOVE this band's own top, which is why
+ * their `top` values are negative. See SLICING.md: both nodes are hidden in Figma,
+ * so they are in neither the export nor the reference render, and their declared
+ * coordinates are the rotated-node kind that says nothing about where the art lands.
+ * Angle and position were measured off the design screenshot instead, registered to
+ * it by the envelope apex the crop happens to include (frame (187, 4062)).
+ */
+.akad__heading {
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  font-weight: 400;
+}
+
+.akad__heading span {
+  position: absolute;
+  display: block;
+  white-space: nowrap;
+  font-family: var(--font-script);
+  font-size: calc(40 * var(--px));
+  line-height: calc(38 * var(--px));
+  color: var(--ink);
+  transform-origin: 0 0;
+  transform: rotate(-12.25deg);
+}
+
+.akad__heading-a {
+  top: calc(-78.4 * var(--px));
+  left: calc(24.94 * var(--px));
+}
+
+.akad__heading-b {
+  top: calc(-46.2 * var(--px));
+  left: calc(93.93 * var(--px));
 }
 
 /*
@@ -258,6 +299,7 @@ const mapsUrl = computed(() => event.value?.maps_url || '')
  * card away well before 4s. Last motion here settles at 1750 + 1900 = 3.65s.
  */
 .akad .lyr,
+.akad__heading span,
 .akad__date,
 .akad__time,
 .akad__venue,
@@ -277,6 +319,23 @@ const mapsUrl = computed(() => event.value?.maps_url || '')
 .akad.is-in .akad__maps {
   opacity: 1;
   transform: none;
+}
+
+/*
+ * The heading has to carry its rotation in the end state too: there is only one
+ * `transform`, so the shared `transform: none` above would flatten it.
+ */
+.akad__heading span {
+  transform: rotate(-12.25deg) translateY(calc(16 * var(--px)));
+  --in: 250ms;
+}
+
+.akad.is-in .akad__heading span {
+  transform: rotate(-12.25deg);
+}
+
+.akad__heading-b {
+  --in: 500ms;
 }
 
 .lyr--envelope {
@@ -333,6 +392,12 @@ const mapsUrl = computed(() => event.value?.maps_url || '')
   .akad__maps {
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+
+  .akad__heading span {
+    opacity: 1;
+    transform: rotate(-12.25deg);
     transition: none;
   }
 }
