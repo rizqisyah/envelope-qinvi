@@ -25,6 +25,7 @@ const bodyImages = Object.values(
       // date plate, which is filed under gallery/ -- see GlimpseSection.vue.
       '../assets/gallery/**/*.webp',
       '../assets/akad/**/*.webp',
+      '../assets/resepsi/**/*.webp',
     ],
     { eager: true, import: 'default' },
   ),

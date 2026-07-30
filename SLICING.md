@@ -90,7 +90,7 @@ python3 scripts/solve_band.py .figma-ref/bands/<band>.json    # a whole stack
 node   scripts/fit-text.mjs <port> <sel> <x> <y> <w> <h>      # where a text node's glyphs land
 python3 scripts/ink.py <clipX> <clipY> [bandY0]               # ...turned into a bounding box
 node   scripts/check-gallery.mjs <port>                       # the gallery carousel's own logic
-node   scripts/check-akad.mjs <port>                          # the akad card's live copy
+node   scripts/check-ceremony.mjs <port>                      # the akad + resepsi cards' live copy
 python3 scripts/crop-gallery-fallback.py                      # its stock photos, cut from its plate
 ```
 
@@ -223,7 +223,7 @@ Two things the copy itself taught us:
 
 - **The design's mock data is not self-consistent.** The card reads "Saturday,
   19 April 2029"; that date is a Thursday. So the fallback strings are the design's
-  literal text, and `scripts/check-akad.mjs` asserts them literally while testing
+  literal text, and `scripts/check-ceremony.mjs` asserts them literally while testing
   the formatter against a date that really is a Saturday.
 - **A bare `YYYY-MM-DD` is parsed as UTC midnight**, which renders as the day before
   anywhere west of Greenwich — the wedding would read Friday to a guest in New York.
@@ -336,6 +336,48 @@ It also writes `.figma-tmp/gallery-live.png`. A bounding box within 0.01px says
 nothing about the rounded-corner AA, and the flat-colour stub makes any ring of the
 plate's baked art leaking around a slot unmistakable.
 
+## A whole band can be another band, moved
+
+Resepsi (Group 244) is Akad (Group 245) again, and not merely "similar" — it is a
+**rigid translation** by `(−8, +587)`. All 19 nodes, layers and TEXT alike, sit at
+their twin's coordinate plus that offset, with no exceptions. Solving it would have
+been re-deriving numbers that were already verified once.
+
+Before trusting that, get more than one kind of evidence. Four here, and none of
+them is "the declared coordinates match", because Figma's declared coordinates are
+exactly what this file spends its length warning about:
+
+1. **The declared coordinates match** — necessary, not sufficient. It says the two
+   groups were built the same way; it says nothing about whether either is right.
+2. **9 of the 14 exports are byte-identical.** `md5` the parts directories against
+   each other. Same bytes means same art at the same size.
+3. **The 5 that differ are the right-edge-clipped ones, and each is exactly 8px
+   wider.** 69 → 77 hops, 69 → 77 sweet pea, 142 → 150 lily, 90 → 98 gypsophila:
+   8px further from the right edge means 8px more of the sprite inside the frame.
+   This is the clip rule doing real work — `375 − 77 = 298` *proves* the x without
+   reference to the translation at all.
+4. **The one asset that breaks the +8 pattern is the strongest evidence of all.**
+   The big white rose is +3, not +8, because at x 307 it stops touching the right
+   edge and exports at its full 63 instead of akad's clipped 60. A wrong hypothesis
+   does not predict its own exceptions.
+
+Then score it. Akad's art rows and Resepsi's art rows both come back at **2.93/255**,
+and the worst row lands at 4288 and 4875 — `4875 − 587 = 4288`, the same row of the
+same picture at the same magnitude. That is what a correct translation looks like:
+not "good", but *identical*.
+
+**The two lies repeat too.** Both of akad's asset-width errors (`2594:329` declaring
+x 76 for a 70-wide sprite, `2594:367` declaring x 80 for a 44-wide one) recur here
+with the same signature. Whatever produced that shift is systematic, so a band that
+is a copy inherits its twin's corrections along with its coordinates.
+
+**What does not ride the group's offset.** The hidden heading is not a child of the
+group, so it does not move with it: the layers shift `(−8, +587)`, the heading shifts
+`(−0.05, +594.85)`. Those differ by about 8px in both axes — close enough to look
+plausible if you derive one from the other, and wrong enough to fail an ink check.
+Measure each independently. In a shared component this must be a separate prop, never
+computed from the layer offset.
+
 ## Frame 242 — three things that will bite you
 
 **1. `frame242-layout.json` does not carry z-order.** It is sorted by `(depth, y)`, so its array
@@ -371,7 +413,7 @@ of something 8700px tall exceeds what Figma will produce. Don't "fix" this by re
 | 7 | 2810–3501 | Glimpse of Us — polaroids, green envelope, "09.09.26" — **built** | `glimpse/` (22) + `gallery/00_2555-112` |
 | 8 | 3501–4052 | Gallery — photo carousel — **built, one plate + live overlays**. Rows 3900–4052 carry the akad heading, which `AkadSection` owns | `gallery/01_..._group-219` |
 | 9 | 4052–4639 | Akad — envelope + scalloped card, live event copy — **built** | `akad/` (14) |
-| 10 | 4639–5180 | Resepsi — the same composition again | `resepsi/` (14) |
+| 10 | 4639–5119 | Resepsi — the akad composition translated by (−8, +587) — **built** | `resepsi/` (14) |
 | 11 | 5180–5420 | Countdown — silver tray | `countdown/` (17) |
 | 12 | 5420–6130 | Wedding Gift — bank cards + address | `gift/` (6) |
 | 13 | 6130–6760 | RSVP — olive arch form | `rsvp/` (7) |
@@ -480,11 +522,10 @@ declared height tells you nothing about where the glyphs land.
   this file warns about. Kept in the stack so the paint order matches Figma.
 - The akad address box is exactly the design's three lines with no slack, so `useFitText` scales
   its `line-height` as well as its `font-size` — shrinking only the glyphs cannot buy a fourth
-  line. `check-akad.mjs` pushes a 180-character address through it, which lands with 1px to
+  line. `check-ceremony.mjs` pushes a 180-character address through it, which lands with 1px to
   spare at the composable's `MIN_SCALE` of 0.72. Longer than that will overflow the card.
-- Resepsi (Group 244) is the akad composition again from y 4639, with its own copies of all 14
-  assets at different coordinates. `AkadSection` is deliberately *not* generalised yet — extract
-  the shared parts when that band lands and it is clear what actually varies.
+- Resepsi (Group 244) is the akad composition again from y 4639 — and it is a *rigid translation*
+  of it, `(−8, +587)` on all 19 nodes. See "A whole band can be another band, moved" below.
 - The akad card's Maps button (`2594:342`) is a flat `#eed891` rounded rect with uniform radius 6
   and no effects, so it is drawn in CSS rather than shipped as the exported image — which also
   makes it a real link with real states. With no `maps_url` it renders as an inert `<span>`

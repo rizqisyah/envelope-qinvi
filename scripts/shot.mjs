@@ -79,6 +79,7 @@ await sheet.waitForTimeout(1500)
 const dividerRevealed = (await sheet.locator('.divider.is-in').count()) === 1
 const galleryRevealed = (await sheet.locator('.gallery.is-in').count()) === 1
 const akadRevealed = (await sheet.locator('.akad.is-in').count()) === 1
+const resepsiRevealed = (await sheet.locator('.resepsi.is-in').count()) === 1
 await sheet.evaluate(() => window.scrollTo(0, 0))
 await sheet.waitForTimeout(400)
 await sheet.locator('.sheet').screenshot({ path: `${OUT}/web-sheet.png` })
@@ -91,6 +92,7 @@ console.log(`hero reveal fired: ${revealed}`)
 console.log(`divider reveal fired on scroll: ${dividerRevealed}`)
 console.log(`gallery reveal fired on scroll: ${galleryRevealed}`)
 console.log(`akad reveal fired on scroll: ${akadRevealed}`)
+console.log(`resepsi reveal fired on scroll: ${resepsiRevealed}`)
 if (errors.length) console.log(errors.join('\n'))
-if (!opened || !revealed || !dividerRevealed || !galleryRevealed || !akadRevealed)
+if (!opened || !revealed || !dividerRevealed || !galleryRevealed || !akadRevealed || !resepsiRevealed)
   process.exitCode = 1

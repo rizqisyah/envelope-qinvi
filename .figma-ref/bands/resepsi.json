@@ -1,0 +1,181 @@
+{
+ "y0": 4630,
+ "y1": 5119,
+ "note": "Frame 242 resepsi band = Group 244 (2594:370) at (6, 4639) 390x382. This is Group 245 (akad) again as a RIGID TRANSLATION: every one of the 14 layers and 5 TEXT nodes sits at its akad twin's coordinate minus 8 in x and plus 587 in y, with no exceptions. Nothing here was solved -- solve_band.py was never run on this band, and the layer list below is AkadSection's verified numbers with x - 8. Four independent confirmations, listed in ResepsiSection.vue. The band also owns the hidden heading nodes 2560:261/2560:262 (\"It's the day! / Resepsi Nikah\") at frame y 4532-4638, which is ABOVE this band's own top and inside the akad band's bare bottom rows -- and which is NOT the layers' (-8, +587) but (-0.05, +594.85), because the heading is not a child of the group. Hidden in Figma, so in neither the export nor the render (rows 4560-4640 of frame242-full.png are bare paper, min luma 217) and nothing can score them; scripts/check-ceremony.mjs guards their geometry instead. Rows 5021-5119 are bare paper before the countdown group at y 5119.",
+ "verification": {
+  "method": "not solved -- translated, then scored",
+  "akadArtRows": "4052-4434, mean 2.93/255",
+  "resepsiArtRows": "4639-5021, mean 2.93/255",
+  "worstRow": "akad 4288 at 24.08, resepsi 4875 at 24.00 -- 4875-587=4288, the same row of the same picture",
+  "note": "The two bands scoring identically to two decimals, with the worst row landing at exactly the same offset, is the confirmation that the translation is right. A per-layer solve would only be re-deriving akad's already-verified numbers."
+ },
+ "layers": [
+  {
+   "id": "2550:130",
+   "z": 0,
+   "asset": "src/assets/page/parts/00_2550-130_paper-bg.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 13
+  },
+  {
+   "id": "2560:276",
+   "z": 3,
+   "asset": "src/assets/page/parts/01_2560-276_bg-strip.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 2821
+  },
+  {
+   "id": "2594:346",
+   "twin": "2594:323",
+   "asset": "src/assets/resepsi/parts/g244_2594-346.webp",
+   "x": 298,
+   "y": 4724,
+   "note": "green hops stem. Clipped to 77 = 375-298, so the clip width proves x -- and it is exactly 8 wider than akad's 69 because 8px more of it falls inside the frame"
+  },
+  {
+   "id": "2594:347",
+   "twin": "2594:318",
+   "asset": "src/assets/resepsi/parts/g244_2594-347_envelope.webp",
+   "x": 24,
+   "y": 4639,
+   "note": "the olive envelope, 316x382 exact. Byte-identical to akad's export"
+  },
+  {
+   "id": "2594:348",
+   "twin": "2594:319",
+   "asset": "src/assets/resepsi/parts/g244_2594-348.webp",
+   "x": 225,
+   "y": 4667,
+   "note": "lily of the valley, rotated. Declared x 300.40 is impossible for a 150-wide unclipped export; clipped to 150 = 375-225, so x is proven. Akad's twin solved to 233 = 225+8"
+  },
+  {
+   "id": "2594:349",
+   "twin": "2594:329",
+   "asset": "src/assets/resepsi/parts/g244_2594-349.webp",
+   "x": 6,
+   "y": 4730,
+   "note": "white orchid spray. Declared x 76 is 70 out -- exactly its own width, the same lie Figma tells about akad's twin, which was probed to ground truth. Byte-identical export"
+  },
+  {
+   "id": "2594:350",
+   "twin": "2594:320",
+   "asset": "src/assets/resepsi/parts/g244_2594-350.webp",
+   "x": 23,
+   "y": 4678,
+   "note": "the scalloped card, 316x319.5 exported from a declared 315x315 -- a shadow grew the box. Byte-identical to akad's"
+  },
+  {
+   "id": "2594:360",
+   "twin": "2594:342",
+   "asset": "src/assets/resepsi/parts/g244_2594-360_maps-btn.webp",
+   "x": 153.1,
+   "y": 4910,
+   "note": "drawn in CSS rather than shipped, so it is a real link -- see ResepsiSection.vue"
+  },
+  {
+   "id": "2594:362",
+   "twin": "2594:344",
+   "asset": "src/assets/resepsi/parts/g244_2594-362_pin.webp",
+   "x": 174,
+   "y": 4807
+  },
+  {
+   "id": "2594:363",
+   "twin": "2594:321",
+   "asset": "src/assets/resepsi/parts/g244_2594-363_vdf-8.webp",
+   "x": 36,
+   "y": 4678
+  },
+  {
+   "id": "2594:364",
+   "twin": "2594:326",
+   "asset": "src/assets/resepsi/parts/g244_2594-364.webp",
+   "x": 269,
+   "y": 4730
+  },
+  {
+   "id": "2594:365",
+   "twin": "2594:324",
+   "asset": "src/assets/resepsi/parts/g244_2594-365.webp",
+   "x": 298,
+   "y": 4785,
+   "note": "sweet pea. Clipped to 77 = 375-298, +8 on akad's 69"
+  },
+  {
+   "id": "2594:366",
+   "twin": "2594:325",
+   "asset": "src/assets/resepsi/parts/g244_2594-366.webp",
+   "x": 307,
+   "y": 4815,
+   "note": "big white rose, and the exception that confirms the shift: at x 307 it no longer touches the right edge, so it exports at its full declared 63 rather than akad's clipped 60. +3, not +8, which is exactly what the geometry predicts"
+  },
+  {
+   "id": "2594:367",
+   "twin": "2594:330",
+   "asset": "src/assets/resepsi/parts/g244_2594-367.webp",
+   "x": 36,
+   "y": 4758,
+   "note": "small white rose. Declared x 80 is 44 out -- one asset width, the same lie as akad's twin. Byte-identical export"
+  },
+  {
+   "id": "2594:368",
+   "twin": "2594:327",
+   "asset": "src/assets/resepsi/parts/g244_2594-368.webp",
+   "x": 307,
+   "y": 4857,
+   "note": "calla lily, rotated. Declared (366.30, 4863.80); akad's twin solved to (315, 4270), so this is (307, 4857). Unclipped at 59.5 either way, hence the byte-identical export"
+  },
+  {
+   "id": "2594:369",
+   "twin": "2594:328",
+   "asset": "src/assets/resepsi/parts/g244_2594-369.webp",
+   "x": 277,
+   "y": 4875,
+   "note": "gypsophila, rotated. Clipped to 98 = 375-277, +8 on akad's 90, so the clip proves x independently of the translation"
+  }
+ ],
+ "textMasks": [
+  {
+   "id": "2594:353",
+   "note": "Saturday, / 19 April 2029",
+   "x": 92,
+   "y": 4713,
+   "w": 180,
+   "h": 60
+  },
+  {
+   "id": "2594:355",
+   "note": "10.00 WIB - 12.00 WIB",
+   "x": 92,
+   "y": 4771,
+   "w": 180,
+   "h": 30
+  },
+  {
+   "id": "2594:357",
+   "note": "Rumah mempelai wanita",
+   "x": 56,
+   "y": 4825,
+   "w": 250,
+   "h": 30
+  },
+  {
+   "id": "2594:359",
+   "note": "the three address lines",
+   "x": 92,
+   "y": 4849,
+   "w": 180,
+   "h": 56
+  },
+  {
+   "id": "2594:361",
+   "note": "the Maps label, on top of its own plate",
+   "x": 137,
+   "y": 4911,
+   "w": 92,
+   "h": 24
+  }
+ ]
+}
