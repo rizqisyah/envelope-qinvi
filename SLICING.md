@@ -90,6 +90,7 @@ python3 scripts/solve_band.py .figma-ref/bands/<band>.json    # a whole stack
 node   scripts/fit-text.mjs <port> <sel> <x> <y> <w> <h>      # where a text node's glyphs land
 python3 scripts/ink.py <clipX> <clipY> [bandY0]               # ...turned into a bounding box
 node   scripts/check-gallery.mjs <port>                       # the gallery carousel's own logic
+python3 scripts/crop-gallery-fallback.py                      # its stock photos, cut from its plate
 ```
 
 `locate.py` only works when the asset is the topmost thing at its spot. In a dense
@@ -192,9 +193,16 @@ masks and two white circles — no floral z-order to recover — so the whole gr
 ships as **one plate** and the live photos are absolutely positioned over the slot
 rects, which are exact (nothing in the group is rotated). Three things follow:
 
-- **The plate is also the empty state.** With no photos configured the overlays do
-  not render at all and the design's own stock shots show through, which is what
-  keeps the band's pixel diff meaningful. No cropped fallback assets needed.
+- **The plate is also the source of the empty state.** Leaving the overlays out
+  until an API supplies photos looked like the lazy answer, but it means an
+  unconfigured invitation — every local preview included — has nothing on the band
+  to click. `scripts/crop-gallery-fallback.py` cuts the design's own two shots back
+  out of the plate, so the slots are always populated and always clickable. The main
+  slot and thumbs 1 and 3 get their crop at native size and stay pixel-exact;
+  thumbs 2 and 4 show the main crop scaled down 4.5×, and the browser's resampling
+  against Figma's puts them at ~17/255 where the exact ones sit at ~9. Cropping a
+  third file at thumb size would fix it and is worth about 0.4/255 on the band —
+  it was not judged worth a per-slot fallback mapping.
 - **Redraw whatever an overlay covers.** The live main photo hides 20px of the
   left circle and 15px of the right one, and in Figma both circles paint *above*
   the photo — so they are re-drawn in CSS (`#fff`, radius 29, sampled off the
@@ -206,13 +214,25 @@ rects, which are exact (nothing in the group is rotated). Three things follow:
   The reveal moves `.gallery__stage` as one piece, and the per-photo zoom lives on
   the `<img>` inside each clipping slot.
 
-**The pixel diff cannot see any of this.** It runs with an empty API, so the
-carousel would ship unexercised. `scripts/check-gallery.mjs` stubs `getHome` with a
-three-photo payload and asserts what the diff structurally can't: every overlay's
-box against its Figma slot rect, thumb → main binding, prev/next wrapping at both
-ends, and that the lightbox is teleported out of `.sheet` — `container-type:
-inline-size` makes `.sheet` the containing block for fixed descendants, so an
-untelported `position: fixed` overlay is clipped to the card.
+**The pixel diff cannot see any of this.** A mean-difference number says nothing
+about whether the carousel works, so `scripts/check-gallery.mjs` asserts what the
+diff structurally can't, in two passes — a stubbed three-photo `getHome`, then an
+empty one:
+
+- every overlay's box against its Figma slot rect (all within 0.02px);
+- tapping any photo opens the preview, and a thumb selects its own photo on the way,
+  while the two nav circles browse without opening it;
+- a short set repeats across the four slots, and prev/next wrap at both ends;
+- the lightbox is teleported out of `.sheet` — `container-type: inline-size` makes
+  `.sheet` the containing block for fixed descendants, so an unteleported
+  `position: fixed` overlay is clipped to the card;
+- focus moves into the viewer on open and back to whichever slot opened it on close,
+  which is what `aria-modal` promises;
+- with no configured photos the slots still populate and still open the preview.
+
+It also writes `.figma-tmp/gallery-live.png`. A bounding box within 0.01px says
+nothing about the rounded-corner AA, and the flat-colour stub makes any ring of the
+plate's baked art leaking around a slot unmistakable.
 
 ## Frame 242 — three things that will bite you
 
@@ -357,6 +377,9 @@ declared height tells you nothing about where the glyphs land.
   arrows inside them. They ship as `aria-label`led buttons with a focus ring and no glyph, which
   is faithful but gives a sighted mouse user no affordance beyond the thumbnails. Add a chevron
   only if the design is allowed to change.
+- The gallery lightbox is an addition — the design draws no viewer. Its fallback photos are
+  cropped from a scale-2 plate, so the full-length shot is only 615 × 577 and looks soft
+  full-screen. Configured photos come through at whatever the API serves.
 - `BrideSection` paints `2560:278`, the glimpse band's backdrop. It is a top-to-bottom alpha
   gradient that sits above the bride's paper (z20 < z21) and below her name block (z21 < z22), so
   it can only be drawn between them — **`GlimpseSection` must not draw it again.** Same reasoning

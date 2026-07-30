@@ -1,7 +1,7 @@
 {
  "y0": 3477,
  "y1": 4060,
- "note": "Frame 242 gallery band. The whole carousel is a single Figma group (2560:183 Group 219) whose only children are rounded-rect photo masks and two white circles, so it ships as one plate with live photos overlaid on the slot rects -- see GallerySection.vue. No text nodes, and no floral from the glimpse band above reaches past y 3495, so the only other layers here are the two page-wide backdrops. Rows 3868-4052 are bare paper, and the shipped component's height of 551 is provisional on Akad having no art above its group box at y 4052.",
+ "note": "Frame 242 gallery band. The whole carousel is a single Figma group (2560:183 Group 219) whose only children are rounded-rect photo masks and two white circles, so it ships as one plate with live photos overlaid on the slot rects -- see GallerySection.vue. The plate is also where the fallback photos come from (scripts/crop-gallery-fallback.py), so this job scores the plate alone while the shipped band scores plate + overlays. No text nodes, and no floral from the glimpse band above reaches past y 3495, so the only other layers here are the two page-wide backdrops. Rows 3868-4052 are bare paper, and the shipped component's height of 551 is provisional on Akad having no art above its group box at y 4052.",
  "layers": [
   {
    "id": "2550:130",

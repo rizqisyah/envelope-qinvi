@@ -13,42 +13,55 @@
  * Origin read off the main photo's own edges in the export, then confirmed as a
  * clean bowl minimum against the Figma render.
  *
- * With no photos configured the overlays do not render at all and the plate's own
- * stock shots stand in -- which is also what makes this band's pixel diff exact.
- * Rows 3868-4052 are bare paper; the design puts no heading on this band.
+ * With no photos configured the slots fall back to the design's own two shots, cut
+ * back out of the plate by scripts/crop-gallery-fallback.py -- so an unconfigured
+ * render is still clickable, and still matches Figma in the main slot and in thumbs
+ * 1 and 3 exactly. Rows 3868-4052 are bare paper; the design puts no heading here.
  */
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useReveal } from '../../composables/useReveal'
 import { useWedding } from '../../composables/useWedding'
 
 import plate from '../../assets/gallery/parts/01_2560-183_group-219.webp' // z65
+import stockCloseup from '../../assets/gallery/fallback/photo-1.webp'
+import stockFull from '../../assets/gallery/fallback/photo-2.webp'
 
 // Thumbnail slots, band-local. Every rect in the group has cornerRadius 29.
 const THUMB_XS = [43.49, 116.78, 190.07, 263.36]
 const THUMB = { y: 296.14, w: 68.82, h: 70.86 }
 
+/*
+ * The design alternates two shots across its four thumbnail slots and shows the
+ * full-length one in the main slot, so a two-photo fallback with `active` starting
+ * at 1 reproduces the composition it was drawn with.
+ */
+const STOCK = [
+  { src: stockCloseup, caption: '' },
+  { src: stockFull, caption: '' },
+]
+const STOCK_ACTIVE = 1
+
 const { el, shown } = useReveal()
 const { gallery } = useWedding()
 
-const photos = computed(() =>
-  (gallery.value as any[])
+const photos = computed(() => {
+  const configured = (gallery.value as any[])
     .map((g) => ({ src: g.image_url as string, caption: (g.caption as string) || '' }))
-    .filter((p) => !!p.src),
-)
-
-const active = ref(0)
-watch(photos, (list) => {
-  if (active.value >= list.length) active.value = 0
+    .filter((p) => !!p.src)
+  return configured.length ? configured : STOCK
 })
 
-const current = computed(() => photos.value[active.value] ?? null)
+const active = ref(STOCK_ACTIVE)
+watch(photos, (list, was) => {
+  // Configured photos arriving replaces the stock pair, so the index restarts.
+  active.value = list === STOCK ? STOCK_ACTIVE : was === STOCK ? 0 : Math.min(active.value, list.length - 1)
+})
 
-// The design fills four thumbnail slots from two distinct shots, so repeating a
-// short set across the slots is the composition it was drawn with.
+const current = computed(() => photos.value[active.value] ?? photos.value[0])
+
+// Fewer photos than slots repeats the set, which is what the design does.
 const thumbs = computed(() =>
-  photos.value.length
-    ? THUMB_XS.map((x, i) => ({ x, index: i % photos.value.length, in: 900 + i * 150 }))
-    : [],
+  THUMB_XS.map((x, i) => ({ x, index: i % photos.value.length, in: 900 + i * 150 })),
 )
 
 function step(delta: number) {
@@ -73,8 +86,15 @@ function thumbBox(t: { x: number; in: number }) {
  * clip the overlay to the card.
  */
 const zoomed = ref(false)
-const mainButton = ref<HTMLButtonElement | null>(null)
 const closeButton = ref<HTMLButtonElement | null>(null)
+// Whichever slot opened the viewer is where focus goes back to on close.
+let opener: HTMLElement | null = null
+
+function preview(e: MouseEvent, index?: number) {
+  opener = e.currentTarget as HTMLElement
+  if (index !== undefined) active.value = index
+  zoomed.value = true
+}
 
 function onKey(e: KeyboardEvent) {
   if (e.key === 'Escape') zoomed.value = false
@@ -89,7 +109,7 @@ watch(zoomed, async (open) => {
   // aria-modal is a promise the markup has to keep: without this, tabbing out of
   // the open viewer walks straight into the sheet behind it.
   await nextTick()
-  ;(open ? closeButton.value : mainButton.value)?.focus()
+  ;(open ? closeButton.value : opener)?.focus()
 })
 
 onBeforeUnmount(() => {
@@ -104,13 +124,7 @@ onBeforeUnmount(() => {
       <img :src="plate" alt="" class="gallery__plate" />
 
       <template v-if="current">
-        <button
-          ref="mainButton"
-          class="gallery__main"
-          type="button"
-          aria-label="Perbesar foto"
-          @click="zoomed = true"
-        >
+        <button class="gallery__main" type="button" aria-label="Perbesar foto" @click="preview($event)">
           <img :src="current.src" :alt="current.caption || 'Foto mempelai'" />
         </button>
 
@@ -135,7 +149,7 @@ onBeforeUnmount(() => {
           :style="thumbBox(t)"
           :aria-label="`Lihat foto ${t.index + 1}`"
           :aria-current="t.index === active"
-          @click="active = t.index"
+          @click="preview($event, t.index)"
         >
           <img :src="photos[t.index].src" alt="" />
         </button>

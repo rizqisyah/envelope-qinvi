@@ -90,18 +90,35 @@ for (const [label, locator, rect] of targets) {
 // is unmistakable here -- this is the only look anyone gets at the band with photos.
 await page.locator('.gallery').screenshot({ path: '.figma-tmp/gallery-live.png' })
 
-// --- thumbs drive the main photo, and repeat once the set runs out ---
+// --- every photo opens the preview, and a thumb selects its own photo on the way ---
 const mainSrc = () => page.locator('.gallery__main img').getAttribute('src')
+const lbSrc = () => page.locator('.gl-lightbox__photo').getAttribute('src')
+const escape = async () => {
+  await page.keyboard.press('Escape')
+  await page.waitForTimeout(300)
+}
 check((await mainSrc()).endsWith(PHOTOS[0]), 'main starts on the first photo')
+
 await page.locator('.gallery__thumb').nth(2).click()
-check((await mainSrc()).endsWith(PHOTOS[2]), 'thumb 3 selects photo 3')
+await page.waitForTimeout(300)
+check((await lbSrc()).endsWith(PHOTOS[2]), 'thumb 3 previews photo 3')
+await escape()
+check((await mainSrc()).endsWith(PHOTOS[2]), 'thumb 3 also selects photo 3')
+check(
+  await page.locator('.gallery__thumb').nth(2).evaluate((n) => n === document.activeElement),
+  'focus restored to the thumb that opened the preview',
+)
+
 // Slot 4 of 4 with 3 photos wraps back to photo 1 -- the design repeats a short set.
 await page.locator('.gallery__thumb').nth(3).click()
-check((await mainSrc()).endsWith(PHOTOS[0]), 'thumb 4 wraps to photo 1 with 3 photos')
+await page.waitForTimeout(300)
+check((await lbSrc()).endsWith(PHOTOS[0]), 'thumb 4 wraps to photo 1 with 3 photos')
+await escape()
 
-// --- prev/next wrap at both ends ---
+// --- prev/next browse without opening the preview, and wrap at both ends ---
 await page.click('.gallery__nav--prev')
 check((await mainSrc()).endsWith(PHOTOS[2]), 'prev from the first photo wraps to the last')
+check((await page.locator('.gl-lightbox').count()) === 0, 'prev does not open the preview')
 await page.click('.gallery__nav--next')
 check((await mainSrc()).endsWith(PHOTOS[0]), 'next from the last photo wraps to the first')
 
@@ -130,6 +147,32 @@ check(
   await page.locator('.gallery__main').evaluate((n) => n === document.activeElement),
   'focus restored to the photo on close',
 )
+
+await page.close()
+
+/*
+ * Second pass: an empty gallery, which is what a local preview and every
+ * unconfigured invitation actually renders. The slots have to fall back to the
+ * design's own two shots, or there is nothing on the band to click.
+ */
+const bare = await browser.newPage({ viewport: { width: 375, height: 812 }, reducedMotion: 'reduce' })
+await bare.route('**/getHome/**', (r) =>
+  r.fulfill({ json: { success: true, data: { wedding: {}, pengantin: [], acara: [], gallery: [] } } }),
+)
+await bare.goto(URL, { waitUntil: 'networkidle' })
+await bare.click('.opening__envelope')
+await bare.waitForTimeout(2500)
+await bare.locator('.gallery').scrollIntoViewIfNeeded()
+await bare.waitForTimeout(600)
+check((await bare.locator('.gallery__thumb').count()) === 4, 'four thumbs render with no API photos')
+check(
+  (await bare.locator('.gallery__main img').getAttribute('src')).includes('photo-2'),
+  'main falls back to the design’s full-length shot',
+)
+await bare.click('.gallery__main')
+await bare.waitForTimeout(400)
+check((await bare.locator('.gl-lightbox').count()) === 1, 'preview opens with no API photos')
+await bare.close()
 
 await browser.close()
 if (fails.length) {
