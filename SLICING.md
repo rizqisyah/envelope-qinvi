@@ -86,15 +86,47 @@ Two tools do the solving, both diffing against `.figma-tmp/frame242-full.png`
 
 ```bash
 python3 scripts/locate.py <asset> <hintX> <hintY>            # one asset, if nothing covers it
-python3 scripts/solve_band.py .figma-ref/bands/<band>.json    # a whole stack
+python3 scripts/solve_band.py .figma-ref/bands/<band>.json    # a whole stack, by minimising error
+python3 scripts/worth.py <band.json> <id> <x0> <x1> <y0> <y1> # ...by maximising worth instead
 node   scripts/fit-text.mjs <port> <sel> <x> <y> <w> <h>      # where a text node's glyphs land
 python3 scripts/ink.py <clipX> <clipY> [bandY0]               # ...turned into a bounding box
+node   scripts/sweep-text.mjs <sel> <prop> <a> <b> <y0> <y1>  # sweep live text against the render
+python3 scripts/sweep-score.py                                # ...and score what it shot
 node   scripts/check-gallery.mjs <port>                       # the gallery carousel's own logic
 node   scripts/check-ceremony.mjs <port>                      # the akad + resepsi cards' live copy
 node   scripts/check-countdown.mjs <port>                     # that the clock is a clock, not a picture
 node   scripts/check-gift.mjs <port>                          # the account cards + the clipboard
+node   scripts/check-rsvp.mjs <port>                          # the form's payload, failures + a11y
+node   scripts/sheet-shot.mjs <port>                          # the live sheet at 375 x dsf 1
+python3 scripts/band-diff.py <y0> <y1> [x0] [x1]              # ...scored against the render
 python3 scripts/crop-gallery-fallback.py                      # its stock photos, cut from its plate
 ```
+
+**Score every band with `sheet-shot.mjs` + `band-diff.py`, and nothing else.** Two traps
+they close:
+
+- `shot.mjs`'s sheet shot is deviceScaleFactor 2. Downscaling it to 375 softens every
+  glyph and inflates a band's score by 20–40% — the RSVP band reads 1.54 that way
+  against its true 1.12. `band-diff.py` now refuses a non-375-wide input rather than
+  resample one.
+- Pick the band's **art rows**, not its group box, and write the range next to the
+  figure. The RSVP group starts at 6173 but a floral hangs 61 rows above it; the gift
+  group runs 120 rows past its last card. Padding a window with bare paper only drags
+  the mean down and makes the number incomparable.
+
+These two scripts arrived with the RSVP band, so it is the first band measured on them.
+Re-running them on the earlier bands gives **gift 2.245, countdown 2.193, akad 4.322** —
+none of which match those bands' recorded 2.35 / 2.62 / 2.93, because each was measured
+on a one-off harness that no longer exists (and akad's live copy differs from the
+design's when nothing is configured). Under one harness the ranking still holds, but
+**re-measure before comparing** rather than trusting the older figures against each
+other.
+
+`check-rsvp.mjs` runs its geometry table under **WebKit as well as Chromium**: three of
+those rows are form controls with `border: 0` and a pinned 36px height, and WebKit is
+the engine with its own opinion about those. It holds them — measured, not assumed —
+but a Chromium-only pass would have shipped whatever WebKit decided. Any band with
+form controls should do the same (`pnpm exec playwright install webkit`).
 
 `locate.py` only works when the asset is the topmost thing at its spot. In a dense
 band it fails silently with a high error, because a floral buried under a card
@@ -530,9 +562,9 @@ never by picking the method you ran first.
 
 An ink measurement of a text row catches whatever artwork sits behind the words. On
 the gift band that meant the BCA logo, the olive tab and three florals; on the RSVP
-band it would mean the olive arch and the floral cascade. `.figma-tmp/sweep-rsvp.mjs`
+band it would mean the olive arch and the floral cascade. `scripts/sweep-text.mjs`
 overrides one declaration on the running page, re-shoots the sheet at each value, and
-scores the box against the render — so the number includes the background either way
+`scripts/sweep-score.py` scores the box against the render — so the number includes the background either way
 and cancels it.
 
 What that found on the RSVP band: the heading and all three field labels land on their

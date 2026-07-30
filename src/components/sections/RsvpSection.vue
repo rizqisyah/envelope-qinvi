@@ -26,7 +26,7 @@
  *   2594:315  (8, 6363) as declared
  *   2594:316  (0, 6359)  declared (-37, 6413)
  */
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useReveal } from '../../composables/useReveal'
 import { useWedding } from '../../composables/useWedding'
 import { submitRsvp } from '../../lib/api'
@@ -48,6 +48,7 @@ const attendance = ref('')
 const submitting = ref(false)
 const sent = ref(false)
 const error = ref('')
+const thanksEl = ref<HTMLElement | null>(null)
 
 /*
  * Per invitation AND per guest link: the same phone opening two different links is two
@@ -108,6 +109,9 @@ async function submit() {
       // Losing the receipt only means the form comes back on reload.
     }
     sent.value = true
+    // The submit button just stopped existing, so move focus somewhere real.
+    await nextTick()
+    thanksEl.value?.focus()
   } catch (err: any) {
     error.value = err?.message || 'Gagal mengirim konfirmasi. Coba lagi.'
   } finally {
@@ -126,7 +130,16 @@ async function submit() {
       konfirmasi kehadiran Anda melalui formulir reservasi di bawah:
     </p>
 
-    <p v-if="sent" class="rsvp__thanks">
+    <!--
+      A live region that is already in the DOM when `sent` flips: one rendered fresh
+      at that moment is announced unreliably. Submitting removes the form outright, so
+      without this a screen-reader user gets no confirmation at all.
+    -->
+    <p class="rsvp__sr" aria-live="polite">
+      {{ sent ? 'Konfirmasi kehadiran Anda sudah kami terima.' : '' }}
+    </p>
+
+    <p v-if="sent" ref="thanksEl" class="rsvp__thanks" tabindex="-1">
       <span class="rsvp__thanks-title">Terima Kasih!</span>
       <span>Konfirmasi kehadiran Anda sudah kami terima.</span>
     </p>
@@ -202,6 +215,20 @@ async function submit() {
 
 .rsvp img {
   pointer-events: none;
+}
+
+.rsvp__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.rsvp__thanks:focus-visible {
+  outline: calc(2 * var(--px)) solid #ffffff;
+  outline-offset: calc(4 * var(--px));
 }
 
 /* 2594:299 — 332x560 exact, flat #4d4d2d with mixed corner radii. */
@@ -291,7 +318,13 @@ async function submit() {
   border-radius: 0;
   background: #ffffff;
   font-family: var(--font-serif);
-  font-size: calc(15 * var(--px));
+  /*
+   * 16, not the 15 that first looked right: `--px` is 1.0 at a 375 container, so
+   * anything under 16 makes mobile Safari zoom the page on focus and throw the whole
+   * 375-wide layout off screen. The design draws these boxes empty, so the size costs
+   * no fidelity -- and 16 still clears the plate's 36px box.
+   */
+  font-size: calc(16 * var(--px));
   line-height: calc(36 * var(--px));
   color: #4d4d2d;
 }

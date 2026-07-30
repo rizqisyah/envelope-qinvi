@@ -6,7 +6,7 @@
 // already have replied, and whether the labels are wired to the controls at all.
 //
 //   pnpm dev & node scripts/check-rsvp.mjs [port]
-import { chromium } from 'playwright'
+import { chromium, webkit } from 'playwright'
 
 const PORT = process.argv[2] || 5177
 const ORIGIN = `http://localhost:${PORT}`
@@ -23,8 +23,13 @@ const browser = await chromium.launch()
  * Opens the invitation with the RSVP band in view. `rsvp` decides how the POST is
  * answered; every request that reaches it is recorded in `posts`.
  */
-async function open({ guest = null, rsvp = 'ok', to = '', motion = 'reduce', ctx: reuse } = {}) {
-  const ctx = reuse || (await browser.newContext({ viewport: { width: 375, height: 812 }, reducedMotion: motion }))
+async function open({ guest = null, rsvp = 'ok', to = '', motion = 'reduce', ctx: reuse, engine } = {}) {
+  const ctx =
+    reuse ||
+    (await (engine || browser).newContext({
+      viewport: { width: 375, height: 812 },
+      reducedMotion: motion,
+    }))
   const page = await ctx.newPage()
   const posts = []
   await page.route('**/getHome/**', (r) =>
@@ -81,6 +86,19 @@ const fill = async (page, { name, phone, attend }) => {
   // Success has to replace the form, or a guest can submit the same reply twice.
   check((await page.locator('.rsvp__thanks').count()) === 1, 'success shows the thank-you')
   check((await page.locator('.rsvp__form').count()) === 0, 'success removes the form')
+
+  /*
+   * Submitting deletes the button that was focused. Without an announcement and a
+   * focus move, a screen-reader user is left on <body> with no idea it worked -- on
+   * the one control in this band that has a consequence.
+   */
+  const live = (await page.locator('.rsvp__sr[aria-live]').innerText()).trim()
+  check(live.length > 0, `the live region announces the confirmation (got "${live}")`)
+  const focused = await page.evaluate(() => document.activeElement?.className || '')
+  check(
+    focused.includes('rsvp__thanks'),
+    `focus moves to the thank-you, not <body> (landed on "${focused}")`,
+  )
   await ctx.close()
 }
 
@@ -178,39 +196,60 @@ for (const [mode, want] of [
     JSON.stringify(wired) === JSON.stringify(['input', 'input', 'select']),
     `all three labels point at their control (got ${JSON.stringify(wired)})`,
   )
-
-  /*
-   * Geometry the diff would catch only as a blur. Each of these is a sharp sweep
-   * minimum, and three of them sit one px off some node's declared y.
-   */
-  const sheet = await page.locator('.sheet').boundingBox()
-  const at = async (sel) => {
-    const b = await page.locator(sel).boundingBox()
-    return { top: b.y - sheet.y, left: b.x - sheet.x, w: b.width, h: b.height }
-  }
-  const want = [
-    ['.rsvp__arch', 6173, 35, 332, 560],
-    ['.rsvp__heading', 6243, 48, 305, null],
-    ['.rsvp__body', 6300, 85, 231, null],
-    ['.rsvp__label--name', 6429, 67, null, null],
-    ['.rsvp__field--name', 6452, 68, 261.22, 36],
-    ['.rsvp__label--phone', 6494, 67, null, null],
-    ['.rsvp__field--phone', 6517, 67, 261.22, 36],
-    ['.rsvp__label--attend', 6557, 69, null, null],
-    ['.rsvp__field--attend', 6580, 68, 258, 36],
-    ['.rsvp__send', 6648, 139, 115, 32],
-  ]
-  for (const [sel, top, left, w, h] of want) {
-    const b = await at(sel)
-    const bad = [
-      Math.abs(b.top - top) > 0.6 ? `top ${b.top.toFixed(1)}!=${top}` : '',
-      Math.abs(b.left - left) > 0.6 ? `left ${b.left.toFixed(1)}!=${left}` : '',
-      w !== null && Math.abs(b.w - w) > 0.6 ? `w ${b.w.toFixed(1)}!=${w}` : '',
-      h !== null && Math.abs(b.h - h) > 0.6 ? `h ${b.h.toFixed(1)}!=${h}` : '',
-    ].filter(Boolean)
-    check(bad.length === 0, `${sel} sits where Frame 242 draws it${bad.length ? ` (${bad})` : ''}`)
-  }
   await ctx.close()
+}
+
+/*
+ * Geometry the diff would catch only as a blur. Each row is a sharp sweep minimum, and
+ * the body copy sits one px off its node's declared y.
+ *
+ * Run under WebKit as well as Chromium: three of these rows are form controls with
+ * `border: 0` and a pinned height, and WebKit is the engine that has its own opinion
+ * about those. A Chromium-only pass would ship a taller select to every iPhone.
+ */
+const GEOMETRY = [
+  ['.rsvp__arch', 6173, 35, 332, 560],
+  ['.rsvp__heading', 6243, 48, 305, null],
+  ['.rsvp__body', 6300, 85, 231, null],
+  ['.rsvp__label--name', 6429, 67, null, null],
+  ['.rsvp__field--name', 6452, 68, 261.22, 36],
+  ['.rsvp__label--phone', 6494, 67, null, null],
+  ['.rsvp__field--phone', 6517, 67, 261.22, 36],
+  ['.rsvp__label--attend', 6557, 69, null, null],
+  ['.rsvp__field--attend', 6580, 68, 258, 36],
+  ['.rsvp__send', 6648, 139, 115, 32],
+]
+
+for (const [engineName, engine] of [
+  ['chromium', browser],
+  ['webkit', await webkit.launch()],
+]) {
+  const { ctx, page } = await open({ engine })
+  const sheet = await page.locator('.sheet').boundingBox()
+  for (const [sel, top, left, w, h] of GEOMETRY) {
+    const b = await page.locator(sel).boundingBox()
+    const got = { top: b.y - sheet.y, left: b.x - sheet.x, w: b.width, h: b.height }
+    const bad = [
+      Math.abs(got.top - top) > 0.6 ? `top ${got.top.toFixed(1)}!=${top}` : '',
+      Math.abs(got.left - left) > 0.6 ? `left ${got.left.toFixed(1)}!=${left}` : '',
+      w !== null && Math.abs(got.w - w) > 0.6 ? `w ${got.w.toFixed(1)}!=${w}` : '',
+      h !== null && Math.abs(got.h - h) > 0.6 ? `h ${got.h.toFixed(1)}!=${h}` : '',
+    ].filter(Boolean)
+    check(bad.length === 0, `[${engineName}] ${sel} sits where Frame 242 draws it${bad.length ? ` (${bad})` : ''}`)
+  }
+  // Under 16px, mobile Safari zooms the page on focus and the 375-wide layout leaves
+  // the screen. --px is 1.0 at a 375 container, so 16 design px is the floor.
+  const sizes = await page.evaluate(() =>
+    [...document.querySelectorAll('.rsvp__field')].map((f) =>
+      parseFloat(getComputedStyle(f).fontSize),
+    ),
+  )
+  check(
+    sizes.every((s) => s >= 16),
+    `[${engineName}] every field is at least 16px, so focus does not zoom (got ${sizes})`,
+  )
+  await ctx.close()
+  if (engineName === 'webkit') await engine.close()
 }
 
 /*
