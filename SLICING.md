@@ -462,8 +462,10 @@ different question from "where does the total error go down".
           maximise worth -> x 10, worth +7.9      (declared 70, asset 60 wide)
 ```
 
-Maximising worth placed every layer and took the band from 3.03 to **2.22**, the
-best in the file. It validates itself on `2610:119`, whose x is independently proven
+Maximising worth placed every layer and took the band from 3.03 to **2.22** over the
+solve window. Quote band numbers on one basis: this band's art rows score **2.62**,
+which is what compares to akad's and resepsi's 2.93. The 2.22 excludes the live text,
+and a full-band 2.42 just averages in 85 rows of bare paper. It validates itself on `2610:119`, whose x is independently proven
 by the left-edge clip: the worth probe returns exactly that x.
 
 Two corollaries worth carrying forward:

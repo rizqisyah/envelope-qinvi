@@ -25,7 +25,7 @@
  *             of the ticket, where the render has clean paper.
  *   2610:120  declared 45, actually 18 (27 wide).
  */
-import { computed, onUnmounted, ref } from 'vue'
+import { computed, onUnmounted, ref, watch } from 'vue'
 import { parseEventStart, remainingUntil } from '../../lib/format'
 import { useReveal } from '../../composables/useReveal'
 import { useWedding } from '../../composables/useWedding'
@@ -107,7 +107,28 @@ const target = computed(() => {
 // The design ships 0 0 0 0, so an unconfigured render matches the reference.
 const now = ref(Date.now())
 const left = computed(() => remainingUntil(target.value, now.value))
-const timer = window.setInterval(() => (now.value = Date.now()), 1000)
+
+/*
+ * The tick starts on reveal, not on mount. This band is mounted for the whole
+ * session -- the cover is what unmounts, InviteBody never does -- so a tick started
+ * at setup would rewrite four cells every second forever, including while the guest
+ * is thousands of pixels away and has never seen the clock. `shown` latches true
+ * once and never goes back, so this fires at most once and needs no teardown of its
+ * own beyond the unmount guard.
+ *
+ * `now` is seeded at setup regardless, so the first frame after reveal is already
+ * correct rather than a second stale.
+ */
+let timer = 0
+watch(
+  shown,
+  (on) => {
+    if (!on || timer) return
+    now.value = Date.now()
+    timer = window.setInterval(() => (now.value = Date.now()), 1000)
+  },
+  { immediate: true },
+)
 onUnmounted(() => window.clearInterval(timer))
 
 function cellStyle(cx: number) {

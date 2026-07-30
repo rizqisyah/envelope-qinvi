@@ -153,8 +153,10 @@
   }
  ],
  "verification": {
-  "method": "worth probe, not solve_band -- see note",
-  "bandError": "2.22/255 over the solve window, text masked",
-  "note": "solve_band minimises the error of the finished stack, which is the wrong objective for a layer that may not belong where you put it: it walked three layers here to their window edges and left the band at 3.03. Maximising WORTH instead -- err(absent) - err(present), both measured over the same box -- fixed all three and took the band to 2.22. The method validates itself on 2610:119, whose x is independently proven by the left-edge clip: the worth probe returns exactly that x."
+  "canonical": "art rows 5119-5400, live sheet: 2.62/255",
+  "note": "Three numbers exist for this band and they are three different bases -- quote the canonical one. (a) art rows 5119-5400 against the live sheet, 2.62: the rows that actually carry artwork, and the figure comparable to akad's and resepsi's 2.93. (b) full band 5119-5485, 2.42: includes ~85 rows of bare paper, which only drags the mean down. (c) solve window 5110-5490 with the text masked, 2.22: what the placement work optimised, not what ships -- it excludes the live countdown text entirely.",
+  "textRows": "5243-5297, x 66-345: 4.50/255. The live text against the design's baked bitmap; the only rows where the two differ by construction.",
+  "method": "worth probe, NOT solve_band -- see below",
+  "methodNote": "solve_band minimises the error of the finished stack, which slides a layer to the least-bad spot when it does not belong in the window at all: it walked three layers here to their window edges and left the band at 3.03. Maximising WORTH instead -- err(absent) - err(present), both measured over the SAME box -- placed every layer. The method validates itself on 2610:119, whose x is independently proven by the left-edge clip: the worth probe returns exactly that x."
  }
 }
