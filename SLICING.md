@@ -98,6 +98,7 @@ node   scripts/check-countdown.mjs <port>                     # that the clock i
 node   scripts/check-gift.mjs <port>                          # the account cards + the clipboard
 node   scripts/check-rsvp.mjs <port>                          # the form's payload, failures + a11y
 node   scripts/check-wish.mjs <port>                          # the ucapan key, the panel, the wrap
+node   scripts/check-nav.mjs <port>                           # the nav's scroll-spy, music + both layouts
 node   scripts/sheet-shot.mjs <port>                          # the live sheet at 375 x dsf 1
 python3 scripts/band-diff.py <y0> <y1> [x0] [x1]              # ...scored against the render
 python3 scripts/crop-gallery-fallback.py                      # its stock photos, cut from its plate
@@ -732,7 +733,21 @@ declared height tells you nothing about where the glyphs land.
 - Frame 242: the hero, envelope, groom, divider, bride, glimpse, gallery, akad, resepsi,
   countdown, gift and rsvp bands are built. `InviteBody` renders them plus 2 placeholders (wish,
   footer) and owns the two page-wide backdrops. The sheet is 7240 design px tall so far.
-  `BottomNav` is still a stub. `CoverSection` (Frame 241) is done.
+  `CoverSection` (Frame 241) is done.
+- `BottomNav` is an **addition** — Frame 242 draws no nav; its own final bar is part of the
+  footer band. The palette is taken from the design's own fills (`#f7f3dc` gift plate,
+  `#cdc2ae` wish card stroke, `#55391c`/`#4d4d2d` the two text browns). Three things
+  template-2's version got wrong are fixed here, and all three were invisible in a
+  screenshot: its `active` ref was assigned once and never updated, so the scroll-spy was
+  dead paint; it autoplayed on mount and fell back to a hardcoded MP3 on someone else's
+  worker; and it was `position: fixed` with a `right: 240px !important` desktop patch.
+- **The nav needs a different `position` per layout, and neither value works for both.**
+  On desktop `.desktop-right-column` is the scroller *and* the nav's containing block —
+  the one case where `sticky` spans the whole scroll. On mobile the page scrolls and the
+  nav is the last child of a non-scrolling parent, so its sticky range is zero and it
+  never pins at all; `fixed` is correct there. `check-nav.mjs` asserts the nav stays on
+  screen mid-scroll and stays centred on the invitation column, in both layouts and both
+  engines — the mobile failure looked exactly like a working nav in a screenshot.
 - **The wish list's API key is `ucapan`, not `wishes`.** `useWedding` read `data.wishes` for
   several bands' worth of work and it was always empty — and no pixel diff could ever catch it,
   because an empty list falls back to the design's own four cards and therefore scores
