@@ -1,0 +1,211 @@
+{
+ "y0": 5480,
+ "y1": 6180,
+ "note": "Frame 242 gift band, y 5485-6173 = Group 236 (2594:148) plus florals that are NOT its children. Three identical cards at y 5637/5790/5943 -- a 153px pitch -- each a flat #f7f3dc plate (radius 12) with a #4d4d2d tab, flattened into one 327x110 export. Cards 1 and 2 are bank accounts, card 3 is a postal address; all three carry live copy, so every TEXT node is masked here and drawn as DOM in the shipped band. Florals 2594:199/200 and their per-card copies paint BEHIND the cards (z 77-82 against the group's 83); 2594:202 and copies paint in front (z 97-99). The florals repeat on the same 153 pitch, so the two rotated ones were solved once on card 1 and the offset reused.",
+ "layers": [
+  {
+   "id": "2550:130",
+   "z": 0,
+   "asset": "src/assets/page/parts/00_2550-130_paper-bg.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 13
+  },
+  {
+   "id": "2560:276",
+   "z": 3,
+   "asset": "src/assets/page/parts/01_2560-276_bg-strip.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 2821
+  },
+  {
+   "id": "2594:199",
+   "z": 77,
+   "asset": "src/assets/gift/parts/01_2594-199.webp",
+   "x": 324,
+   "y": 5604,
+   "note": "declared 57 wide at x 324; exported 51 = 375-324, so the clip proves x"
+  },
+  {
+   "id": "2594:233",
+   "z": 78,
+   "asset": "src/assets/gift/parts/01_2594-199.webp",
+   "x": 324,
+   "y": 5757,
+   "note": "declared 57 wide at x 324; exported 51 = 375-324, so the clip proves x"
+  },
+  {
+   "id": "2594:278",
+   "z": 79,
+   "asset": "src/assets/gift/parts/01_2594-199.webp",
+   "x": 324,
+   "y": 5910,
+   "note": "declared 57 wide at x 324; exported 51 = 375-324, so the clip proves x"
+  },
+  {
+   "id": "2594:200",
+   "z": 80,
+   "asset": "src/assets/gift/parts/02_2594-200.webp",
+   "x": 333,
+   "y": 5647,
+   "note": "rotated: declared 41x61 at x 351.2, exported 42x70.5. x 333 = 375-42 exactly, so the clip rule and the worth probe agree; declared y is untouched. The two copies below take the same x on the cards' 153 pitch"
+  },
+  {
+   "id": "2594:234",
+   "z": 81,
+   "asset": "src/assets/gift/parts/02_2594-200.webp",
+   "x": 333,
+   "y": 5800,
+   "note": "rotated: declared 41x61, exported 42x70.5. Declared x 351.2 would clip to 23.8 and it is not clipped, so x <= 333"
+  },
+  {
+   "id": "2594:279",
+   "z": 82,
+   "asset": "src/assets/gift/parts/02_2594-200.webp",
+   "x": 333,
+   "y": 5953,
+   "note": "rotated: declared 41x61, exported 42x70.5. Declared x 351.2 would clip to 23.8 and it is not clipped, so x <= 333"
+  },
+  {
+   "id": "card1",
+   "z": 83,
+   "asset": "src/assets/gift/parts/g236_2594-193_card.webp",
+   "x": 29,
+   "y": 5637,
+   "note": "Rectangle 135 (#f7f3dc, radius 12) + Rectangle 136 (#4d4d2d tab) flattened; 327x110 exact"
+  },
+  {
+   "id": "card2",
+   "z": 83,
+   "asset": "src/assets/gift/parts/g236_2594-193_card.webp",
+   "x": 29,
+   "y": 5790,
+   "note": "Rectangle 135 (#f7f3dc, radius 12) + Rectangle 136 (#4d4d2d tab) flattened; 327x110 exact"
+  },
+  {
+   "id": "card3",
+   "z": 83,
+   "asset": "src/assets/gift/parts/g236_2594-193_card.webp",
+   "x": 29,
+   "y": 5943,
+   "note": "Rectangle 135 (#f7f3dc, radius 12) + Rectangle 136 (#4d4d2d tab) flattened; 327x110 exact"
+  },
+  {
+   "id": "logo1",
+   "z": 83,
+   "asset": "src/assets/gift/parts/g236_2594-156_bca-logo.webp",
+   "x": 45,
+   "y": 5652
+  },
+  {
+   "id": "logo2",
+   "z": 83,
+   "asset": "src/assets/gift/parts/g236_2594-156_bca-logo.webp",
+   "x": 45,
+   "y": 5805
+  },
+  {
+   "id": "2594:290",
+   "z": 84,
+   "asset": "src/assets/gift/parts/12_2594-290_frame-224.webp",
+   "x": 45,
+   "y": 6001,
+   "note": "card 3's 'A/n ...' line. A FRAME with a TEXT child, so it should never have been exported -- it is here only so the solve has something at those rows; the shipped band draws it live"
+  },
+  {
+   "id": "2594:196",
+   "z": 91,
+   "asset": "src/assets/gift/parts/03_2594-196_copy-icon.webp",
+   "x": 323,
+   "y": 5681
+  },
+  {
+   "id": "2594:277",
+   "z": 92,
+   "asset": "src/assets/gift/parts/03_2594-196_copy-icon.webp",
+   "x": 323,
+   "y": 5832
+  },
+  {
+   "id": "2594:288",
+   "z": 93,
+   "asset": "src/assets/gift/parts/03_2594-196_copy-icon.webp",
+   "x": 323,
+   "y": 5985
+  },
+  {
+   "id": "2594:202",
+   "z": 97,
+   "asset": "src/assets/gift/parts/04_2594-202.webp",
+   "x": 260,
+   "y": 5702,
+   "note": "rotated: declared 81x76.4, exported 110x111. x is essentially as declared (260.5 -> 260) but y is 46 high of it. Solved on this instance; the two copies take the same x on the 153 pitch"
+  },
+  {
+   "id": "2594:243",
+   "z": 98,
+   "asset": "src/assets/gift/parts/04_2594-202.webp",
+   "x": 260,
+   "y": 5855,
+   "note": "rotated: declared 81x76.4, exported 110x111"
+  },
+  {
+   "id": "2594:289",
+   "z": 99,
+   "asset": "src/assets/gift/parts/04_2594-202.webp",
+   "x": 260,
+   "y": 6008,
+   "note": "rotated: declared 81x76.4, exported 110x111"
+  }
+ ],
+ "textMasks": [
+  {
+   "id": "2594:150",
+   "note": "Wedding Gift",
+   "x": 22,
+   "y": 5482,
+   "w": 240,
+   "h": 52
+  },
+  {
+   "id": "2594:157",
+   "note": "the four body lines",
+   "x": 26,
+   "y": 5524,
+   "w": 330,
+   "h": 96
+  },
+  {
+   "id": "2594:153",
+   "note": "card 1 rekening + a/n",
+   "x": 42,
+   "y": 5670,
+   "w": 185,
+   "h": 48
+  },
+  {
+   "id": "2594:239",
+   "note": "card 2 rekening + a/n",
+   "x": 42,
+   "y": 5823,
+   "w": 185,
+   "h": 48
+  },
+  {
+   "id": "2594:284",
+   "note": "card 3 address + a/n",
+   "x": 42,
+   "y": 5960,
+   "w": 185,
+   "h": 62
+  }
+ ],
+ "verification": {
+  "canonical": "art rows 5485-6053, live sheet: 2.35/255",
+  "note": "Other bases exist and are not comparable: full band 5485-6173 is 2.26 (adds 120 rows of bare paper) and the solve window 5480-6180 with text masked is 2.09 (excludes all the live copy). Quote the art-rows figure.",
+  "heading": "rows 5481-5545, x 25-258: 4.12/255. 2594:150's `top` is -4, not its node y -- a sharp diff minimum (3.93 against 10.8 and 11.3 either side) where the ink measurement had suggested only -2.",
+  "method": "worth probe (err(absent) - err(present) over the same box), not solve_band. The two rotated florals were solved on card 1 and the result reused on the cards' 153 pitch; re-probing 2594:243 independently returned exactly the pitched coordinate (260, 5855), which is the pitch validating itself.",
+  "unshipped": "12_2594-290_frame-224.webp and (in countdown/) 07_2610-113.webp are exports of TEXT nodes. Kept for reference, excluded from usePreloadAssets by negative glob, and asserted never-fetched by the band checks."
+ }
+}

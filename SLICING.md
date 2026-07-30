@@ -92,6 +92,7 @@ python3 scripts/ink.py <clipX> <clipY> [bandY0]               # ...turned into a
 node   scripts/check-gallery.mjs <port>                       # the gallery carousel's own logic
 node   scripts/check-ceremony.mjs <port>                      # the akad + resepsi cards' live copy
 node   scripts/check-countdown.mjs <port>                     # that the clock is a clock, not a picture
+node   scripts/check-gift.mjs <port>                          # the account cards + the clipboard
 python3 scripts/crop-gallery-fallback.py                      # its stock photos, cut from its plate
 ```
 
@@ -445,6 +446,24 @@ And the exclusion has to be enforced, not assumed: no component imports the bitm
 but `usePreloadAssets`'s directory glob still fetched it until a negative pattern was
 added. `check-countdown.mjs` asserts it is never requested.
 
+## A picture of a TEXT node is still a picture
+
+`2610:113` was not a one-off. Figma will happily hand you an export of anything that
+does not *directly* contain a TEXT child, which includes a FRAME whose only content
+is text — and the gift band has one: `2594:290` "Frame 224", a 170 × 18 export of the
+third card's "A/n Putrianti Resti Rusyah".
+
+So the existing rule — *never export a node that has a TEXT descendant* — needs its
+companion: **before shipping any export, check whether it is a picture of words.** A
+cheap test is the alpha histogram. Both offenders come back over 95% transparent with
+a percent or two of opaque ink, which is what glyphs on nothing looks like and what
+no real asset in this file looks like.
+
+Neither is deleted — their ink is where the typography was measured from — but
+neither may reach a browser, and "no component imports it" is not enough. Both were
+still being fetched by `usePreloadAssets`'s directory glob until it got negative
+patterns, and both bands' checks now assert the file is never requested.
+
 ## solve_band.py minimises the wrong thing
 
 `solve_band.py` moves a layer to minimise the error of the finished stack. That
@@ -515,7 +534,7 @@ of something 8700px tall exceeds what Figma will produce. Don't "fix" this by re
 | 9 | 4052–4639 | Akad — envelope + scalloped card, live event copy — **built** | `akad/` (14) |
 | 10 | 4639–5119 | Resepsi — the akad composition translated by (−8, +587) — **built** | `resepsi/` (14) |
 | 11 | 5119–5485 | Countdown — silver tray, ticket, **live clock** — **built** | `countdown/` (16 of 17) |
-| 12 | 5420–6130 | Wedding Gift — bank cards + address | `gift/` (6) |
+| 12 | 5485–6173 | Wedding Gift — 3 account cards, live copy + clipboard — **built** | `gift/` (10, 2 unshipped) |
 | 13 | 6130–6760 | RSVP — olive arch form | `rsvp/` (7) |
 | 14 | 6760–7700 | Wedding Wish — form + wishes list | `wish/` (7) |
 | 15 | 7700–8749 | Footer / Thank You + credits + IG/WA | `footer/` (32) |

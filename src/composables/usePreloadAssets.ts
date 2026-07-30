@@ -34,6 +34,13 @@ const bodyImages = Object.values(
        * imports it; without this the directory glob would still preload it.
        */
       '!../assets/countdown/parts/07_2610-113.webp',
+      '../assets/gift/**/*.webp',
+      /*
+       * Frame 224 is a FRAME wrapping the third card's "A/n ..." TEXT node, so it was
+       * exported as a picture of copy. Same rule as the countdown bitmap above: kept
+       * for reference, never shipped -- GiftSection draws that line live.
+       */
+      '!../assets/gift/parts/12_2594-290_frame-224.webp',
     ],
     { eager: true, import: 'default' },
   ),

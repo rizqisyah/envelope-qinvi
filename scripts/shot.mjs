@@ -81,6 +81,7 @@ const galleryRevealed = (await sheet.locator('.gallery.is-in').count()) === 1
 const akadRevealed = (await sheet.locator('.akad.is-in').count()) === 1
 const resepsiRevealed = (await sheet.locator('.resepsi.is-in').count()) === 1
 const countdownRevealed = (await sheet.locator('.countdown.is-in').count()) === 1
+const giftRevealed = (await sheet.locator('.gift.is-in').count()) === 1
 await sheet.evaluate(() => window.scrollTo(0, 0))
 await sheet.waitForTimeout(400)
 await sheet.locator('.sheet').screenshot({ path: `${OUT}/web-sheet.png` })
@@ -95,6 +96,7 @@ console.log(`gallery reveal fired on scroll: ${galleryRevealed}`)
 console.log(`akad reveal fired on scroll: ${akadRevealed}`)
 console.log(`resepsi reveal fired on scroll: ${resepsiRevealed}`)
 console.log(`countdown reveal fired on scroll: ${countdownRevealed}`)
+console.log(`gift reveal fired on scroll: ${giftRevealed}`)
 if (errors.length) console.log(errors.join('\n'))
-if (!opened || !revealed || !dividerRevealed || !galleryRevealed || !akadRevealed || !resepsiRevealed || !countdownRevealed)
+if (!opened || !revealed || !dividerRevealed || !galleryRevealed || !akadRevealed || !resepsiRevealed || !countdownRevealed || !giftRevealed)
   process.exitCode = 1
