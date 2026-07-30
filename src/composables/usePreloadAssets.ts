@@ -41,6 +41,17 @@ const bodyImages = Object.values(
        * for reference, never shipped -- GiftSection draws that line live.
        */
       '!../assets/gift/parts/12_2594-290_frame-224.webp',
+      '../assets/rsvp/**/*.webp',
+      /*
+       * The RSVP band's three Input frames and its Send rectangle are flat #ffffff
+       * plates -- pictures of form controls. They stay in the repo because the band's
+       * florals are scored over those rows, but the shipped band renders real
+       * <input>/<select>/<button> elements, so none of the four may be fetched.
+       */
+      '!../assets/rsvp/parts/rsvp_2594-302_send-btn.webp',
+      '!../assets/rsvp/parts/rsvp_2594-304_input.webp',
+      '!../assets/rsvp/parts/rsvp_2594-308_input.webp',
+      '!../assets/rsvp/parts/rsvp_2594-309_input.webp',
     ],
     { eager: true, import: 'default' },
   ),

@@ -464,6 +464,12 @@ neither may reach a browser, and "no component imports it" is not enough. Both w
 still being fetched by `usePreloadAssets`'s directory glob until it got negative
 patterns, and both bands' checks now assert the file is never requested.
 
+The RSVP band widens the family: `2594:304/308/309` and `2594:302` are flat `#ffffff`
+plates — **pictures of form controls**. Same handling and for a stronger reason, since
+shipping them would mean an invitation whose RSVP form is a screenshot. They stay in
+`.figma-ref/bands/rsvp.json` only because `2594:315` and `2594:316` reach those rows
+and masking them would blank the window those two florals are scored in.
+
 ## solve_band.py minimises the wrong thing
 
 `solve_band.py` moves a layer to minimise the error of the finished stack. That
@@ -495,7 +501,44 @@ Two corollaries worth carrying forward:
 - **Size-exact does not mean correctly placed.** `2610:115` exports at exactly its
   declared 60 × 90 and is still 60px out, and `2610:120` at exactly 27 × 25 is 27px
   out. Both are the asset-width shift again. Probe every layer, not just the ones
-  whose export size disagrees with Figma.
+  whose export size disagrees with Figma. The RSVP band's `2594:314` is the cleanest
+  case: 47 × 47 exact, and 47px — its own width — out.
+
+## The worth probe can be wrong too: confirm it against the asset alone
+
+Worth asks "is this layer better here than not at all". In a cascade where several
+layers paint the same *kind* of ink, a wrong position can still cover a lot of the
+right ink and score well. The RSVP band caught this:
+
+```
+2594:313  worth   -> x 44, +40.4   (a daisy cluster, 60x60 exact, declared x 31)
+          locate  -> x 31, err 16.03
+          1-D sweep of the finished band: 0.817 at 31, 1.011 at 44
+```
+
+At x 44 the cluster still sits on daisy ink that `2594:311`'s leaves and `2594:314`'s
+daisies contribute above it, so worth stays high 13px off. `locate.py` matches the
+asset *alone* against the render and has no such blind spot.
+
+**So run both.** Worth places layers that are buried; `locate.py` places layers that
+are visible and is immune to what the neighbours contribute. On the RSVP band they
+agreed to the pixel on five of six florals, and where they disagreed `locate.py` was
+right. Disagreement is the signal — resolve it with a 1-D sweep of the finished band,
+never by picking the method you ran first.
+
+## Sweep text on the live band, not on measured ink
+
+An ink measurement of a text row catches whatever artwork sits behind the words. On
+the gift band that meant the BCA logo, the olive tab and three florals; on the RSVP
+band it would mean the olive arch and the floral cascade. `.figma-tmp/sweep-rsvp.mjs`
+overrides one declaration on the running page, re-shoots the sheet at each value, and
+scores the box against the render — so the number includes the background either way
+and cancels it.
+
+What that found on the RSVP band: the heading and all three field labels land on their
+node y *exactly*, each a sharp minimum. Only the body copy is off, by one px (top 127
+against node y 126, 3.13 against 13.0 and 10.5 either side). Do not assume the
+one-px-off case generalises: sweep each block, and expect most of them to be right.
 
 ## Frame 242 — three things that will bite you
 
@@ -535,7 +578,7 @@ of something 8700px tall exceeds what Figma will produce. Don't "fix" this by re
 | 10 | 4639–5119 | Resepsi — the akad composition translated by (−8, +587) — **built** | `resepsi/` (14) |
 | 11 | 5119–5485 | Countdown — silver tray, ticket, **live clock** — **built** | `countdown/` (16 of 17) |
 | 12 | 5485–6173 | Wedding Gift — 3 account cards, live copy + clipboard — **built** | `gift/` (10, 2 unshipped) |
-| 13 | 6130–6760 | RSVP — olive arch form | `rsvp/` (7) |
+| 13 | 6173–6760 | RSVP — olive arch, **live form posting to `hadir2`** — **built** | `rsvp/` (7, 4 unshipped) |
 | 14 | 6760–7700 | Wedding Wish — form + wishes list | `wish/` (7) |
 | 15 | 7700–8749 | Footer / Thank You + credits + IG/WA | `footer/` (32) |
 | — | full page | Paper texture backdrop + long bg strip | `page/` (2) |
@@ -631,9 +674,22 @@ declared height tells you nothing about where the glyphs land.
   If pearls are missing along the footer, they are the reason.
 - `DEFAULT_SLUG` in `src/lib/api.ts` and the `name` field in `package.json` are both still
   `tema-elegan-putih`, carried over from the previous template. Neither is this project's slug.
-- Frame 242: the hero, envelope, groom, divider, bride, glimpse, gallery and akad bands are
-  built. `InviteBody` renders them plus 6 placeholders and owns the two page-wide backdrops.
+- Frame 242: the hero, envelope, groom, divider, bride, glimpse, gallery, akad, resepsi,
+  countdown, gift and rsvp bands are built. `InviteBody` renders them plus 2 placeholders (wish,
+  footer) and owns the two page-wide backdrops. The sheet is 7240 design px tall so far.
   `BottomNav` is still a stub. `CoverSection` (Frame 241) is done.
+- The RSVP band is the first one that posts to the server. Its payload shape is pinned against
+  the production app (`qinvi-fe-2`): `{ guest_name, phone, attendance_status, guest_count }` to
+  `/v1/service/menu/hadir2/<slug>`. The design draws no guest-count field, so an attending guest
+  counts as 1 and a declining one as 0 — do not invent the control.
+- The RSVP band's Kehadiran control is a native `<select>`, which shows a dropdown indicator the
+  design's flat white plate does not. Its placeholder option carries no label, so the resting box
+  is empty as drawn. Hiding the indicator with `appearance: none` would score marginally better
+  and leave the control with no affordance at all; the deviation is deliberate.
+- A guest can already have replied two ways, and both are handled: a `localStorage` receipt keyed
+  `rsvp_<slug>_<to|general>`, and `guest.has_rsvp` from the API, which is the only signal when
+  they replied from another device. `guest` arrives *after* the band mounts, so that is a `watch`,
+  not an `onMounted` read.
 - `2594:329`, a white orchid spray in the akad band, paints below the card and is 98% covered by
   it — measured against the card export's own alpha, not inferred from its 0.000 leave-one-out,
   which would look identical if the coordinates were simply wrong somewhere covered. A probe does

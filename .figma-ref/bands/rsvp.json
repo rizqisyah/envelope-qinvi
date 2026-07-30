@@ -1,0 +1,170 @@
+{
+ "y0": 6100,
+ "y1": 6770,
+ "note": "Frame 242 RSVP band, y 6173-6760 = Group 2594:298 plus six florals that are NOT its children (z 117-122, so every floral paints OVER the arch). The arch itself is FRAME 2594:299, an empty 332x560 frame filled flat #4d4d2d with mixed corner radii; its export is 93% one colour and carries no text ink, so it is safe to ship whole. The three Input frames and the Send rectangle are flat #ffffff plates that must be live form controls, so they are solve-only layers here: they are in the stack because 2594:315 and 2594:316 reach those rows and masking them would blank the window those florals are scored in. Only the six TEXT nodes are masked.",
+ "layers": [
+  {
+   "id": "2550:130",
+   "z": 0,
+   "asset": "src/assets/page/parts/00_2550-130_paper-bg.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 13
+  },
+  {
+   "id": "2560:276",
+   "z": 3,
+   "asset": "src/assets/page/parts/01_2560-276_bg-strip.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 2821
+  },
+  {
+   "id": "2594:299",
+   "z": 116,
+   "asset": "src/assets/rsvp/parts/rsvp_2594-299_arch.webp",
+   "x": 35,
+   "y": 6173,
+   "note": "332x560 exact"
+  },
+  {
+   "id": "2594:309",
+   "z": 116,
+   "asset": "src/assets/rsvp/parts/rsvp_2594-309_input.webp",
+   "x": 68,
+   "y": 6452,
+   "note": "solve-only: flat #ffffff 261.5x36, ships as a live <input>"
+  },
+  {
+   "id": "2594:308",
+   "z": 116,
+   "asset": "src/assets/rsvp/parts/rsvp_2594-308_input.webp",
+   "x": 67,
+   "y": 6517,
+   "note": "solve-only: flat #ffffff 261.5x36, ships as a live <input>"
+  },
+  {
+   "id": "2594:304",
+   "z": 116,
+   "asset": "src/assets/rsvp/parts/rsvp_2594-304_input.webp",
+   "x": 68,
+   "y": 6580,
+   "note": "solve-only: flat #ffffff 258x36, ships as a live <select>"
+  },
+  {
+   "id": "2594:302",
+   "z": 116,
+   "asset": "src/assets/rsvp/parts/rsvp_2594-302_send-btn.webp",
+   "x": 139,
+   "y": 6648,
+   "note": "solve-only: flat #ffffff 115x32 radius 6, ships as a live <button>"
+  },
+  {
+   "id": "2594:316",
+   "z": 117,
+   "asset": "src/assets/rsvp/parts/06_2594-316.webp",
+   "x": 0,
+   "y": 6359,
+   "note": "rotated: declared 100x98.98 at x -37, exported 101x137.5. Solved to (0,6359) -- 37 right and 54 up of its declared spot. locate.py matches the asset alone at exactly (0,6359) with err 12.79, independent of the worth probe"
+  },
+  {
+   "id": "2594:312",
+   "z": 118,
+   "asset": "src/assets/rsvp/parts/00_2594-312.webp",
+   "x": 21,
+   "y": 6112,
+   "note": "133x187 exact and at its declared spot; reaches 61 rows above the band's own top, so the shipped band gives it top -61. Its locate.py err is 74 because the export is mostly transparent stem, but the position agrees"
+  },
+  {
+   "id": "2594:313",
+   "z": 119,
+   "asset": "src/assets/rsvp/parts/02_2594-313.webp",
+   "x": 31,
+   "y": 6249,
+   "note": "60x60 exact and at its declared spot. The ONE case in this file where the worth probe was wrong: it preferred x 44 at +40.4 worth over x 31 at +32.8, because 311's leaves and 314's daisies contribute ink that a cluster at 44 still covers. locate.py (err 16.03), the live pixel diff and a 1-D sweep (0.817 at 31 against 1.011 at 44) all say 31"
+  },
+  {
+   "id": "2594:311",
+   "z": 120,
+   "asset": "src/assets/rsvp/parts/03_2594-311.webp",
+   "x": 0,
+   "y": 6255,
+   "note": "rotated: declared 67.69x101.53 at x -4, exported 74x108. Solved to (0,6255); x 0 is also where the clip rule puts the bound, and locate.py returns the same pixel"
+  },
+  {
+   "id": "2594:314",
+   "z": 121,
+   "asset": "src/assets/rsvp/parts/04_2594-314.webp",
+   "x": 14,
+   "y": 6335,
+   "note": "47x47 exact yet 47 out -- the asset-width shift again, this time on a size-exact export. Declared x 61, actually 14, confirmed by locate.py at err 10.62, the lowest in the band"
+  },
+  {
+   "id": "2594:315",
+   "z": 122,
+   "asset": "src/assets/rsvp/parts/05_2594-315_vdf-6.webp",
+   "x": 8,
+   "y": 6363,
+   "note": "48x78 exact and at its declared spot"
+  }
+ ],
+ "textMasks": [
+  {
+   "id": "2594:301",
+   "note": "\"Rsvp\", Pinyon Script 48/38",
+   "x": 40,
+   "y": 6230,
+   "w": 320,
+   "h": 62
+  },
+  {
+   "id": "2594:300",
+   "note": "the five body lines, EB Garamond 16/20",
+   "x": 78,
+   "y": 6293,
+   "w": 244,
+   "h": 112
+  },
+  {
+   "id": "2594:306",
+   "note": "\"Nama:\"",
+   "x": 62,
+   "y": 6424,
+   "w": 55,
+   "h": 30
+  },
+  {
+   "id": "2594:307",
+   "note": "\"No Hp:\"",
+   "x": 62,
+   "y": 6489,
+   "w": 60,
+   "h": 30
+  },
+  {
+   "id": "2594:305",
+   "note": "\"Kehadiran\"",
+   "x": 64,
+   "y": 6552,
+   "w": 78,
+   "h": 30
+  },
+  {
+   "id": "2594:303",
+   "note": "\"Send\", Jost 13/16.8",
+   "x": 128,
+   "y": 6649,
+   "w": 138,
+   "h": 28
+  }
+ ],
+ "verification": {
+  "canonical": "art rows 6112-6690, live sheet: 1.116/255",
+  "note": "Art rows start at 6112, not the band's own 6173, because 2594:312 hangs 61 rows above it. Two other bases exist and are not comparable: full band 6173-6760 against the live sheet is 1.246, and the offline solve window 6100-6770 with the six TEXT nodes masked and the four flat form plates composited is 0.817 -- that last one is what the placement work optimised, not what ships. Quote the art-rows figure.",
+  "textRows": "heading 6230-6292 x 40-360: 0.768. body 6293-6405 x 78-322: 3.269. labels + plates 6420-6620 x 55-340: 0.376. Send 6645-6685 x 128-266: 0.552.",
+  "method": "worth probe, then every result confirmed by an independent template match (scripts/locate.py) against the asset alone. The two methods agreed on five of six florals to the pixel; they disagreed on 2594:313 and locate.py was right -- see that layer's note. Text tops were swept on the LIVE band (.figma-tmp/sweep-rsvp.mjs), not measured from ink: an ink measurement here would catch the arch and the florals behind the words.",
+  "textFindings": "The heading and all three labels land on their node y exactly (70/256/321/384 band-local), each a sharp sweep minimum. Only the body is off by one: top 127 against node y 126, 3.13 against 13.0 and 10.5 either side. All five body line breaks fall where the render's do at width 231.",
+  "unshipped": "rsvp_2594-302_send-btn.webp and rsvp_2594-304/308/309_input.webp are flat #ffffff plates -- pictures of form controls. They are layers here because 2594:315 and 2594:316 reach those rows and masking them would blank the window those florals are scored in. Excluded from usePreloadAssets by negative glob and asserted never-fetched by scripts/check-rsvp.mjs.",
+  "deviations": "The Kehadiran control is a native <select>, so it shows a dropdown indicator the design's empty plate does not. Kept discoverable rather than hidden with appearance:none, which would leave the control with no affordance. Its placeholder option carries no label, which is what keeps the resting box empty as drawn. Typed text takes EB Garamond 15 -- the design never shows any. The form controls centre on ~197-199 while the heading and body centre on 200.5; that is in the Figma coordinates and is left alone."
+ }
+}
