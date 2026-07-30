@@ -135,3 +135,19 @@ export function relativeTime(value?: string | Date | null, now: number = Date.no
   }
   return 'baru saja'
 }
+
+/*
+ * "09. 09. 26" — the glimpse band's date plate. Neither of the formats above produces it:
+ * two-digit day, month and YEAR, separated by ". " with the trailing dot on the first two.
+ * The design's own string is 09. 09. 26 for a 2026-09-09 wedding, so the last field is the
+ * year, not the day repeated.
+ */
+export function formatShortDate(raw?: string | null): string {
+  if (!raw) return ''
+  const m = raw.match(/^(\d{4})-(\d{2})-(\d{2})/)
+  if (m) return `${m[3]}. ${m[2]}. ${m[1].slice(2)}`
+  const d = new Date(raw)
+  if (Number.isNaN(d.getTime())) return ''
+  const p = (n: number) => String(n).padStart(2, '0')
+  return `${p(d.getDate())}. ${p(d.getMonth() + 1)}. ${String(d.getFullYear()).slice(2)}`
+}

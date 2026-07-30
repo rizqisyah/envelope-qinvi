@@ -100,6 +100,7 @@ node   scripts/check-rsvp.mjs <port>                          # the form's paylo
 node   scripts/check-wish.mjs <port>                          # the ucapan key, the panel, the wrap
 node   scripts/check-nav.mjs <port>                           # the nav's scroll-spy, music + both layouts
 node   scripts/check-footer.mjs <port>                        # the live photo, names, credit links + 8749
+node   scripts/check-envelope.mjs <port>                      # the Arabic verse vs the translation, 5 widths
 node   scripts/sheet-shot.mjs <port>                          # the live sheet at 375 x dsf 1
 python3 scripts/band-diff.py <y0> <y1> [x0] [x1]              # ...scored against the render
 python3 scripts/crop-gallery-fallback.py                      # its stock photos, cut from its plate
@@ -593,6 +594,44 @@ agreed to the pixel on five of six florals, and where they disagreed `locate.py`
 right. Disagreement is the signal — resolve it with a 1-D sweep of the finished band,
 never by picking the method you ran first.
 
+## A font the page never asked for
+
+The quote card shipped with the Arabic verse **overlapping** the Indonesian translation and
+the translation **clipped off the bottom of the card** — on a user's machine, not on the one
+the band was built on. Two independent things hid it, and both are worth knowing:
+
+1. **`--font-arabic` was `"Noto Sans", system-ui, sans-serif`, and Noto Sans contains no
+   Arabic glyphs.** So the verse fell through to whatever Arabic face the OS happened to
+   ship. The build machine's fallback was small; another machine's was large enough to run
+   the verse into the paragraph below it. **A pixel diff on one machine proves nothing about
+   a font the page never requested** — the layout was never deterministic to begin with.
+   Fixed by pinning `--font-quran: "Noto Naskh Arabic"` (`@fontsource/noto-naskh-arabic`).
+   `--font-arabic` keeps its old name and its real job: the wish list's Latin sans.
+2. **The band's own figure was inflated by `BottomNav`.** The nav is `position: fixed`, so an
+   element screenshot of `.sheet` captures it, and at scroll 0 it sat on rows 760–1000. That
+   cost the cover rows a false **17.4** against their real **3.1**. `sheet-shot.mjs` now
+   hides `.nav` before shooting — an addition Frame 242 does not draw never belongs in a diff
+   against the render.
+
+Envelope went **10.474 → 5.119** (nav) **→ 4.725** (verse). The stale note blaming it all on
+the known 11-vs-10 quote wrap survived three sessions because nobody split the rows.
+
+Two carry-forwards:
+
+- **Any `var(--font-*)` used on a non-Latin script needs a face that covers that script**,
+  and a check that says so. `check-envelope.mjs` asserts the face loads, that the element
+  asks for it first, and that the verse sets in the design's three lines.
+- **A collision or an overflow is a boolean, not a diff.** `check-envelope.mjs` measures the
+  gap between the two blocks and the translation's `scrollHeight - clientHeight` at five
+  widths on both engines, with the default copy and with a deliberately long verse and
+  translation. The verse's line-height was `27` where the render's is `15`; no diff figure
+  ever said "these two elements overlap".
+
+The residual on the verse is glyph weight: the render's ink is about 8.75px per line against
+Noto Naskh's 12.7 at the size that keeps three lines. 8px would score ~2/255 better and is
+not legible on a phone. The design's face is not identifiable from the render, so this one is
+recorded, not chased.
+
 ## A sweep selector must not match a second element
 
 The footer's `.footer__body` first swept to 7.05 at its own winner, which read like a
@@ -668,7 +707,7 @@ difference out of 255. Rows are each band's **art rows**, not its group box.
 | Band | Art rows | Diff | Note |
 |------|----------|------|------|
 | Hero | 0–760 | 1.384 | |
-| Envelope | 760–1400 | 10.474 | the quote body wraps to 11 lines where Figma sets 10; `useFitText` shrinks it |
+| Envelope | 760–1400 | 4.725 | see "A font the page never asked for" — read 10.474 until two separate artifacts were removed |
 | Groom | 1235–2014 | 3.014 | |
 | Bride | 2014–2810 | 2.743 | |
 | Glimpse | 2810–3501 | 6.964 | date still hardcoded `09. 09. 26` |
@@ -777,8 +816,10 @@ declared height tells you nothing about where the glyphs land.
 
 - Two nodes exported blank and were dropped: `2594:479`, `2594:480` (both "mutiara last page").
   If pearls are missing along the footer, they are the reason.
-- `DEFAULT_SLUG` in `src/lib/api.ts` and the `name` field in `package.json` are both still
-  `tema-elegan-putih`, carried over from the previous template. Neither is this project's slug.
+- `DEFAULT_SLUG` in `src/lib/api.ts` is now `adat-jawa` and `package.json` `name` is
+  `slicing-wedding-template-3`; both were `tema-elegan-putih`, the previous template's slug, which
+  meant a deploy without `VITE_DEFAULT_SLUG` fetched the wrong wedding. Still set that env var per
+  deployment — the default is only a fallback for a URL with no slug segment.
 - **Frame 242 is complete.** All fifteen bands are built, `InviteBody` renders them with no
   placeholders left, and the sheet measures exactly **8749** — the frame's own height. That number
   is the strongest single check in the project: it only lands if every band height is right, and a
@@ -885,7 +926,11 @@ declared height tells you nothing about where the glyphs land.
   composition, so stretching it drags the flap, the Save The Date sub-card and the wax seal down
   with it. +4% takes the band from 6.3 to 13.1 / 255 against the design, +7% to 15.8. Change
   `{ src: card, ... h: 566 }` in `EnvelopeSection.vue` if that trade is ever wanted.
-- `GlimpseSection` still hardcodes the date as `09. 09. 26`. The akad band has now pinned the
+- `GlimpseSection`'s date is now `acara[0].event_date` through `formatShortDate`, the third
+  formatter in `src/lib/format.ts` — day, month, two-digit year. The design's own 2026-09-09
+  reproduces `09. 09. 26` exactly, which is what confirmed the last field is the year. Superseded
+  note follows.
+- ~~`GlimpseSection` still hardcodes the date as `09. 09. 26`.~~ The akad band has now pinned the
   `acara` shape — `{ title, event_date, event_time, location_name, address, maps_url }` — so this
   can be bound to `acara[0].event_date` through `formatEventDate`. The design prints it as
   `09. 09. 26`, which is neither of the formats `src/lib/format.ts` produces, so it needs a third

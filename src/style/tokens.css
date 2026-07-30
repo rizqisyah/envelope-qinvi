@@ -24,7 +24,14 @@
   --font-caps: "Playfair Display SC", serif; /* small-caps headings */
   --font-hand: "Meow Script", cursive; /* "We're getting married" */
   --font-sans: "Jost", system-ui, sans-serif; /* UI labels */
-  --font-arabic: "Noto Sans", system-ui, sans-serif; /* Arabic verse + wish list */
+  --font-arabic: "Noto Sans", system-ui, sans-serif; /* the wish list's sans block */
+  /*
+   * The Arabic verse needs a face that actually HAS Arabic glyphs. Noto Sans does not, so
+   * the verse was falling through to whatever Arabic face the OS happened to ship — which
+   * renders at a different ink height per machine and is why the verse collided with the
+   * translation under it on one. Pinned so the layout is the same everywhere.
+   */
+  --font-quran: "Noto Naskh Arabic", "Noto Sans", serif;
   --font-eyebrow: "Reddit Sans", system-ui, sans-serif; /* Frame 241 "THE WEDDING OF" */
   --font-serif-soft: "Platypi", serif; /* Frame 241 "Dear Mr/ Mrs/ Ms" */
   --font-guest: "Poltawski Nowy", serif; /* Frame 241 guest name */

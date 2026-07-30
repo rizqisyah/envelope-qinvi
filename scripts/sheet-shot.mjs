@@ -35,6 +35,15 @@ for (let y = 0; y < h; y += 400) {
 await page.evaluate(() => window.scrollTo(0, 0))
 await page.waitForTimeout(600)
 
+/*
+ * BottomNav is `position: fixed` at this viewport, so it renders OVER the sheet and an
+ * element screenshot of `.sheet` captures it. It cost the envelope band a false 17.4 --
+ * the nav happened to sit on rows 760-1000 at scroll 0 -- against its real 2.9. The nav
+ * is an addition Frame 242 does not draw, so it never belongs in a diff against the render.
+ */
+await page.addStyleTag({ content: '.nav { display: none !important }' })
+await page.waitForTimeout(120)
+
 // Report the sheet height: it should equal the sum of the built bands' heights, and a
 // mismatch means some band's `height` is wrong even if the band itself diffs clean.
 const box = await page.locator('.sheet').boundingBox()

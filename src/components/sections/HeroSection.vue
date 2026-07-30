@@ -1,18 +1,32 @@
 <script setup lang="ts">
 // Figma Frame 242, y 0–760. Coords are frame-local design px; z matches Figma child order.
+import { computed } from 'vue'
 import { useReveal } from '../../composables/useReveal'
+import { useWedding } from '../../composables/useWedding'
 
 import forest from '../../assets/hero/parts/01_2550-136_css-copy-1.webp' // z12
-import couple from '../../assets/footer/parts/21_2594-208_img-8300.webp' // z13, deduped into footer/
+import couplePlate from '../../assets/footer/parts/21_2594-208_img-8300.webp' // z13, deduped into footer/
 import ornateFrame from '../../assets/hero/parts/00_2587-110_group-234.webp' // z14
 
 const { el, shown } = useReveal(0.15)
+const { wedding } = useWedding()
+
+/*
+ * z13 is the couple's PHOTOGRAPH, not artwork -- the same node the footer band draws
+ * (2594:208, deduped into footer/). It has to come from the API, or a real couple's
+ * invitation opens on the design's stock portrait. The sliced plate stays as the
+ * unconfigured fallback so the render still matches; `object-fit: cover` is what lets a
+ * photo of any aspect fill the frame's 342x342 aperture without stretching.
+ */
+const couple = computed(
+  () => (wedding.value?.image_cover as string) || (wedding.value?.image_bg1 as string) || couplePlate,
+)
 </script>
 
 <template>
   <section :ref="el" class="hero" :class="{ 'is-in': shown }" aria-labelledby="hero-heading">
     <img :src="forest" alt="" width="274" height="457" class="hero__forest" />
-    <img :src="couple" alt="" width="342" height="342" class="hero__couple" />
+    <img :src="couple" alt="Foto mempelai" width="342" height="342" class="hero__couple" />
     <!--
       Group 234 is paper backdrop + ornate frame flattened into one layer with a
       transparent aperture, and it paints ABOVE the two photos — that hole is what
@@ -97,6 +111,7 @@ const { el, shown } = useReveal(0.15)
   left: calc(17 * var(--px));
   width: calc(342 * var(--px));
   height: calc(342 * var(--px));
+  object-fit: cover;
   transform: translateY(calc(34 * var(--px))) scale(1.04);
   transition:
     opacity 1500ms ease-out 900ms,

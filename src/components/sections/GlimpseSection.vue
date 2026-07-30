@@ -20,7 +20,10 @@
  * florals), so the layer arrays below are split at those points rather than
  * grouped by entrance. See SLICING.md on why grouping would be a silent bug.
  */
+import { computed } from 'vue'
 import { useReveal } from '../../composables/useReveal'
+import { useWedding } from '../../composables/useWedding'
+import { formatShortDate } from '../../lib/format'
 
 import tag from '../../assets/glimpse/parts/01_2560-175.webp' // z23
 import envBack from '../../assets/glimpse/parts/11_2555-109_cascasc-1.webp' // z24
@@ -100,7 +103,15 @@ const { el, shown } = useReveal()
  * just be wrong in a way nothing catches. Bind this when the Akad band lands and
  * the event shape is pinned down -- noted in SLICING.md.
  */
-const dateLine = '09. 09. 26'
+/*
+ * The design prints 09. 09. 26 -- day, month, two-digit year. `formatShortDate` is a third
+ * formatter because neither formatEventDate ("Saturday" / "19 April 2029") nor
+ * formatEventTime produces that shape. Falls back to the design's own string, so an
+ * unconfigured render still matches the reference.
+ */
+const { acara } = useWedding()
+
+const dateLine = computed(() => formatShortDate((acara.value as any[])[0]?.event_date) || '09. 09. 26')
 </script>
 
 <template>

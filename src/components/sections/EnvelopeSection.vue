@@ -162,20 +162,31 @@ const { quoteVerse, quoteText, quoteArabic } = useWedding()
 }
 
 .envelope__arabic {
-  top: calc(272 * var(--px));
-  font-family: var(--font-arabic);
+  /* Swept: 13.74 at 276 against 13.91 and 14.18. */
+  top: calc(276 * var(--px));
+  font-family: var(--font-quran);
   /*
-   * Figma reports 10/14 for the whole node, but it renders the Arabic run in a
-   * fallback face with a much larger em -- 13/27 is what actually matches the
-   * frame render's ink.
+   * Figma reports 10/14 for the whole node, and the render sets the verse in three lines
+   * whose ink tops are 1038 / 1053 / 1068 -- a 15px line box, not the 27 this once had.
+   * 27 pushed the verse 36px past where it belongs and drove it into the translation
+   * below, which then overflowed the card. Measured off the render, then swept.
    */
-  font-size: calc(13 * var(--px));
-  line-height: calc(27 * var(--px));
+  /*
+   * 11 is the largest size that still sets the verse in the design's three lines: at 12+
+   * Noto Naskh wraps to four and crowds the translation. The render's own ink is smaller
+   * still (about 8.75px per line against this face's 12.7), and 8px would score ~2/255
+   * better -- but the design's face is not identifiable from the render and 8px Arabic
+   * with diacritics is not legible on a phone. Line count and block height match (45
+   * against the render's 41); the residual is glyph weight, and it is not chaseable.
+   */
+  font-size: calc(11 * var(--px));
+  line-height: calc(15 * var(--px));
   direction: rtl;
 }
 
 .envelope__quote-id {
-  top: calc(361 * var(--px));
+  /* Swept: 12.92 at 363. */
+  top: calc(363 * var(--px));
   /*
    * Fixed height so useFitText has a box to fit into. 175 lands the last line
    * well inside the card, whose bottom edge is at 568. Without this the copy —
