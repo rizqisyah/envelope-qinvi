@@ -59,6 +59,7 @@ const bodyImages = Object.values(
        */
       '!../assets/wish/parts/wish_2594-425_input.webp',
       '!../assets/wish/parts/wish_2594-426_textarea.webp',
+      '../assets/footer/**/*.webp',
     ],
     { eager: true, import: 'default' },
   ),

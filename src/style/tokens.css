@@ -29,6 +29,7 @@
   --font-serif-soft: "Platypi", serif; /* Frame 241 "Dear Mr/ Mrs/ Ms" */
   --font-guest: "Poltawski Nowy", serif; /* Frame 241 guest name */
   --font-quote: "Playfair", serif; /* Frame 242 quote card body */
+  --font-thanks: "Pochaevsk", serif; /* Frame 242 footer thank-you paragraphs */
 
   /* design frame reference (Figma Frame 242) */
   --frame-w: 375;

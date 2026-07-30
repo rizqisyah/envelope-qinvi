@@ -1,0 +1,358 @@
+{
+ "y0": 7600,
+ "y1": 8749,
+ "note": "Frame 242 footer band, y 7700-8749 = the last 1049 rows, and the only band that reaches the frame's own bottom edge. 33 shipped layers plus 8 TEXT nodes. Two nodes are NOT here: 2594:479 and 2594:480 (\"mutiara last page\") exported blank, and rows 7620-7800 of the render carry no pearls at all, which confirms the drop. Group 176 (the credit block) was exported whole at 714x216 but that export wraps four TEXT nodes, so it was deleted and only its two buttons kept, as g176_2594-445_ig and g176_2594-449_wa. 2594:208 is the couple PHOTOGRAPH, not artwork -- it is here so the stack composites, but the shipped band binds the API's image over it. Paint order matters more here than in any other band: 2594:203 (envelope back, z99) is under the photo (z105), and 2594:204 (front flap, z110) is over it.",
+ "layers": [
+  {
+   "id": "2550:130",
+   "z": 0,
+   "asset": "src/assets/page/parts/00_2550-130_paper-bg.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 13
+  },
+  {
+   "id": "2560:276",
+   "z": 3,
+   "asset": "src/assets/page/parts/01_2560-276_bg-strip.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 2821
+  },
+  {
+   "id": "2594:477",
+   "z": 7,
+   "asset": "src/assets/footer/parts/09_2594-477.webp",
+   "x": 3,
+   "y": 7774,
+   "note": "rotated: declared 63x83, exported 86x98.5. z7 -- it paints UNDER the Thank You text"
+  },
+  {
+   "id": "2594:478",
+   "z": 8,
+   "asset": "src/assets/footer/parts/10_2594-478.webp",
+   "x": 306,
+   "y": 7778,
+   "note": "rotated: declared 63x83, exported 69x98.5"
+  },
+  {
+   "id": "2594:292",
+   "z": 92,
+   "asset": "src/assets/footer/parts/22_2594-292.webp",
+   "x": 260,
+   "y": 8074,
+   "note": "rotated: declared 100x150, exported 115x173"
+  },
+  {
+   "id": "2594:211",
+   "z": 94,
+   "asset": "src/assets/footer/parts/23_2594-211.webp",
+   "x": 0,
+   "y": 8065,
+   "note": "rotated: declared 78x117 at x -7, exported 101x134.5"
+  },
+  {
+   "id": "2594:212",
+   "z": 95,
+   "asset": "src/assets/footer/parts/25_2594-212.webp",
+   "x": 281,
+   "y": 8070,
+   "note": "rotated: declared 78x117, exported 94x134.5"
+  },
+  {
+   "id": "2594:203",
+   "z": 99,
+   "asset": "src/assets/footer/parts/19_2594-203_cascasc-2.webp",
+   "x": 17,
+   "y": 8053,
+   "note": "349x416 exact -- the envelope back"
+  },
+  {
+   "id": "2594:207",
+   "z": 100,
+   "asset": "src/assets/footer/parts/17_2594-207.webp",
+   "x": 56,
+   "y": 8021,
+   "note": "declared 270x408, exported 274x412 -- effect bleed, so register off the art"
+  },
+  {
+   "id": "2594:220",
+   "z": 101,
+   "asset": "src/assets/footer/parts/18_2594-220.webp",
+   "x": 266,
+   "y": 8027,
+   "note": "93x125 exact"
+  },
+  {
+   "id": "2594:215",
+   "z": 102,
+   "asset": "src/assets/footer/parts/26_2594-215_vdf-4.webp",
+   "x": 0,
+   "y": 8095,
+   "note": "declared 122x217 at x -7; exported 115 = 122-7, so the LEFT clip proves the export starts at frame x 0"
+  },
+  {
+   "id": "2594:216",
+   "z": 103,
+   "asset": "src/assets/footer/parts/24_2594-216_vdf-5.webp",
+   "x": 261,
+   "y": 8090,
+   "note": "declared 122x217 at x 383; 375-383 is negative so it is not a right clip -- exported 114, solve it"
+  },
+  {
+   "id": "2594:214",
+   "z": 104,
+   "asset": "src/assets/footer/parts/27_2594-214.webp",
+   "x": 277,
+   "y": 8122,
+   "note": "78x109 exact, but its declared x 355 would put 78 of 20 visible px off-frame and the export came back unclipped, so x <= 297. Solved to (277,8122) on the art-rows objective. A local refine had walked it to 367, which the clip cap rules out outright -- the cap is the guard that caught it"
+  },
+  {
+   "id": "2594:208",
+   "z": 105,
+   "asset": "src/assets/footer/parts/21_2594-208_img-8300.webp",
+   "x": 17,
+   "y": 8054,
+   "note": "342x342 exact -- THE COUPLE PHOTOGRAPH. Deduped and also used by the hero band; the shipped footer binds the API's image over it"
+  },
+  {
+   "id": "2594:213",
+   "z": 106,
+   "asset": "src/assets/footer/parts/28_2594-213.webp",
+   "x": 28,
+   "y": 8122,
+   "note": "78x109 exact"
+  },
+  {
+   "id": "2594:435",
+   "z": 107,
+   "asset": "src/assets/footer/parts/31_2594-435.webp",
+   "x": 283,
+   "y": 8199,
+   "note": "declared 71x71 at x 283; exported 91.5 = 375-283.5, so the right clip proves x"
+  },
+  {
+   "id": "2594:219",
+   "z": 108,
+   "asset": "src/assets/footer/parts/29_2594-219.webp",
+   "x": 276,
+   "y": 8176,
+   "note": "73x98 exact"
+  },
+  {
+   "id": "2594:217",
+   "z": 109,
+   "asset": "src/assets/footer/parts/32_2594-217.webp",
+   "x": 188,
+   "y": 8214,
+   "note": "84x182 exact"
+  },
+  {
+   "id": "2594:204",
+   "z": 110,
+   "asset": "src/assets/footer/parts/20_2594-204_defcew-2.webp",
+   "x": 31,
+   "y": 8045,
+   "note": "declared 316x417, exported 320x425 -- z110, above the photo, so this is the envelope FRONT flap"
+  },
+  {
+   "id": "2594:210",
+   "z": 111,
+   "asset": "src/assets/footer/parts/33_2594-210.webp",
+   "x": 157,
+   "y": 8280,
+   "note": "69x87 exact"
+  },
+  {
+   "id": "2594:218",
+   "z": 112,
+   "asset": "src/assets/footer/parts/30_2594-218.webp",
+   "x": 34,
+   "y": 8180,
+   "note": "67x67 exact"
+  },
+  {
+   "id": "2594:459",
+   "z": 134,
+   "asset": "src/assets/footer/parts/04_2594-459.webp",
+   "x": 146,
+   "y": 7715,
+   "note": "102x92 exact -- the olive orchid medallion"
+  },
+  {
+   "id": "2594:462",
+   "z": 135,
+   "asset": "src/assets/footer/parts/00_2594-462.webp",
+   "x": 0,
+   "y": 7608,
+   "note": "declared 173x219 at x -19; exported 154 = 173-19, so the LEFT clip puts the export at frame x 0"
+  },
+  {
+   "id": "2594:463",
+   "z": 136,
+   "asset": "src/assets/footer/parts/01_2594-463.webp",
+   "x": 236,
+   "y": 7608,
+   "note": "declared 173x219 at x 409 -- entirely off-frame as declared. Exported 139, so x <= 375-139 = 236"
+  },
+  {
+   "id": "2594:466",
+   "z": 137,
+   "asset": "src/assets/footer/parts/06_2594-466.webp",
+   "x": 263,
+   "y": 7763,
+   "note": "rotated: declared 95x168, exported 112x193, so x <= 263"
+  },
+  {
+   "id": "2594:467",
+   "z": 138,
+   "asset": "src/assets/footer/parts/05_2594-467.webp",
+   "x": 0,
+   "y": 7756,
+   "note": "rotated: declared 95x168, exported 127x193"
+  },
+  {
+   "id": "2594:475",
+   "z": 139,
+   "asset": "src/assets/footer/parts/12_2594-475.webp",
+   "x": 291,
+   "y": 7834,
+   "note": "declared 104x104 at x 291; exported 84 = 375-291 exactly, so the right clip proves x. Gypsophila, 3.2% opaque -- white on white, so this clip is the only evidence for the pair"
+  },
+  {
+   "id": "2594:476",
+   "z": 140,
+   "asset": "src/assets/footer/parts/11_2594-476.webp",
+   "x": 0,
+   "y": 7831,
+   "note": "declared 104x104 at x 101; exported 101 = 104-3, which is a LEFT clip -- so the declared x is wrong and the export begins at frame x 0. Solved to (0,7831). At the declared 101 the spray sat in the middle of the band, visible in the build and absent from the render; at 0 it flanks the left edge, mirroring 2594:475 on the right. Gypsophila, only 2.7% opaque, so its worth probe read 0.000 everywhere -- the clip rule is what placed it, not the probe"
+  },
+  {
+   "id": "2594:471",
+   "z": 141,
+   "asset": "src/assets/footer/parts/14_2594-471.webp",
+   "x": 3,
+   "y": 7848,
+   "note": "rotated: declared 51.3x77, exported 61.5x83.5"
+  },
+  {
+   "id": "2594:472",
+   "z": 142,
+   "asset": "src/assets/footer/parts/13_2594-472.webp",
+   "x": 327,
+   "y": 7841,
+   "note": "rotated: declared 51.3x77 at x 377.8, exported 48x83.5, so x <= 327"
+  },
+  {
+   "id": "2594:469",
+   "z": 143,
+   "asset": "src/assets/footer/parts/15_2594-469.webp",
+   "x": 17,
+   "y": 7902,
+   "note": "58x58 exact"
+  },
+  {
+   "id": "2594:470",
+   "z": 144,
+   "asset": "src/assets/footer/parts/16_2594-470.webp",
+   "x": 320,
+   "y": 7902,
+   "note": "declared 58x58 at x 320; exported 55 = 375-320, so the clip proves x"
+  },
+  {
+   "id": "2594:473",
+   "z": 145,
+   "asset": "src/assets/footer/parts/07_2594-473.webp",
+   "x": 335,
+   "y": 7772,
+   "note": "40x35 exact"
+  },
+  {
+   "id": "2594:474",
+   "z": 146,
+   "asset": "src/assets/footer/parts/07_2594-473.webp",
+   "x": 14,
+   "y": 7772,
+   "note": "40x35 exact; byte-identical to 2594:473, so it reuses that export"
+  },
+  {
+   "id": "2594:445",
+   "z": 147,
+   "asset": "src/assets/footer/parts/g176_2594-445_ig.webp",
+   "x": 155,
+   "y": 8664,
+   "note": "45x30 exact -- the Instagram button, sliced out of Group 176 without its text"
+  },
+  {
+   "id": "2594:449",
+   "z": 148,
+   "asset": "src/assets/footer/parts/g176_2594-449_wa.webp",
+   "x": 211,
+   "y": 8665,
+   "note": "45x29.5 exact -- the WhatsApp button"
+  }
+ ],
+ "textMasks": [
+  {
+   "id": "2594:436",
+   "note": "\"Thank You !\", Pinyon Script 40, no lineHeight in a 50-tall box",
+   "x": 98,
+   "y": 7820,
+   "w": 194,
+   "h": 62
+  },
+  {
+   "id": "2594:296",
+   "note": "the three-line thank-you, Pochaevsk 15/24",
+   "x": 68,
+   "y": 7872,
+   "w": 262,
+   "h": 94
+  },
+  {
+   "id": "2594:295",
+   "note": "\"Antonio + Aliyah\", Pinyon Script 36, no lineHeight in a 45-tall box",
+   "x": 70,
+   "y": 7960,
+   "w": 244,
+   "h": 58
+  },
+  {
+   "id": "2594:438",
+   "note": "the two-line credit thank-you, Pochaevsk 12/17",
+   "x": 60,
+   "y": 8533,
+   "w": 286,
+   "h": 54
+  },
+  {
+   "id": "2594:440",
+   "note": "\"Created with Love by,\", Pinyon Script 24/24",
+   "x": 84,
+   "y": 8582,
+   "w": 238,
+   "h": 32
+  },
+  {
+   "id": "2594:441",
+   "note": "\"@25ribuaja\" / \"x\" / \"Qinvi\" -- three centred boxes that all declare 172.9 wide and overlap",
+   "x": 14,
+   "y": 8614,
+   "w": 348,
+   "h": 32
+  }
+ ],
+ "verification": {
+  "canonical": "art rows 7608-8700: 2.528/255, via `node scripts/sheet-shot.mjs` then `python3 scripts/band-diff.py 7608 8700`. Art rows start at 7608 (2594:462/463 hang 92 rows above the band) and stop at 8700; the last 49 rows are bare paper.",
+  "sheetCheck": "This band takes the sheet to exactly 8749, Frame 242's own height. That is the strongest single check in the project: it only lands if all twelve band heights are right, and a band off by one pixel would still diff clean on its own. scripts/check-footer.mjs asserts it.",
+  "rows": "7608-7700 3.130 (the top cascade). 7700-7830 2.245. 7830-7980 3.195 (Thank You + the Pochaevsk paragraph). 7980-8060 3.615. 8060-8300 2.092 (the envelope + photo). 8300-8480 1.307. 8480-8700 3.070 (the credit block).",
+  "offline": "The offline solve window 7600-8749 with the 6 text masks scores 2.875 -- that is what the placement work optimised, with the sliced photo plate composited and no live copy. Not comparable to the 2.528 figure.",
+  "method": "worth probe, then a global local refine on the ART-ROWS objective, then locate.py as a cross-check. Two layers were placed by the refine against the probe, and one by the clip rule against both -- see the individual notes.",
+  "findings": "Eight right-side layers (463, 466, 472, 292, 216, 212, 478, and 214) sit at exactly `375 - exportWidth`. Their declared x puts them partly or wholly off-frame -- 2594:463 declares x 409, past the frame entirely -- while the export came back unclipped, so that value is an upper BOUND from the clip rule, and the probe chose exactly it in every case. Four left-side layers land at or within 3px of x 0 for the mirror reason. So on this band the clip rule did more placement work than the probe did.",
+  "textFindings": "Six of the eight TEXT nodes sit at their node y exactly (178, 839, 887, 919 band-local, plus the three vendor lines which share 919). The two that do not are the two Pinyon Script blocks, and for the same reason as the wish band's heading: Figma reports NO lineHeight for either and both live in boxes taller than one line, so the line is centred inside the box. 2594:436 sweeps to 129 against node 127; 2594:295 to 268 against node 266. Both sharp.",
+  "sweepPitfall": "The first sweep of `.footer__body` read 7.05 at its own winner. `.footer__body--credit` carries BOTH classes, so `top: N !important` moved the bottom paragraph into the top paragraph's rows and scored two paragraphs on top of each other. Re-run as `.footer__body:not(.footer__body--credit)` it reads 2.75. Sweep selectors must not match a second element.",
+  "unshipped": "2594:479 and 2594:480 (\"mutiara last page\") exported blank and rows 7620-7800 of the render carry no pearls, which confirms the drop. Group 176's own 714x216 export wraps four TEXT nodes and was deleted; only its two buttons survive as g176_2594-445_ig and g176_2594-449_wa. 2594:474 is byte-identical to 2594:473 and reuses it.",
+  "live": "Four things in this band are data, not art: 2594:208 is the couple's PHOTOGRAPH (bound to wedding.image_cover with the sliced plate as fallback and object-fit: cover, since a live photo has its own aspect); 2594:295 is their names, from pengantin; and the two credit buttons are links. HeroSection imports the same photo file directly and does NOT bind the API -- a pre-existing gap, recorded but not fixed here.",
+  "deviations": "The design's own footer line reads \"Antonio + Aliyah\" where the bride is \"Ayu Shella Pratni (Allysa)\" -- an inconsistency in the design. Live names win, so those text rows never diff clean once pengantin is populated; the design's literal is the unconfigured fallback. The WhatsApp button has no number anywhere in the design or the production app, and a wa.me/ with no number is a dead link, so it renders as inert art unless wedding.vendor_whatsapp is set -- the same call the akad band's Maps button makes. Both Pinyon blocks are centred on their own box centres rather than left-aligned as declared, so a longer live name stays put."
+ }
+}

@@ -131,7 +131,9 @@ const fill = async (page, name, message) => {
   const box = await page.locator('.wish__panel').boundingBox()
   const sheet = await page.locator('.sheet').boundingBox()
   check(Math.abs(box.height - 428) < 0.6, `8 wishes keep the panel at 428 (got ${box.height.toFixed(1)})`)
-  check(Math.abs(sheet.height - 7940) < 1, `and the sheet at 7940 (got ${sheet.height.toFixed(0)})`)
+  // 8749 is Frame 242's own height; see check-footer.mjs for why that number is the one
+  // that validates every band above it.
+  check(Math.abs(sheet.height - 8749) < 1, `and the sheet at 8749 (got ${sheet.height.toFixed(0)})`)
   await ctx.close()
 }
 

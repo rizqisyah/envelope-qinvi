@@ -83,6 +83,8 @@ const resepsiRevealed = (await sheet.locator('.resepsi.is-in').count()) === 1
 const countdownRevealed = (await sheet.locator('.countdown.is-in').count()) === 1
 const giftRevealed = (await sheet.locator('.gift.is-in').count()) === 1
 const rsvpRevealed = (await sheet.locator('.rsvp.is-in').count()) === 1
+const wishRevealed = (await sheet.locator('.wish.is-in').count()) === 1
+const footerRevealed = (await sheet.locator('.footer.is-in').count()) === 1
 await sheet.evaluate(() => window.scrollTo(0, 0))
 await sheet.waitForTimeout(400)
 await sheet.locator('.sheet').screenshot({ path: `${OUT}/web-sheet.png` })
@@ -99,6 +101,8 @@ console.log(`resepsi reveal fired on scroll: ${resepsiRevealed}`)
 console.log(`countdown reveal fired on scroll: ${countdownRevealed}`)
 console.log(`gift reveal fired on scroll: ${giftRevealed}`)
 console.log(`rsvp reveal fired on scroll: ${rsvpRevealed}`)
+console.log(`wish reveal fired on scroll: ${wishRevealed}`)
+console.log(`footer reveal fired on scroll: ${footerRevealed}`)
 if (errors.length) console.log(errors.join('\n'))
-if (!opened || !revealed || !dividerRevealed || !galleryRevealed || !akadRevealed || !resepsiRevealed || !countdownRevealed || !giftRevealed || !rsvpRevealed)
+if (!opened || !revealed || !dividerRevealed || !galleryRevealed || !akadRevealed || !resepsiRevealed || !countdownRevealed || !giftRevealed || !rsvpRevealed || !wishRevealed || !footerRevealed)
   process.exitCode = 1

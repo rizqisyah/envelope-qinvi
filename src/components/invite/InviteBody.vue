@@ -16,15 +16,12 @@ import CountdownSection from '../sections/CountdownSection.vue'
 import GiftSection from '../sections/GiftSection.vue'
 import RsvpSection from '../sections/RsvpSection.vue'
 import WishSection from '../sections/WishSection.vue'
+import FooterSection from '../sections/FooterSection.vue'
 
 import paperBg from '../../assets/page/parts/00_2550-130_paper-bg.webp' // z0, y 13
 import quoteBg from '../../assets/quote/parts/00_2588-125_bac-2.webp' // z1, (-16, 679)
 import bgStrip from '../../assets/page/parts/01_2560-276_bg-strip.webp' // z3, y 2821
 
-// Bands still to build, in frame order.
-const pending = [
-  'Footer',
-]
 </script>
 
 <template>
@@ -52,10 +49,8 @@ const pending = [
     <GiftSection />
     <RsvpSection />
     <WishSection />
+    <FooterSection />
 
-    <section v-for="name in pending" :key="name" class="sheet__placeholder">
-      {{ name }}
-    </section>
   </div>
 </template>
 

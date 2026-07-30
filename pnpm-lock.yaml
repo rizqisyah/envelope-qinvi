@@ -38,6 +38,9 @@ importers:
       '@fontsource/playfair-display-sc':
         specifier: 5.3.0
         version: 5.3.0
+      '@fontsource/pochaevsk':
+        specifier: 5.3.0
+        version: 5.3.0
       '@fontsource/poltawski-nowy':
         specifier: 5.3.0
         version: 5.3.0
@@ -127,6 +130,9 @@ packages:
 
   '@fontsource/playfair@5.3.0':
     resolution: {integrity: sha512-sJzt9x2B/gwmAqTiF4EgImtX8aXQ73HCa8sRs1OJyuEffJN7o8RN8F8MvAi5+YbAYDc8srjV5uSpuHlCKINTQw==}
+
+  '@fontsource/pochaevsk@5.3.0':
+    resolution: {integrity: sha512-DUBkMpN0UMzfnrDJ/nZNjm+TlCHr5zrEK7AjGFfejQerb5ETpJ4xkyPL889hh/R5mafKpK3Eh3PplkYBfuNkRA==}
 
   '@fontsource/poltawski-nowy@5.3.0':
     resolution: {integrity: sha512-83EMAAzWbqH6MFmTZy0YK46/Kjap0ojg2s0pRB6iM3OMCK/6unmPj634Cb2IWt+GEvshU9YbSRzju2aUaXmieg==}
@@ -577,6 +583,8 @@ snapshots:
   '@fontsource/playfair-display-sc@5.3.0': {}
 
   '@fontsource/playfair@5.3.0': {}
+
+  '@fontsource/pochaevsk@5.3.0': {}
 
   '@fontsource/poltawski-nowy@5.3.0': {}
 

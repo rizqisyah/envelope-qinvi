@@ -99,6 +99,7 @@ node   scripts/check-gift.mjs <port>                          # the account card
 node   scripts/check-rsvp.mjs <port>                          # the form's payload, failures + a11y
 node   scripts/check-wish.mjs <port>                          # the ucapan key, the panel, the wrap
 node   scripts/check-nav.mjs <port>                           # the nav's scroll-spy, music + both layouts
+node   scripts/check-footer.mjs <port>                        # the live photo, names, credit links + 8749
 node   scripts/sheet-shot.mjs <port>                          # the live sheet at 375 x dsf 1
 python3 scripts/band-diff.py <y0> <y1> [x0] [x1]              # ...scored against the render
 python3 scripts/crop-gallery-fallback.py                      # its stock photos, cut from its plate
@@ -246,6 +247,16 @@ goes at **x 0**, not at −71. Placing it at the declared −71 would slide it a
 |------|--------------|-------------------------|-------|
 | right | `375 − x` | at the node's x | `x` |
 | left | `w + x` (x negative) | at frame x 0 | `0` |
+| none, but `x + exportWidth > 375` | its own | unknown | `≤ 375 − exportWidth` — a **bound**, not a value |
+
+**On the footer band the clip rule placed more layers than the probe did.** Eight of its
+right-side layers land at *exactly* `375 − exportWidth`, and four left-side ones at or
+within 3px of 0. `2594:463` declares x 409 — past the frame entirely — and sits at 236.
+`2594:214` is the sharpest case: 78 × 109 **exact**, declared x 355, which would leave
+20px on frame, yet the export is the full 78. A local refine walked it to 367, which the
+cap rules out outright; it solves to 277. **Compute the cap for every layer before you
+trust any optimiser's answer** — it is the cheapest guard in the toolkit and it caught a
+size-exact layer three separate methods had gotten wrong.
 
 **A layer can be unsolvable purely because the band under it is missing.** The wish
 band's `2594:429` paints on top of the RSVP band's olive arch, which ends 27 rows into
@@ -582,6 +593,15 @@ agreed to the pixel on five of six florals, and where they disagreed `locate.py`
 right. Disagreement is the signal — resolve it with a 1-D sweep of the finished band,
 never by picking the method you ran first.
 
+## A sweep selector must not match a second element
+
+The footer's `.footer__body` first swept to 7.05 at its own winner, which read like a
+font-metric residual. It was not: `.footer__body--credit` carries **both** classes, so
+`top: N !important` dragged the bottom paragraph into the top paragraph's rows and the
+score was two paragraphs stacked. Re-run as `.footer__body:not(.footer__body--credit)`
+it reads **2.75**. Before believing a flat or high sweep, check how many elements the
+selector matches.
+
 ## Sweep text on the live band, not on measured ink
 
 An ink measurement of a text row catches whatever artwork sits behind the words. On
@@ -636,8 +656,37 @@ of something 8700px tall exceeds what Figma will produce. Don't "fix" this by re
 | 12 | 5485–6173 | Wedding Gift — 3 account cards, live copy + clipboard — **built** | `gift/` (10, 2 unshipped) |
 | 13 | 6173–6760 | RSVP — olive arch, **live form posting to `hadir2`** — **built** | `rsvp/` (7, 4 unshipped) |
 | 14 | 6760–7700 | Wedding Wish — **live form + live wishes panel, both CSS** — **built** | `wish/` (6, 2 unshipped) |
-| 15 | 7700–8749 | Footer / Thank You + credits + IG/WA | `footer/` (32) |
+| 15 | 7700–8749 | Footer / Thank You + envelope portrait + credits + IG/WA — **built** | `footer/` (33, 2 blank) |
 | — | full page | Paper texture backdrop + long bg strip | `page/` (2) |
+
+## Band figures — all on one harness
+
+Every number below is `node scripts/sheet-shot.mjs` then `python3 scripts/band-diff.py <y0> <y1>`,
+against an **unconfigured** render, so every band shows its fallback copy. Mean per-channel
+difference out of 255. Rows are each band's **art rows**, not its group box.
+
+| Band | Art rows | Diff | Note |
+|------|----------|------|------|
+| Hero | 0–760 | 1.384 | |
+| Envelope | 760–1400 | 10.474 | the quote body wraps to 11 lines where Figma sets 10; `useFitText` shrinks it |
+| Groom | 1235–2014 | 3.014 | |
+| Bride | 2014–2810 | 2.743 | |
+| Glimpse | 2810–3501 | 6.964 | date still hardcoded `09. 09. 26` |
+| Gallery | 3501–4052 | 5.965 | |
+| Akad | 4052–4639 | 4.322 | live event copy differs from the design's when unconfigured |
+| Resepsi | 4639–5119 | 2.426 | |
+| Countdown | 5119–5400 | 2.193 | live clock against a baked bitmap |
+| Gift | 5485–6053 | 2.245 | |
+| **RSVP** | 6112–6690 | **1.116** | closest band in the file |
+| Wish | 6674–7660 | 6.043 | 3.4 of it is the added Send button, which the design does not draw |
+| Footer | 7608–8700 | 2.528 | |
+| **Sheet total** | | **8749** | exactly Frame 242's height |
+
+Two things this table is for. First, the older per-band figures scattered through the band
+records were each taken on a one-off harness and are **not** comparable to each other — these
+are. Second, a band's number changes when the band *below* it is built: the wish band read
+6.142 until the footer's `2594:462/463` filled rows 7608–7660, which had been bare paper.
+Re-measure after the next band lands.
 
 ## Text is never baked into an asset
 
@@ -730,10 +779,21 @@ declared height tells you nothing about where the glyphs land.
   If pearls are missing along the footer, they are the reason.
 - `DEFAULT_SLUG` in `src/lib/api.ts` and the `name` field in `package.json` are both still
   `tema-elegan-putih`, carried over from the previous template. Neither is this project's slug.
-- Frame 242: the hero, envelope, groom, divider, bride, glimpse, gallery, akad, resepsi,
-  countdown, gift and rsvp bands are built. `InviteBody` renders them plus 2 placeholders (wish,
-  footer) and owns the two page-wide backdrops. The sheet is 7240 design px tall so far.
-  `CoverSection` (Frame 241) is done.
+- **Frame 242 is complete.** All fifteen bands are built, `InviteBody` renders them with no
+  placeholders left, and the sheet measures exactly **8749** — the frame's own height. That number
+  is the strongest single check in the project: it only lands if every band height is right, and a
+  band off by a pixel would still diff clean on its own. `check-footer.mjs` asserts it.
+- The footer is the only band where the couple's **photograph** appears as a sliced asset
+  (`2594:208`, deduped into `footer/parts/21_..._img-8300.webp`). `FooterSection` binds
+  `wedding.image_cover` over it with `object-fit: cover`. **`HeroSection` imports the same file
+  directly and does not bind the API** — a real gap, and the reason a shipped invitation would show
+  a stranger's face in the hero. Fix that when the hero is next touched.
+- The footer's `2594:476` is gypsophila: 2.7% of the export is opaque, white blossom on white
+  paper, so its worth probe reads **0.000 across the whole window** — it moves the band error by
+  nothing at all. The clip rule placed it: exported 101 = 104 − 3 is a left clip, so it starts at
+  frame x 0, not at its declared 101 where it sat visibly in the middle of a band the render leaves
+  empty there. Its mirror `2594:475` is clip-proven at 291, and that clip is the only independent
+  evidence either of them has.
 - `BottomNav` is an **addition** — Frame 242 draws no nav; its own final bar is part of the
   footer band. The palette is taken from the design's own fills (`#f7f3dc` gift plate,
   `#cdc2ae` wish card stroke, `#55391c`/`#4d4d2d` the two text browns). Three things
