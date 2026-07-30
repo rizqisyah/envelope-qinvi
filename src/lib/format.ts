@@ -34,6 +34,53 @@ export function formatEventDate(raw?: string | null): EventDate | null {
   }
 }
 
+/**
+ * The instant the countdown counts to: `event_date` at `event_time`'s start.
+ *
+ * Built in the GUEST'S local zone, not WIB. The payload carries no offset -- the
+ * design's "WIB" is a literal in its own copy, not data -- so there is nothing to
+ * pin to, and a guest-local reading is the one a bare `new Date(...)` gives. A
+ * guest abroad therefore sees the countdown reach zero at their own local
+ * wall-clock time, which is a choice, not an oversight; pinning to +07:00 would
+ * need the API to say so.
+ *
+ * Missing time means midnight local, the same anchor `formatEventDate` uses.
+ */
+export function parseEventStart(date?: string | null, time?: string | null): Date | null {
+  if (!date) return null
+  const d = date.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (!d) {
+    const loose = new Date(date)
+    return Number.isNaN(loose.getTime()) ? null : loose
+  }
+  const sep = time ? RANGE_SEPARATORS.find((s) => time.includes(s)) : undefined
+  const start = sep && time ? time.split(sep)[0] : time
+  const t = (start ?? '').trim().match(/^(\d{1,2})[.:](\d{2})/)
+  const at = new Date(
+    Number(d[1]),
+    Number(d[2]) - 1,
+    Number(d[3]),
+    t ? Number(t[1]) : 0,
+    t ? Number(t[2]) : 0,
+  )
+  return Number.isNaN(at.getTime()) ? null : at
+}
+
+export type Remaining = { days: number; hours: number; minutes: number; seconds: number }
+
+/** Whole units left until `target`, clamped at zero once it has passed. */
+export function remainingUntil(target: Date | null, now: number = Date.now()): Remaining {
+  const ms = target ? target.getTime() - now : 0
+  if (!target || ms <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
+  const s = Math.floor(ms / 1000)
+  return {
+    days: Math.floor(s / 86400),
+    hours: Math.floor(s / 3600) % 24,
+    minutes: Math.floor(s / 60) % 60,
+    seconds: s % 60,
+  }
+}
+
 /** '10:00:00' -> '10.00'. Anything unparseable comes back as given. */
 function clockOf(part: string): string {
   const m = part.trim().match(/^(\d{1,2})[.:](\d{2})/)

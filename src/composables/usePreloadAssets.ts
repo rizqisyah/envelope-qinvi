@@ -26,6 +26,14 @@ const bodyImages = Object.values(
       '../assets/gallery/**/*.webp',
       '../assets/akad/**/*.webp',
       '../assets/resepsi/**/*.webp',
+      '../assets/countdown/**/*.webp',
+      /*
+       * 2610:113 is the countdown's baked "0 Days 0 Hours ..." bitmap. It is kept in
+       * the repo because its ink is where the band's typography was measured from,
+       * but it must never reach a browser -- the copy is live DOM. No component
+       * imports it; without this the directory glob would still preload it.
+       */
+      '!../assets/countdown/parts/07_2610-113.webp',
     ],
     { eager: true, import: 'default' },
   ),

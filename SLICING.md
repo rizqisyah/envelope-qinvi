@@ -91,6 +91,7 @@ node   scripts/fit-text.mjs <port> <sel> <x> <y> <w> <h>      # where a text nod
 python3 scripts/ink.py <clipX> <clipY> [bandY0]               # ...turned into a bounding box
 node   scripts/check-gallery.mjs <port>                       # the gallery carousel's own logic
 node   scripts/check-ceremony.mjs <port>                      # the akad + resepsi cards' live copy
+node   scripts/check-countdown.mjs <port>                     # that the clock is a clock, not a picture
 python3 scripts/crop-gallery-fallback.py                      # its stock photos, cut from its plate
 ```
 
@@ -398,6 +399,83 @@ become a prop. It is also invisible to every content assertion: drop the block a
 copy is still correct while the whole card's text sits 8px off. Only a pixel diff would
 catch that, so `check-ceremony.mjs` pins those five x positions directly.
 
+## Text baked into a bitmap, with no node to recover it from
+
+Frame 242 breaks its own rule once. `2610:113`, the countdown's "0 Days 0 Hours 0
+Minutes 0 Seconds", is a flattened RECTANGLE with an image fill — 96.4% transparent,
+pure glyphs, and there is **no TEXT node for it anywhere in the document**. Not
+hidden like the ceremony headings: simply not there.
+
+It cannot ship. Quite apart from the no-baked-text rule, a countdown that is a
+picture is a stopped clock, and the reference render shows exactly that — which
+means a frozen build would score a *perfect* pixel diff. The diff cannot tell a
+working countdown from a broken one, so the band's check has to.
+
+Recovering the typography from the bitmap itself, in the order that worked:
+
+1. **Geometry off the ink.** Project columns separately for the digit rows and the
+   label rows — projecting the whole image merges them and gives nonsense. That
+   yields four cell centres (87.5, 163.0, 237.13, 313.13 — note they are *not*
+   evenly spaced, so they cannot be re-derived from the ticket's width), the digit
+   ink band, the labels' cap top and baseline, and the descender.
+2. **Colour** from the darkest 5% of fully-opaque pixels: `#875e16`.
+3. **Family by fingerprint, not by eye.** The four label widths (27, 33, 44, 44) are
+   a ratio signature. Load every candidate with `document.fonts.load()` first —
+   `measureText` silently falls back for a face the page has not used, and six
+   different families came back byte-identical before that was added.
+4. **Fit size and tracking together.** Every candidate set "Minutes" ~6% wide at the
+   bitmap's cap height, which is tracking, not the wrong family. Least-squares each
+   family for `(size, tracking)` across all four widths, *then* compare residuals.
+5. **Let the diff choose.** Ratios could not separate the top three. Rendering each
+   complete `(family, size, tracking)` config and diffing the text rows could —
+   EB Garamond's digits won against every label pairing.
+
+Two things that nearly went wrong:
+
+- **Do not stack the digit and label in a flex column.** The digit's line box then
+  sets where the label starts, so changing the digit size silently moves every
+  label — an early sweep ranked one label config three points apart depending on
+  the digit size it happened to be paired with. Position both absolutely.
+- **Correcting the two `top` values was worth more than the entire font search.**
+  Text rows went 6.97 → 4.50 from a 0.75px and a 2.5px shift; the best-versus-worst
+  spread across families was smaller than that. Measure the rendered ink and correct
+  before agonising over the face.
+
+And the exclusion has to be enforced, not assumed: no component imports the bitmap,
+but `usePreloadAssets`'s directory glob still fetched it until a negative pattern was
+added. `check-countdown.mjs` asserts it is never requested.
+
+## solve_band.py minimises the wrong thing
+
+`solve_band.py` moves a layer to minimise the error of the finished stack. That
+assumes the layer belongs somewhere in the window — and when it does not, or when
+the window is too narrow, the score just slides the layer to the least-bad spot,
+which is usually the window edge. On the countdown band it walked three layers to
+their edges and stalled at 3.03.
+
+The right objective is **worth**: `err(absent) − err(present)`, both measured over
+the *same* box. It asks "is this layer better here than not at all", which is a
+different question from "where does the total error go down".
+
+```
+2610:115  minimise error -> x 77, and worth is NEGATIVE everywhere in the window
+          maximise worth -> x 10, worth +7.9      (declared 70, asset 60 wide)
+```
+
+Maximising worth placed every layer and took the band from 3.03 to **2.22**, the
+best in the file. It validates itself on `2610:119`, whose x is independently proven
+by the left-edge clip: the worth probe returns exactly that x.
+
+Two corollaries worth carrying forward:
+
+- **Measure "absent" over the candidate's own box, not the best-error box.** Getting
+  this backwards is what made three correctly-placed layers look like they did not
+  belong.
+- **Size-exact does not mean correctly placed.** `2610:115` exports at exactly its
+  declared 60 × 90 and is still 60px out, and `2610:120` at exactly 27 × 25 is 27px
+  out. Both are the asset-width shift again. Probe every layer, not just the ones
+  whose export size disagrees with Figma.
+
 ## Frame 242 — three things that will bite you
 
 **1. `frame242-layout.json` does not carry z-order.** It is sorted by `(depth, y)`, so its array
@@ -434,7 +512,7 @@ of something 8700px tall exceeds what Figma will produce. Don't "fix" this by re
 | 8 | 3501–4052 | Gallery — photo carousel — **built, one plate + live overlays**. Rows 3900–4052 carry the akad heading, which `AkadSection` owns | `gallery/01_..._group-219` |
 | 9 | 4052–4639 | Akad — envelope + scalloped card, live event copy — **built** | `akad/` (14) |
 | 10 | 4639–5119 | Resepsi — the akad composition translated by (−8, +587) — **built** | `resepsi/` (14) |
-| 11 | 5180–5420 | Countdown — silver tray | `countdown/` (17) |
+| 11 | 5119–5485 | Countdown — silver tray, ticket, **live clock** — **built** | `countdown/` (16 of 17) |
 | 12 | 5420–6130 | Wedding Gift — bank cards + address | `gift/` (6) |
 | 13 | 6130–6760 | RSVP — olive arch form | `rsvp/` (7) |
 | 14 | 6760–7700 | Wedding Wish — form + wishes list | `wish/` (7) |

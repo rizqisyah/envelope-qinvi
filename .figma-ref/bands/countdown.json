@@ -1,0 +1,160 @@
+{
+ "y0": 5110,
+ "y1": 5490,
+ "note": "Frame 242 countdown band, y 5119-5485: a silver tray, a scalloped white ticket (2610:112 'sdc 1') and florals over both. `y0`/`y1` are the SOLVE WINDOW, a little wider than the band itself, not the band's extent -- same convention as the other job files. Layers are listed in z order from frame242-zorder.json (149-165), which is NOT the order the export filenames are numbered in: the ticket is z151 and most florals paint above it. 2610:113, the countdown text, is deliberately absent from this list -- it is a flattened bitmap of '0 Days 0 Hours 0 Minutes 0 Seconds' with no TEXT node anywhere in the document, and a countdown has to tick, so it is rebuilt as live DOM and masked out of the solve instead. See CountdownSection.vue.",
+ "layers": [
+  {
+   "id": "2550:130",
+   "z": 0,
+   "asset": "src/assets/page/parts/00_2550-130_paper-bg.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 13
+  },
+  {
+   "id": "2560:276",
+   "z": 3,
+   "asset": "src/assets/page/parts/01_2560-276_bg-strip.webp",
+   "scale": 1,
+   "x": 0,
+   "y": 2821
+  },
+  {
+   "id": "2610:111",
+   "z": 149,
+   "asset": "src/assets/countdown/parts/00_2610-111_tray.webp",
+   "x": 0,
+   "y": 5119,
+   "note": "the silver tray, 210x281 exact"
+  },
+  {
+   "id": "2610:131",
+   "z": 150,
+   "asset": "src/assets/countdown/parts/01_2610-131.webp",
+   "x": 145,
+   "y": 5123,
+   "note": "size exact"
+  },
+  {
+   "id": "2610:112",
+   "z": 151,
+   "asset": "src/assets/countdown/parts/06_2610-112_sdc-1.webp",
+   "x": 22,
+   "y": 5209,
+   "note": "the scalloped ticket. Declared 348x116 at x 24, exported 353x122.5 -- a drop shadow grew the box. x is PROVEN by the clip: 375 - 353 = 22, and 22 is also a sharp worth maximum. solve_band walked it to 12, its window edge"
+  },
+  {
+   "id": "2610:119",
+   "z": 153,
+   "asset": "src/assets/countdown/parts/04_2610-119.webp",
+   "x": 0,
+   "y": 5176,
+   "note": "declared 38 wide at x -1, exported 37 = clipped by the left edge, which proves x: the export starts at frame 0"
+  },
+  {
+   "id": "2610:126",
+   "z": 154,
+   "asset": "src/assets/countdown/parts/05_2610-126.webp",
+   "x": 8,
+   "y": 5190,
+   "note": "rotated: declared 30.8x113.8 at (34.8, 5190), exported 57x118. x 8 found independently by solve_band and by the worth probe; declared y is untouched"
+  },
+  {
+   "id": "2610:114",
+   "z": 155,
+   "asset": "src/assets/countdown/parts/02_2610-114.webp",
+   "x": 289,
+   "y": 5157
+  },
+  {
+   "id": "2610:115",
+   "z": 156,
+   "asset": "src/assets/countdown/parts/08_2610-115.webp",
+   "x": 10,
+   "y": 5226,
+   "note": "the big calla lily. Declared x 70, actually 10 -- exactly one asset width (60) out, the same signature as the akad band's 2594:329/330. At 70 it lands on top of the ticket, where the render has clean paper, and it is the single largest error in the band until corrected"
+  },
+  {
+   "id": "2610:116",
+   "z": 157,
+   "asset": "src/assets/countdown/parts/03_2610-116.webp",
+   "x": 321,
+   "y": 5167
+  },
+  {
+   "id": "2610:117",
+   "z": 158,
+   "asset": "src/assets/countdown/parts/14_2610-117.webp",
+   "x": 6,
+   "y": 5296,
+   "note": "declared. Worth is ~0.47 and flat over a 20x26 window -- this one is essentially fully buried by the florals above it, so there is no signal to place it by and the declared position stands"
+  },
+  {
+   "id": "2610:125",
+   "z": 159,
+   "asset": "src/assets/countdown/parts/11_2610-125.webp",
+   "x": 33,
+   "y": 5285
+  },
+  {
+   "id": "2610:122",
+   "z": 160,
+   "asset": "src/assets/countdown/parts/16_2610-122.webp",
+   "x": 29,
+   "y": 5305
+  },
+  {
+   "id": "2610:118",
+   "z": 161,
+   "asset": "src/assets/countdown/parts/12_2610-118.webp",
+   "x": 0,
+   "y": 5285,
+   "note": "declared, and confirmed twice: a sharp worth peak at x 0, and an unclipped 35-wide export cannot start left of the frame, so the coarse probe's -16 was impossible"
+  },
+  {
+   "id": "2610:121",
+   "z": 162,
+   "asset": "src/assets/countdown/parts/15_2610-121.webp",
+   "x": 0,
+   "y": 5301,
+   "note": "rotated: declared 41.6x37 at (12.7, 5301), exported 46.5x54.5. Sharp interior minimum at x 0"
+  },
+  {
+   "id": "2610:120",
+   "z": 163,
+   "asset": "src/assets/countdown/parts/10_2610-120.webp",
+   "x": 18,
+   "y": 5280,
+   "note": "declared x 45, actually 18 -- one asset width (27) out again. Sharp worth peak: +15.0 at 18 against +10.1 either side"
+  },
+  {
+   "id": "2610:123",
+   "z": 164,
+   "asset": "src/assets/countdown/parts/13_2610-123.webp",
+   "x": 25,
+   "y": 5285
+  },
+  {
+   "id": "2610:124",
+   "z": 165,
+   "asset": "src/assets/countdown/parts/09_2610-124.webp",
+   "x": 339,
+   "y": 5244
+  }
+ ],
+ "textMasks": [
+  {
+   "id": "2610:113",
+   "note": "the baked countdown text -- rebuilt as live DOM, so it must not be scored here. Ink runs x 74-335, y 5247.5-5291.5",
+   "x": 70,
+   "y": 5243,
+   "w": 270,
+   "h": 54
+  }
+ ],
+ "verification": {
+  "method": "worth probe, not solve_band -- see note",
+  "bandError": "2.22/255 over the solve window, text masked",
+  "note": "solve_band minimises the error of the finished stack, which is the wrong objective for a layer that may not belong where you put it: it walked three layers here to their window edges and left the band at 3.03. Maximising WORTH instead -- err(absent) - err(present), both measured over the same box -- fixed all three and took the band to 2.22. The method validates itself on 2610:119, whose x is independently proven by the left-edge clip: the worth probe returns exactly that x."
+ }
+}
