@@ -19,10 +19,10 @@ const check = (ok, label) => {
 
 const browser = await chromium.launch()
 
-async function render(acara, tz = 'Asia/Jakarta') {
+async function render(acara, tz = 'Asia/Jakarta', motion = 'reduce') {
   const page = await browser.newPage({
     viewport: { width: 375, height: 812 },
-    reducedMotion: 'reduce',
+    reducedMotion: motion,
     timezoneId: tz,
   })
   await page.route('**/getHome/**', (r) =>
@@ -32,7 +32,9 @@ async function render(acara, tz = 'Asia/Jakarta') {
   await page.click('.opening__envelope')
   await page.waitForTimeout(2200)
   await page.locator('.akad').scrollIntoViewIfNeeded()
-  await page.waitForTimeout(500)
+  // The heading's own chain is 250ms delay + a 1400ms fade, so with motion on the
+  // reveal has to be allowed to finish before opacity means anything.
+  await page.waitForTimeout(motion === 'reduce' ? 500 : 4200)
   const text = async (sel) => (await page.locator(sel).innerText()).replace(/\s+/g, ' ').trim()
   const sheet = await page.locator('.sheet').boundingBox()
   const headings = await page.locator('.akad__heading span').all()
@@ -43,6 +45,10 @@ async function render(acara, tz = 'Asia/Jakarta') {
   }
   const out = {
     heads,
+    opacity: await page
+      .locator('.akad__heading span')
+      .first()
+      .evaluate((n) => getComputedStyle(n).opacity),
     date: await text('.akad__date'),
     time: await text('.akad__time'),
     venue: await text('.akad__venue'),
@@ -123,6 +129,19 @@ const block = {
 const want = { x0: 24.9, y0: 3937.1, x1: 281.3, y1: 4042.9 }
 const off = Math.max(...Object.keys(want).map((k) => Math.abs(block[k] - want[k])))
 check(off < 2, `heading block where its ink was verified (max off ${off.toFixed(1)}px)`)
+
+/*
+ * Every other assertion here runs under reduced motion, where the media query forces
+ * everything visible -- so a band element left out of the `.is-in` fade is invisible
+ * in the real thing and passes every check. That is exactly what happened to this
+ * heading. One pass with motion on, after the reveal has run, is the guard.
+ */
+const motion = await render([], 'Asia/Jakarta', 'no-preference')
+check(motion.opacity === '1', `heading fades in with motion on (opacity ${motion.opacity})`)
+check(
+  motion.heads.length === 2 && motion.heads.every((h) => h.w > 100),
+  'heading keeps its rotated box with motion on',
+)
 
 // --- with no acara the card shows the copy Frame 242 was drawn with ---
 const bare = await render([])

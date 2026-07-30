@@ -330,7 +330,13 @@ const mapsUrl = computed(() => event.value?.maps_url || '')
   --in: 250ms;
 }
 
+/*
+ * `opacity` has to be repeated here, not just `transform`: pulling the heading out
+ * of the shared `.is-in` rule to keep its rotation also pulled it out of the fade,
+ * and both checks run under reduced motion, where the override below hides that.
+ */
 .akad.is-in .akad__heading span {
+  opacity: 1;
   transform: rotate(-12.25deg);
 }
 

@@ -230,6 +230,22 @@ Two things the copy itself taught us:
   `src/lib/format.ts` builds date-only strings as local dates, and the check runs
   one case under `America/New_York` to keep it that way.
 
+## Reduced motion hides a whole class of bug
+
+Both `shot.mjs` and the band checks run with `reducedMotion: 'reduce'`, because that
+pins every stagger to its end state and makes the shots deterministic. It also makes
+them **blind to anything left out of the `.is-in` rule**: the reduced-motion block
+forces `opacity: 1` on everything, so an element that never fades in is invisible in
+the real invitation and passes every check.
+
+That is exactly what happened to the akad heading. Pulling it out of the shared
+`.is-in` rule — necessary, because it carries a rotation and there is only one
+`transform` property — also pulled it out of the fade, and nothing caught it until
+the band was looked at in a browser. Whenever a band element gets its own `.is-in`
+rule, that rule needs `opacity: 1` as well as its transform, and the band's check
+needs one pass with `reducedMotion: 'no-preference'` that waits out the longest
+chain and asserts the computed opacity.
+
 ## The design has content the render does not
 
 `scan_text_nodes` on Frame 242 returns 64 text nodes; `search_nodes` across the
@@ -262,6 +278,11 @@ Three consequences worth knowing before you meet the next one:
   render: this one clipped the envelope's apex, which the asset's own alpha puts at
   frame (187, 4062). Then place, screenshot, measure the same extremal ink pixels,
   and shift — it converged in one iteration to under half a pixel.
+- **Verify it twice, from different registrations.** A second screenshot of the same
+  design — full frame width, so it registered off the paper edges (x 66..722 → scale
+  1.752) instead of the envelope apex — put the block at frame x 31.4..278.5,
+  y 3940.5..4034.1 and the angle at −12.25°, against a built 31..279 / 3939..4032 at
+  −12.25°. Two independent paths inside a pixel is what makes this placeable at all.
 - **Adding it makes the pixel diff worse, and that is correct.** The gallery band
   went 4.07 → 6.25 because rows 3900–4052 now carry copy the reference render does
   not have. Score the comparable rows instead: 3501–3900 is 4.96, unchanged.
