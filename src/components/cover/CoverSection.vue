@@ -56,7 +56,8 @@ const { coupleNickname } = useWedding()
 .opening__frame {
   container-type: inline-size;
   position: relative;
-  width: min(100%, var(--card-max, 430px), calc(100dvh * 375 / 725));
+  /* --card-max is enforced by the column, not here — see InviteBody's `.sheet`. */
+  width: min(100%, calc(100dvh * 375 / 725));
   aspect-ratio: 375 / 725;
 }
 

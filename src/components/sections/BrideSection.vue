@@ -25,10 +25,12 @@ import calla from '../../assets/bride/parts/03_2588-135_vdf-3.webp' // z67
 type Layer = { src: string; x: number; y: number; w: number; h: number; kind: string; in: number }
 
 // z10-z22. Everything after the wash paints on top of it.
+// `in` is entrance order, not z-order: the frame lands first and the garden plate
+// fills its aperture after, so the plate never reads as a bare floating rectangle.
 const behind: Layer[] = [
-  { src: garden, x: 8, y: 147, w: 360, h: 409, kind: 'plate', in: 0 },
-  { src: portrait, x: 108, y: 241, w: 160, h: 279, kind: 'portrait', in: 320 },
-  { src: innerFrame, x: 23, y: 133, w: 341, h: 435, kind: 'plate', in: 160 },
+  { src: garden, x: 8, y: 147, w: 360, h: 409, kind: 'plate', in: 260 },
+  { src: portrait, x: 108, y: 241, w: 160, h: 279, kind: 'portrait', in: 520 },
+  { src: innerFrame, x: 23, y: 133, w: 341, h: 435, kind: 'plate', in: 0 },
   { src: paperFrame, x: 0, y: 0, w: 375, h: 796, kind: 'paper', in: 0 },
   /*
    * z21 belongs to the glimpse band, but it is a top-to-bottom alpha gradient
@@ -135,7 +137,8 @@ const parents = computed(
 }
 
 /*
- * Reveal: the garden plate settles, the portrait rises into its aperture, the
+ * Reveal: the frame settles, the garden plate fills its aperture, the portrait
+ * rises into it, the
  * calla sweeps in from the right, then the name block writes itself out.
  */
 .bride .lyr,
@@ -169,7 +172,11 @@ const parents = computed(
  * opaque paper, and the wash below it is what hides the drape's lower edge. Any
  * opacity under 1 ghosts the garden photo's rectangle through both.
  */
-.lyr--paper {
+/*
+ * Scoped: `.bride .lyr` above is (0,2,0) and outranks a bare `.lyr--paper`, so
+ * unscoped this rule never applied and the paper faded like everything else.
+ */
+.bride .lyr--paper {
   opacity: 1;
   transition: none;
 }

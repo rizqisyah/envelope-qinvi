@@ -62,8 +62,12 @@ import bgStrip from '../../assets/page/parts/01_2560-276_bg-strip.webp' // z3, y
 .sheet {
   container-type: inline-size;
   position: relative;
-  width: min(100%, var(--card-max, 430px));
-  margin-inline: auto;
+  /*
+   * Full-bleed: the sheet fills its column edge to edge. The cap lives on
+   * `.desktop-right-column` instead — capping it here left cream gutters either
+   * side of the art on any viewport between --card-max and the 768px breakpoint.
+   */
+  width: 100%;
   overflow: hidden;
   background: var(--paper, #efe7dc);
 }

@@ -25,19 +25,25 @@ import calla from '../../assets/groom/parts/04_2588-131_vdf-1.webp' // z66
 // groom layers too, but they paint above the divider's drape, which renders after
 // this component. DividerSection.vue owns them.
 
-type Layer = { src: string; x: number; y: number; w: number; h: number }
+type Layer = { src: string; x: number; y: number; w: number; h: number; kind: string; in: number }
 
+/*
+ * Array order is Figma's z-order and must stay that way; `in` is the entrance
+ * order, which is deliberately different. The frame lands first and the garden
+ * plate fills its aperture after, so the plate never reads as a bare rectangle
+ * floating on the paper — same treatment as the bride's.
+ */
 const behind: Layer[] = [
-  { src: garden, x: 8, y: 147, w: 360, h: 409 },
-  { src: portrait, x: 69, y: 226, w: 237, h: 319 },
-  { src: innerFrame, x: 45, y: 146, w: 285, h: 410 },
-  { src: paperFrame, x: 0, y: 0, w: 375, h: 796 },
-  { src: leaf, x: 26, y: 666, w: 86, h: 95 },
+  { src: garden, x: 8, y: 147, w: 360, h: 409, kind: 'plate', in: 260 },
+  { src: portrait, x: 69, y: 226, w: 237, h: 319, kind: 'portrait', in: 520 },
+  { src: innerFrame, x: 45, y: 146, w: 285, h: 410, kind: 'plate', in: 0 },
+  { src: paperFrame, x: 0, y: 0, w: 375, h: 796, kind: 'paper', in: 0 },
+  { src: leaf, x: 26, y: 666, w: 86, h: 95, kind: 'plate', in: 760 },
 ]
 
-const front: Layer[] = [{ src: calla, x: 0, y: 226, w: 136, h: 200 }]
+const front: Layer[] = [{ src: calla, x: 0, y: 226, w: 136, h: 200, kind: 'front', in: 900 }]
 
-function box(l: Layer, delay: number) {
+function box(l: Layer, delay = l.in) {
   return {
     top: `calc(${l.y} * var(--px))`,
     left: `calc(${l.x} * var(--px))`,
@@ -61,14 +67,14 @@ const parents = computed(
 
 <template>
   <section :ref="el" class="groom" :class="{ 'is-in': shown }" aria-labelledby="groom-heading">
-    <img v-for="(l, i) in behind" :key="`b${i}`" :src="l.src" alt="" :style="box(l, i * 160)" class="lyr lyr--behind" />
+    <img v-for="(l, i) in behind" :key="`b${i}`" :src="l.src" alt="" :style="box(l)" class="lyr" :class="`lyr--${l.kind}`" />
 
     <h2 id="groom-heading" class="groom__nickname">{{ nickname }}</h2>
-    <img :src="ornament" alt="" :style="box({ src: ornament, x: 131, y: 585, w: 120, h: 29 }, 1500)" class="lyr groom__ornament" />
+    <img :src="ornament" alt="" :style="box({ src: ornament, x: 131, y: 585, w: 120, h: 29, kind: 'ornament', in: 1500 })" class="lyr groom__ornament" />
     <p class="groom__name">{{ fullName }}</p>
     <p :ref="fitParents" class="groom__parents">{{ parents }}</p>
 
-    <img v-for="(l, i) in front" :key="`f${i}`" :src="l.src" alt="" :style="box(l, 900 + i * 150)" class="lyr lyr--front" />
+    <img v-for="(l, i) in front" :key="`f${i}`" :src="l.src" alt="" :style="box(l)" class="lyr lyr--front" />
   </section>
 </template>
 
@@ -123,8 +129,9 @@ const parents = computed(
 }
 
 /*
- * Reveal: the frame settles, the portrait rises into its aperture, the calla
- * sweeps in from the left, the name wipes up, then the florals are laid on.
+ * Reveal: the frame settles, the garden plate fills its aperture, the portrait
+ * rises into it, the calla sweeps in from the left, then the name block writes
+ * itself out.
  */
 .groom .lyr,
 .groom__nickname,
@@ -144,8 +151,24 @@ const parents = computed(
   transform: none;
 }
 
-.lyr--behind {
+.lyr--plate {
   transform: translateY(calc(24 * var(--px))) scale(0.97);
+}
+
+.lyr--portrait {
+  transform: translateY(calc(30 * var(--px))) scale(0.94);
+}
+
+/*
+ * Outside the frame's aperture this IS the band's opaque paper. Fading it in
+ * showed the garden plate's bare rectangle sitting on the sheet for the first
+ * half-second — the "background berlapis" the client flagged. Same fix as the
+ * bride's paper layer.
+ */
+/* Scoped, because `.groom .lyr` above outranks a bare `.lyr--paper`. */
+.groom .lyr--paper {
+  opacity: 1;
+  transition: none;
 }
 
 .lyr--front {

@@ -101,6 +101,7 @@ node   scripts/check-wish.mjs <port>                          # the ucapan key, 
 node   scripts/check-nav.mjs <port>                           # the nav's scroll-spy, music + both layouts
 node   scripts/check-footer.mjs <port>                        # the live photo, names, credit links + 8749
 node   scripts/check-envelope.mjs <port>                      # the Arabic verse vs the translation, 5 widths
+node   scripts/check-reveal.mjs <port>                        # the portrait bands' entrance order
 node   scripts/sheet-shot.mjs <port>                          # the live sheet at 375 x dsf 1
 python3 scripts/band-diff.py <y0> <y1> [x0] [x1]              # ...scored against the render
 python3 scripts/crop-gallery-fallback.py                      # its stock photos, cut from its plate
@@ -613,8 +614,16 @@ the band was built on. Two independent things hid it, and both are worth knowing
    hides `.nav` before shooting — an addition Frame 242 does not draw never belongs in a diff
    against the render.
 
-Envelope went **10.474 → 5.119** (nav) **→ 4.725** (verse). The stale note blaming it all on
-the known 11-vs-10 quote wrap survived three sessions because nobody split the rows.
+Envelope went **10.474 → 5.119** (nav) **→ 4.725** (verse), and back to **5.312** once the
+quote card was raised above the groom band (below) and its last four lines actually render.
+The stale note blaming it all on the known 11-vs-10 quote wrap survived three sessions
+because nobody split the rows.
+
+3. **The quote card is z72; the groom's paper is z17 — but the groom renders later in the
+   DOM.** So its paper painted over the 93px the card hangs into that band and cut the
+   translation off mid-sentence, which the client saw before any measurement did. Rows
+   760–1235 could not see it: the damage is all below 1235. `.envelope` now carries
+   `z-index: 1`, which is the render's own order; nothing else in that band reaches past 475.
 
 Two carry-forwards:
 
@@ -796,9 +805,15 @@ measuring the rendered ink with `node scripts/fit-text.mjs` + `python3 scripts/i
 (they screenshot a text node with and without it rendered, so the artwork can be
 subtracted and only the glyphs measured):
 
-- **`2555:119` reports Pinyon Script and renders in Meow Script.** At the height the
-  design draws it, Meow sets "We're getting married" 172px wide; Pinyon sets the
-  same string 131px. The typography table below had it right and the API does not.
+- ~~**`2555:119` reports Pinyon Script and renders in Meow Script.**~~ **Wrong — it is
+  Pinyon, and the line is rotated.** The reading above came from an ink width taken in a
+  horizontal window; that clips a tilted line and makes it look ~40px narrower than it is.
+  Least-squares over the render's ink puts the baseline at **-7 degrees** running x 117–292,
+  which is the ~175px Pinyon sets at the declared 24. Set flat in Meow it reads upright and
+  runs off the card's right edge onto the green envelope. `GlimpseSection` uses -8.1deg
+  (the fit is taken on the bottom of the ink, so descenders bias it shallow by ~1 degree)
+  at top 393, and repeats the tilt in every reveal state. **Measure a tilted line with a
+  fit, not with a bounding box.**
 - **A `lineHeight` well over the font size renders low in CSS and high in Figma.**
   The three date lines are 24/36/24px type in 48px line boxes; at their declared y
   the browser puts the glyphs 17/24/30px lower than the render. `GlimpseSection`

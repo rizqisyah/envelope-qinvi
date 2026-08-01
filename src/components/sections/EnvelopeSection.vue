@@ -94,13 +94,18 @@ const { quoteVerse, quoteText, quoteArabic } = useWedding()
 
 <style scoped>
 /*
- * 475 = the groom backdrop's top (y 1235) minus this band's top (760). The card
- * and its florals run past that, exactly as they do in Figma, and the groom band
- * paints over the overhang — which is also what hides the two lowest florals.
- * Until that band exists they stay visible; that is the design's z-order, not a bug.
+ * 475 = the groom backdrop's top (y 1235) minus this band's top (760). The quote
+ * card is 566 tall, so it and the last four lines of the translation hang 93px
+ * past that into the groom band.
+ *
+ * In Figma the card is z72 and the groom's paper is z17 — the card paints OVER it.
+ * In the DOM the groom renders after this section, so without the z-index its
+ * paper covered the overhang and sliced the translation off mid-sentence. Nothing
+ * else in this band reaches below 475, so raising the whole section is safe.
  */
 .envelope {
   position: relative;
+  z-index: 1;
   height: calc(475 * var(--px));
   overflow: visible;
 }

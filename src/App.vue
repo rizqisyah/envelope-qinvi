@@ -214,8 +214,9 @@ const leftBackgroundStyle = computed(() => {
     text-transform: uppercase;
   }
 
+  /* Exactly --card-max: the sheet fills it, so the art has no gutter beside it. */
   .desktop-right-column {
-    width: 480px;
+    width: var(--card-max, 430px);
     height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;

@@ -13,8 +13,8 @@
  *    frame explains those pixels; the band scored 9.98 with it missing.
  * 2. The tag and its title are rotated 9.9 degrees clockwise. The tag's export
  *    carries the rotation; the title is live text, so it needs the transform.
- * 3. The three date lines are NOT rotated, even though the plate under them is.
- *    Measured off the render -- their nodes are axis-aligned too.
+ * 3. SAVE THE DATE and the date itself are NOT rotated, even though the plate under
+ *    them is. "We're getting married" IS -- see the correction above its rule.
  *
  * The z-order runs straight through the text nodes (z39-z41 and z45 sit between
  * florals), so the layer arrays below are split at those points rather than
@@ -207,11 +207,32 @@ const dateLine = computed(() => formatShortDate((acara.value as any[])[0]?.event
   font-size: calc(36 * var(--px));
 }
 
+/*
+ * Two corrections to note 3 above, both measured off the render rather than read
+ * off the API:
+ *
+ * - `2555:119` really is the Pinyon Script the API reports. SLICING.md said it
+ *   renders in Meow Script; that reading came from an ink width measured in a
+ *   horizontal window, which clips this line and makes it look 40px narrower than
+ *   it is. Meow sets the line upright where the render is visibly slanted.
+ * - This line alone IS rotated. Least-squares over the render's ink puts its
+ *   baseline at -7 degrees running x 117-292 — the same ~175px Pinyon sets at the
+ *   declared 24. Flat and unrotated it ran off the card's right edge onto the
+ *   green envelope, which is what the client flagged.
+ *
+ * -8.1deg, not -7: the fit is taken on the bottom of the ink, so this script's
+ * descenders bias it shallow by about a degree in both terms. Built against
+ * render: ink x 118-292 at -6.52 against 117-292 at -6.96, baselines within 1px.
+ *
+ * The tilt has to be repeated in every reveal state below, exactly as the tag's
+ * title does — one `transform` property, and the tilt is not part of the entrance.
+ */
 .glimpse__married {
-  top: calc(390.18 * var(--px));
+  top: calc(393 * var(--px));
   left: calc(63.39 * var(--px));
-  font-family: var(--font-hand);
+  font-family: var(--font-script);
   font-size: calc(24 * var(--px));
+  transform: rotate(-8.1deg);
 }
 
 /*
@@ -263,10 +284,14 @@ const dateLine = computed(() => formatShortDate((acara.value as any[])[0]?.event
 
 .glimpse.is-in .lyr,
 .glimpse.is-in .glimpse__save,
-.glimpse.is-in .glimpse__date,
-.glimpse.is-in .glimpse__married {
+.glimpse.is-in .glimpse__date {
   opacity: 1;
   transform: none;
+}
+
+.glimpse.is-in .glimpse__married {
+  opacity: 1;
+  transform: rotate(-8.1deg);
 }
 
 .glimpse.is-in .glimpse__title {
@@ -316,7 +341,7 @@ const dateLine = computed(() => formatShortDate((acara.value as any[])[0]?.event
 
 .glimpse__married {
   --in: 2700ms;
-  transform: translateY(calc(10 * var(--px)));
+  transform: translateY(calc(10 * var(--px))) rotate(-8.1deg);
 }
 
 .glimpse__title {
@@ -326,10 +351,15 @@ const dateLine = computed(() => formatShortDate((acara.value as any[])[0]?.event
 @media (prefers-reduced-motion: reduce) {
   .glimpse .lyr,
   .glimpse__save,
-  .glimpse__date,
-  .glimpse__married {
+  .glimpse__date {
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+
+  .glimpse__married {
+    opacity: 1;
+    transform: rotate(-8.1deg);
     transition: none;
   }
 
