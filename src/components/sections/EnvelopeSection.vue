@@ -85,8 +85,15 @@ const { quoteVerse, quoteText, quoteArabic } = useWedding()
 
     <h2 id="quote-heading" class="envelope__verse">{{ quoteVerse }}</h2>
     <p class="envelope__save">Save<br />The<br />Date</p>
-    <p class="envelope__arabic envelope__quote">{{ quoteArabic }}</p>
-    <blockquote :ref="fitQuote" class="envelope__quote envelope__quote-id">&ldquo;{{ quoteText }}&rdquo;</blockquote>
+    <!--
+      One positioned block, two children in normal flow: the translation sits a
+      fixed 19px under whatever height the verse takes, so a verse that wraps to
+      four lines pushes it down instead of running into it.
+    -->
+    <div class="envelope__block">
+      <p class="envelope__arabic envelope__quote">{{ quoteArabic }}</p>
+      <blockquote :ref="fitQuote" class="envelope__quote envelope__quote-id">&ldquo;{{ quoteText }}&rdquo;</blockquote>
+    </div>
 
     <img v-for="(l, i) in front" :key="`f${i}`" :src="l.src" alt="" :style="box(l, 1150 + i * 110)" class="lyr lyr--front" />
   </section>
@@ -154,12 +161,20 @@ const { quoteVerse, quoteText, quoteArabic } = useWedding()
 
 /*
  * Figma has these as one TEXT node split by a blank line, but the Arabic needs its
- * own line-height, so they are two blocks pinned to the y where each one's ink
- * actually starts in the frame render (1037 and 1130, minus this band's 760).
+ * own line-height, so they are two blocks. Only the block they share is pinned —
+ * to 276, the y where the verse's ink starts in the frame render (1036 minus this
+ * band's 760). The translation then follows in flow.
  */
-.envelope__quote {
+.envelope__block {
+  top: calc(276 * var(--px));
   left: calc(73 * var(--px));
   width: calc(155 * var(--px));
+}
+
+.envelope__quote {
+  width: 100%;
+  margin: 0;
+  text-align: center;
   font-family: var(--font-quote);
   font-size: calc(10 * var(--px) * var(--fit, 1));
   line-height: calc(1.4em);
@@ -167,8 +182,6 @@ const { quoteVerse, quoteText, quoteArabic } = useWedding()
 }
 
 .envelope__arabic {
-  /* Swept: 13.74 at 276 against 13.91 and 14.18. */
-  top: calc(276 * var(--px));
   font-family: var(--font-quran);
   /*
    * Figma reports 10/14 for the whole node, and the render sets the verse in three lines
@@ -190,10 +203,16 @@ const { quoteVerse, quoteText, quoteArabic } = useWedding()
 }
 
 .envelope__quote-id {
-  /* Swept: 12.92 at 363. */
-  top: calc(363 * var(--px));
   /*
-   * Fixed height so useFitText has a box to fit into. 175 lands the last line
+   * The render's own gap is 19: its verse ink ends at 1078 and the translation's
+   * first line starts at 1097. 15, not 19, because this is measured off the box
+   * and Noto Naskh hangs about 4px of descender below it. It was a pinned
+   * `top: 363`, which read as 46 — what the client saw — and which a verse that
+   * wrapped to four lines walked straight into.
+   */
+  margin-top: calc(15 * var(--px));
+  /*
+   * Fixed height so useFitText has a box to fit into. 145 lands the last line
    * well inside the card, whose bottom edge is at 568. Without this the copy —
    * which is data-driven and any length — spills off the card at narrow widths,
    * where the type gets small enough to pick up an extra line.
