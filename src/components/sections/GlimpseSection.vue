@@ -13,8 +13,9 @@
  *    frame explains those pixels; the band scored 9.98 with it missing.
  * 2. The tag and its title are rotated 9.9 degrees clockwise. The tag's export
  *    carries the rotation; the title is live text, so it needs the transform.
- * 3. SAVE THE DATE and the date itself are NOT rotated, even though the plate under
- *    them is. "We're getting married" IS -- see the correction above its rule.
+ * 3. All three date lines ride the plate's tilt -- one shared -9.5deg. They are
+ *    three separate TEXT nodes and the render does not agree with itself to better
+ *    than a couple of degrees; see the note above their rules.
  *
  * The z-order runs straight through the text nodes (z39-z41 and z45 sit between
  * florals), so the layer arrays below are split at those points rather than
@@ -192,8 +193,24 @@ const dateLine = computed(() => formatShortDate((acara.value as any[])[0]?.event
   line-height: calc(48 * var(--px));
 }
 
+/*
+ * These two ride the plate's tilt with the verse below. A rotation sweep scored
+ * against the render bottoms out at -7 for this pair and -8.5/-9 for the verse —
+ * three separate TEXT nodes, and the render does not agree with itself to better
+ * than a couple of degrees. -9.5 is one shared value inside that spread, chosen so
+ * the block reads as printed on one card rather than three lines that each drift.
+ *
+ * `top` is then re-measured, because rotating about the box centre moves the ink:
+ * 323.5 puts this line's ink centroid at 3171.2 against the render's 3169.7. The
+ * date's own top needed no change.
+ */
+.glimpse__save,
+.glimpse__date {
+  transform: rotate(-9.5deg);
+}
+
 .glimpse__save {
-  top: calc(332.11 * var(--px));
+  top: calc(323.5 * var(--px));
   font-family: var(--font-serif);
   font-size: calc(21 * var(--px));
   letter-spacing: 0.02em;
@@ -220,9 +237,9 @@ const dateLine = computed(() => formatShortDate((acara.value as any[])[0]?.event
  *   declared 24. Flat and unrotated it ran off the card's right edge onto the
  *   green envelope, which is what the client flagged.
  *
- * -8.1deg, not -7: the fit is taken on the bottom of the ink, so this script's
- * descenders bias it shallow by about a degree in both terms. Built against
- * render: ink x 118-292 at -6.52 against 117-292 at -6.96, baselines within 1px.
+ * The fit reads shallow — it is taken on the bottom of the ink, and this script's
+ * descenders drag it about a degree and a half. A pixel sweep of the angle puts
+ * this line at -8.5/-9; it now carries the -9.5 the two lines above it share.
  *
  * The tilt has to be repeated in every reveal state below, exactly as the tag's
  * title does — one `transform` property, and the tilt is not part of the entrance.
@@ -232,7 +249,7 @@ const dateLine = computed(() => formatShortDate((acara.value as any[])[0]?.event
   left: calc(63.39 * var(--px));
   font-family: var(--font-script);
   font-size: calc(24 * var(--px));
-  transform: rotate(-8.1deg);
+  transform: rotate(-9.5deg);
 }
 
 /*
@@ -282,16 +299,20 @@ const dateLine = computed(() => formatShortDate((acara.value as any[])[0]?.event
     transform 2000ms cubic-bezier(0.16, 1, 0.3, 1) var(--in, 0ms);
 }
 
-.glimpse.is-in .lyr,
-.glimpse.is-in .glimpse__save,
-.glimpse.is-in .glimpse__date {
+.glimpse.is-in .lyr {
   opacity: 1;
   transform: none;
 }
 
+.glimpse.is-in .glimpse__save,
+.glimpse.is-in .glimpse__date {
+  opacity: 1;
+  transform: rotate(-9.5deg);
+}
+
 .glimpse.is-in .glimpse__married {
   opacity: 1;
-  transform: rotate(-8.1deg);
+  transform: rotate(-9.5deg);
 }
 
 .glimpse.is-in .glimpse__title {
@@ -331,17 +352,17 @@ const dateLine = computed(() => formatShortDate((acara.value as any[])[0]?.event
 
 .glimpse__save {
   --in: 2350ms;
-  transform: translateY(calc(10 * var(--px)));
+  transform: translateY(calc(10 * var(--px))) rotate(-9.5deg);
 }
 
 .glimpse__date {
   --in: 2500ms;
-  transform: translateY(calc(10 * var(--px)));
+  transform: translateY(calc(10 * var(--px))) rotate(-9.5deg);
 }
 
 .glimpse__married {
   --in: 2700ms;
-  transform: translateY(calc(10 * var(--px))) rotate(-8.1deg);
+  transform: translateY(calc(10 * var(--px))) rotate(-9.5deg);
 }
 
 .glimpse__title {
@@ -349,17 +370,22 @@ const dateLine = computed(() => formatShortDate((acara.value as any[])[0]?.event
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .glimpse .lyr,
-  .glimpse__save,
-  .glimpse__date {
+  .glimpse .lyr {
     opacity: 1;
     transform: none;
     transition: none;
   }
 
+  .glimpse__save,
+  .glimpse__date {
+    opacity: 1;
+    transform: rotate(-9.5deg);
+    transition: none;
+  }
+
   .glimpse__married {
     opacity: 1;
-    transform: rotate(-8.1deg);
+    transform: rotate(-9.5deg);
     transition: none;
   }
 
