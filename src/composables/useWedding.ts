@@ -36,6 +36,14 @@ function applyTheme(themeData: any, weddingData: any) {
   if (fonts.hand) root.style.setProperty('--font-hand', fonts.hand)
 }
 
+/*
+ * 18 components call useWedding(), and they all mount in the same tick. The old guard
+ * checked `state.loading`, which is still true at that point for every one of them, so
+ * all 18 fired the same getHome request. Hold the first promise instead: the other 17
+ * mounts see it and skip. Only the explicit `refetch` bypasses this.
+ */
+let inflight: Promise<void> | null = null
+
 export function useWedding() {
   const slug = ref(resolveSlug())
   const guestCode = ref(new URLSearchParams(window.location.search).get('to') || '')
@@ -61,9 +69,10 @@ export function useWedding() {
   }
 
   onMounted(() => {
-    if (!state.value.data && state.value.loading) {
-      fetchWeddingData()
-    }
+    if (state.value.data) return
+    inflight ??= fetchWeddingData().finally(() => {
+      inflight = null
+    })
   })
 
   const wedding = computed(() => state.value.data?.wedding ?? null)

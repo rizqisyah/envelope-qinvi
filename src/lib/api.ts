@@ -4,7 +4,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
  * wins. It was 'tema-elegan-putih', the PREVIOUS template's slug, so a deploy that forgot
  * VITE_DEFAULT_SLUG fetched the wrong wedding. Set VITE_DEFAULT_SLUG per deployment.
  */
-const DEFAULT_SLUG = import.meta.env.VITE_DEFAULT_SLUG || 'adat-jawa'
+const DEFAULT_SLUG = import.meta.env.VITE_DEFAULT_SLUG || 'demo-envelop'
 
 export function resolveSlug(): string {
   const segments = window.location.pathname.split('/').filter(Boolean)
