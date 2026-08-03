@@ -3,6 +3,7 @@ import { ref, computed, nextTick, onMounted } from 'vue'
 import { useWedding } from './composables/useWedding'
 import { usePreloadAssets } from './composables/usePreloadAssets'
 import CoverSection from './components/cover/CoverSection.vue'
+import VideoSection from './components/sections/VideoSection.vue'
 import InviteBody from './components/invite/InviteBody.vue'
 import BottomNav from './components/sections/BottomNav.vue'
 
@@ -69,6 +70,7 @@ const leftBackgroundStyle = computed(() => {
         class="invitation-content"
         :class="{ 'is-visible': contentVisible }"
       >
+        <VideoSection />
         <InviteBody />
       </div>
 

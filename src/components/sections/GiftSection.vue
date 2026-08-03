@@ -56,13 +56,23 @@ const FALLBACK: Account[] = [
 const { el, shown } = useReveal()
 const { gift } = useWedding()
 
+/*
+ * The API's rekening rows are accounts only -- there is no address field. The CMS
+ * convention, confirmed by the owner, is a row whose bank is `kado`: its
+ * account_number holds the postal address, and it renders as the design's card 3.
+ */
+const isKado = (bank?: string) => (bank || '').trim().toLowerCase() === 'kado'
+
 const accounts = computed<Account[]>(() => {
   const live = (gift.value as any[])
-    .map((g) => ({
-      bank_name: g.bank_name,
-      account_number: g.account_number,
-      account_name: g.account_name,
-    }))
+    .map((g) => {
+      const number = (g.account_number || '').trim()
+      const name = g.account_name
+      // account_number is kept so the address stays copyable -- see `copyable` below.
+      return isKado(g.bank_name)
+        ? { address: ['Alamat', number], account_name: name, account_number: number }
+        : { bank_name: g.bank_name, account_number: number, account_name: name }
+    })
     .filter((a) => a.account_number || a.account_name)
   return live.length ? live : FALLBACK
 })
@@ -82,8 +92,13 @@ function lines(a: Account): { top: number; leading: number; rows: string[] } {
   }
 }
 
-/** Only an account number is copyable; the address card has nothing to put on a clipboard. */
+/*
+ * Whatever sits in account_number is what gets copied -- an account for a bank card, the
+ * address for a `kado` one. The design's own fallback address card carries neither, so it
+ * renders without the control, exactly as Frame 242 draws it.
+ */
 const copyable = (a: Account) => !!a.account_number
+const copyLabel = (a: Account) => (a.address ? 'alamat' : 'nomor rekening')
 
 const copied = ref(-1)
 let clear = 0
@@ -158,7 +173,9 @@ const px = (n: number) => `calc(${n} * var(--px))`
       >
         <img :src="copyIcon" alt="" />
         <span class="gift__sr">{{
-          copied === i ? 'Nomor rekening disalin' : `Salin nomor rekening ${a.account_number}`
+          copied === i
+            ? `${copyLabel(a)} disalin`
+            : `Salin ${copyLabel(a)} ${a.account_number}`
         }}</span>
       </button>
 
@@ -167,7 +184,7 @@ const px = (n: number) => `calc(${n} * var(--px))`
     </div>
 
     <p class="gift__sr" aria-live="polite">
-      {{ copied >= 0 ? 'Nomor rekening disalin ke papan klip' : '' }}
+      {{ copied >= 0 ? `${copyLabel(accounts[copied])} disalin ke papan klip` : '' }}
     </p>
   </section>
 </template>

@@ -128,6 +128,42 @@ async function cards(page) {
   await ctx.close()
 }
 
+/*
+ * --- `kado` is the CMS's address row ---
+ * The API has accounts and nothing else, so an address reaches this band as a row banked
+ * to `kado` carrying the address in account_number. Rendered as an account it read
+ * "No. Rekening : 65, Jalan Raya Tanjung Barat", which is what the owner flagged.
+ */
+{
+  const { ctx, page } = await open([
+    { bank_name: 'BCA', account_number: '1122334455', account_name: 'Ahmad Setiawan' },
+    { bank_name: 'kado', account_number: '65, Jalan Raya Tanjung Barat', account_name: 'Resti' },
+  ])
+  const c = await cards(page)
+  check(
+    c[1].lines[0] === 'Alamat' &&
+      c[1].lines[1] === '65, Jalan Raya Tanjung Barat' &&
+      c[1].lines[2] === 'A/n Resti',
+    `a kado row renders as the address variant (got ${JSON.stringify(c[1].lines)})`,
+  )
+  check(!c[1].hasLogo && c[1].bank === null, 'the kado row prints no bank line')
+
+  // It still copies -- an address is the one thing on that card worth putting on a clipboard.
+  check(c[1].hasCopy, 'the kado card keeps its copy button')
+  const label = await page
+    .locator('.gift__card')
+    .nth(1)
+    .locator('.gift__copy')
+    .evaluate((n) => n.innerText.trim())
+  check(label.startsWith('Salin alamat'), `the kado button says "alamat" (got "${label}")`)
+
+  await page.locator('.gift__card').nth(1).locator('.gift__copy').click()
+  await page.waitForTimeout(300)
+  const clip = await page.evaluate(() => navigator.clipboard.readText())
+  check(clip === '65, Jalan Raya Tanjung Barat', `the kado card copies the address (got "${clip}")`)
+  await ctx.close()
+}
+
 // --- an account with no number must not offer a dead copy button ---
 {
   const { ctx, page } = await open([{ bank_name: 'BNI', account_name: 'Tanpa Nomor' }])
