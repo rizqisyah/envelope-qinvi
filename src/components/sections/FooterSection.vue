@@ -4,8 +4,11 @@
  * frame's own bottom edge. Coordinates are frame-local x and band-local y (frame y minus
  * 7700). 33 layers in three groups plus 8 TEXT nodes.
  *
- * Two nodes are NOT here: 2594:479/480 ("mutiara last page") exported blank, and rows
- * 7620-7800 of the render carry no pearls at all, which confirms the drop.
+ * Three nodes are NOT here: 2594:479/480 ("mutiara last page") exported blank, and rows
+ * 7620-7800 of the render carry no pearls at all, which confirms the drop. 2594:207 is
+ * the notecard inside the envelope, which the design buries entirely -- see the note
+ * below. Behind a live CMS photo it stopped being buried and read as a grey rectangle
+ * pasted over the envelope, so it is dropped and the couple sits on the envelope itself.
  *
  * Group 176 (the credit block) was exported whole at 714x216, but that export wraps four
  * TEXT nodes, so it was deleted and only its two buttons kept.
@@ -48,7 +51,6 @@ import callaLeft from '../../assets/footer/parts/14_2594-471.webp'
 import daisyLeft from '../../assets/footer/parts/15_2594-469.webp'
 import daisyRight from '../../assets/footer/parts/16_2594-470.webp'
 import envBack from '../../assets/footer/parts/19_2594-203_cascasc-2.webp'
-import envInner from '../../assets/footer/parts/17_2594-207.webp'
 import envFront from '../../assets/footer/parts/20_2594-204_defcew-2.webp'
 import couplePlate from '../../assets/footer/parts/21_2594-208_img-8300.webp'
 import orchidSpray from '../../assets/footer/parts/18_2594-220.webp'
@@ -80,7 +82,6 @@ const under: Layer[] = [
   { src: roseLeft, x: 0, y: 365, w: 101, h: 134.5, in: 1450 },
   { src: roseRight, x: 281, y: 370, w: 94, h: 134.5, in: 1500 },
   { src: envBack, x: 17, y: 353, w: 349, h: 416, in: 1100 },
-  { src: envInner, x: 56, y: 321, w: 274, h: 412, in: 1150 },
   { src: orchidSpray, x: 266, y: 327, w: 93, h: 125, in: 1550 },
   { src: vdfLeft, x: 0, y: 395, w: 115, h: 217, in: 1600 },
   { src: vdfRight, x: 261, y: 390, w: 114, h: 217, in: 1600 },
