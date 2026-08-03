@@ -151,3 +151,22 @@ export function formatShortDate(raw?: string | null): string {
   const p = (n: number) => String(n).padStart(2, '0')
   return `${p(d.getDate())}. ${p(d.getMonth() + 1)}. ${String(d.getFullYear()).slice(2)}`
 }
+
+/*
+ * The "Putra Pertama dari Bapak Tono & Ibu Ratna" line under a name. getHome has no
+ * `parents` field -- the components read one and always fell through to the design copy.
+ * It ships the pieces separately as `child_of` + `father_name` + `mother_name`, any of
+ * which can be blank, so join whatever is there and let the caller supply the fallback.
+ */
+export function parentLine(p?: {
+  child_of?: string | null
+  father_name?: string | null
+  mother_name?: string | null
+} | null): string {
+  if (!p) return ''
+  const prefix = (p.child_of || '').trim()
+  const parents = [p.father_name, p.mother_name].map((s) => (s || '').trim()).filter(Boolean).join(' ')
+  // `child_of` on real data is often the whole sentence already; don't repeat the parents.
+  if (prefix && parents && prefix.includes(parents)) return prefix
+  return [prefix, parents].filter(Boolean).join(' ').trim()
+}

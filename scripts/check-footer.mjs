@@ -1,7 +1,7 @@
 // The footer's pixel diff is a good check on 33 layers of artwork and says nothing about
 // the four things in it that are live: the couple's photograph, the couple's names, and
 // two credit links. It also cannot see the one number that validates every band above it
-// -- the sheet's total height against the frame's own 8749.
+// -- the sheet's total height against the frame's own 8749, less the cut sentence.
 //
 //   pnpm dev & node scripts/check-footer.mjs [port]
 import { chromium, webkit } from 'playwright'
@@ -37,16 +37,21 @@ async function open({ data = {}, motion = 'reduce', engine } = {}) {
 }
 
 /*
- * The strongest single check in the file. 8749 is Frame 242's own height, and the sheet
- * only reaches it if every one of the twelve bands' heights is right -- one band off by a
- * pixel and this fails, even though that band's own diff would still look clean.
+ * The strongest single check in the file: the sheet only reaches its total if every one of
+ * the twelve bands' heights is right -- one band off by a pixel and this fails, even
+ * though that band's own diff would still look clean.
+ *
+ * Frame 242's own height is 8749. We are 48 under it on purpose: the client asked for the
+ * repeated thank-you sentence above the vendor credit to go, and the footer band lost that
+ * sentence's 48px rather than keeping a hole where it used to be.
  */
+const SHEET_HEIGHT = 8749 - 48
 {
   const { ctx, page } = await open()
   const sheet = await page.locator('.sheet').boundingBox()
   check(
-    Math.abs(sheet.height - 8749) < 1,
-    `the sheet is exactly Frame 242's 8749 tall (got ${sheet.height.toFixed(0)})`,
+    Math.abs(sheet.height - SHEET_HEIGHT) < 1,
+    `the sheet is exactly ${SHEET_HEIGHT} tall (got ${sheet.height.toFixed(0)})`,
   )
   check((await page.locator('.sheet__placeholder').count()) === 0, 'no placeholder bands are left')
   await ctx.close()
@@ -153,14 +158,13 @@ async function open({ data = {}, motion = 'reduce', engine } = {}) {
  */
 const GEOMETRY = [
   ['.footer__thanks', 7829, 104, 181, null],
-  ['.footer__body:not(.footer__body--credit)', 7878, 74, 249, null],
+  ['.footer__body', 7878, 74, 249, null],
   ['.footer__couple', 7968, 77, 230, null],
   ['.footer__photo', 8054, 17, 342, 342],
-  ['.footer__body--credit', 8539, 66, 272, null],
-  ['.footer__by', 8587, 90, 224, null],
-  ['.footer__vendor--a', 8619, 18, 172.9, null],
-  ['.footer__vendor--x', 8619, 117.2, 172.9, null],
-  ['.footer__vendor--b', 8619, 202.1, 172.9, null],
+  ['.footer__by', 8494, 90, 224, null],
+  ['.footer__vendor--a', 8526, 18, 172.9, null],
+  ['.footer__vendor--x', 8526, 117.2, 172.9, null],
+  ['.footer__vendor--b', 8526, 202.1, 172.9, null],
 ]
 
 for (const [engineName, engine] of [

@@ -3,7 +3,7 @@
 // Every other check and every band diff runs with `reducedMotion: 'reduce'`, and each
 // band's reduced-motion block pins `opacity: 1`. So the reveal is invisible to all of
 // them: the frame could arrive after the photo, or the band's opaque paper could fade
-// in and show the garden plate's bare rectangle sitting on the sheet, and all 324
+// in and show the photo plate's bare rectangle sitting on the sheet, and all 324
 // assertions would still pass. That bare rectangle is exactly what the client flagged.
 //
 // It is also the failure mode CSS specificity produces silently: `.lyr--paper` is
@@ -57,13 +57,14 @@ for (const [band, y] of [
   ['groom', 1200],
   ['bride', 2000],
 ]) {
-  // lyr--plate covers the frame AND the garden behind it, so read them positionally:
-  // the arrays are in Figma z-order, and the garden is always the first plate.
-  const s = await trace(band, y, ['lyr--paper', 'lyr--plate', 'lyr--portrait'])
+  // lyr--plate covers the frame AND the photo behind it, so read them positionally:
+  // the arrays are in Figma z-order, and the photo is always the first plate. It used
+  // to be two layers -- a garden backdrop with the portrait cutout over it -- but the
+  // CMS serves one image with the background already in it, so there is one beat now.
+  const s = await trace(band, y, ['lyr--paper', 'lyr--plate'])
   const paper = s.map((f) => f[0])
-  const garden = s.map((f) => f[1][0])
+  const photo = s.map((f) => f[1][0])
   const frame = s.map((f) => f[1][1])
-  const portrait = s.map((f) => f[2][0])
 
   check(
     paper.every((f) => f.every((v) => v === 1)),
@@ -72,16 +73,12 @@ for (const [band, y] of [
   // Strictly ahead at every sample: the frame must be readable before anything
   // lands inside its aperture, which is the whole point of the reordering.
   check(
-    frame.every((v, i) => v >= garden[i]) && frame.at(-1) > garden.at(-1),
-    `[${band}] the frame leads the garden plate (frame ${frame}, garden ${garden})`,
+    frame.every((v, i) => v >= photo[i]) && frame.at(-1) > photo.at(-1),
+    `[${band}] the frame leads the photo plate (frame ${frame}, photo ${photo})`,
   )
   check(
-    garden.every((v, i) => v >= portrait[i]) && garden.at(-1) > portrait.at(-1),
-    `[${band}] the garden plate leads the portrait (garden ${garden}, portrait ${portrait})`,
-  )
-  check(
-    portrait.at(-1) > 0,
-    `[${band}] the portrait does arrive (last ${portrait.at(-1)})`,
+    photo.at(-1) > 0,
+    `[${band}] the photo plate does arrive (last ${photo.at(-1)})`,
   )
 }
 

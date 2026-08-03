@@ -9,13 +9,20 @@
  * frame flattened into one layer with a transparent aperture, painted ABOVE the
  * portrait, and the hole is what crops the photo into the frame.
  */
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useFitText } from '../../composables/useFitText'
 import { useReveal } from '../../composables/useReveal'
 import { useWedding } from '../../composables/useWedding'
+import { parentLine } from '../../lib/format'
 
-import garden from '../../assets/bride/parts/01_2551-186_bg-bride.webp' // z10, shared with the groom
-import portrait from '../../assets/bride/parts/04_2551-198_photo.webp' // z18
+/*
+ * z10 (garden) and z18 (portrait) used to be two layers. getHome serves `photo_url` as
+ * one opaque 360x409 image with the background already in it -- the same box the garden
+ * occupied -- so the client swaps the whole plate by uploading one file from the CMS.
+ * This bundled merge of the two original exports is only the not-yet-uploaded fallback;
+ * regenerate it with scripts/merge-plate.py.
+ */
+import plateFallback from '../../assets/bride/parts/plate-bride-merged.webp'
 import innerFrame from '../../assets/bride/parts/02_2551-189_sdvbsdbsddb-4.webp' // z19
 import paperFrame from '../../assets/bride/parts/00_2551-188_sdvbsdbsddb-3.webp' // z20
 import glimpseWash from '../../assets/glimpse/parts/00_2560-278_vdsvzdsvd-1.webp' // z21
@@ -24,12 +31,27 @@ import calla from '../../assets/bride/parts/03_2588-135_vdf-3.webp' // z67
 
 type Layer = { src: string; x: number; y: number; w: number; h: number; kind: string; in: number }
 
+const { el, shown } = useReveal()
+const fitParents = useFitText()
+const fitNickname = useFitText()
+const { bride } = useWedding()
+
+/*
+ * photo_url is a cross-origin upload host, so a 404 there would leave a broken-image
+ * icon where a designed layer belongs. Fall back to the bundled merge instead.
+ */
+const plateFailed = ref(false)
+const plate = computed(() => (!plateFailed.value && bride.value?.photo_url) || plateFallback)
+
+function onLayerError(e: Event) {
+  if ((e.target as HTMLImageElement).src !== plateFallback) plateFailed.value = true
+}
+
 // z10-z22. Everything after the wash paints on top of it.
-// `in` is entrance order, not z-order: the frame lands first and the garden plate
+// `in` is entrance order, not z-order: the frame lands first and the photo plate
 // fills its aperture after, so the plate never reads as a bare floating rectangle.
-const behind: Layer[] = [
-  { src: garden, x: 8, y: 147, w: 360, h: 409, kind: 'plate', in: 260 },
-  { src: portrait, x: 108, y: 241, w: 160, h: 279, kind: 'portrait', in: 520 },
+const behind = computed<Layer[]>(() => [
+  { src: plate.value, x: 8, y: 147, w: 360, h: 409, kind: 'plate', in: 260 },
   { src: innerFrame, x: 23, y: 133, w: 341, h: 435, kind: 'plate', in: 0 },
   { src: paperFrame, x: 0, y: 0, w: 375, h: 796, kind: 'paper', in: 0 },
   /*
@@ -39,7 +61,7 @@ const behind: Layer[] = [
    */
   { src: glimpseWash, x: 0, y: 542, w: 375, h: 385, kind: 'paper', in: 0 },
   { src: ornament, x: 132, y: 596, w: 120, h: 33, kind: 'ornament', in: 1500 },
-]
+])
 
 // z67, above every band around it.
 const front: Layer = { src: calla, x: 233, y: 215, w: 137, h: 200, kind: 'front', in: 900 }
@@ -54,15 +76,11 @@ function box(l: Layer) {
   }
 }
 
-const { el, shown } = useReveal()
-const fitParents = useFitText()
-const { bride } = useWedding()
-
 // Fallbacks are the copy set in Frame 242, so an unconfigured render matches it.
-const nickname = computed(() => bride.value?.nickname || bride.value?.name?.split(' ')[0] || 'Allysa')
-const fullName = computed(() => bride.value?.name || 'Ayu Shella Pratni')
+const nickname = computed(() => bride.value?.nickname?.trim() || bride.value?.name?.trim().split(' ')[0] || 'Allysa')
+const fullName = computed(() => bride.value?.name?.trim() || 'Ayu Shella Pratni')
 const parents = computed(
-  () => bride.value?.parents || 'Putri Pertama dari Bapak Heri\n& Ibu Sofie',
+  () => parentLine(bride.value) || 'Putri Pertama dari Bapak Heri\n& Ibu Sofie',
 )
 </script>
 
@@ -76,9 +94,10 @@ const parents = computed(
       :style="box(l)"
       class="lyr"
       :class="`lyr--${l.kind}`"
+      @error="onLayerError"
     />
 
-    <h2 id="bride-heading" class="bride__nickname">{{ nickname }}</h2>
+    <h2 :ref="fitNickname" id="bride-heading" class="bride__nickname">{{ nickname }}</h2>
     <p class="bride__name">{{ fullName }}</p>
     <p :ref="fitParents" class="bride__parents">{{ parents }}</p>
 
@@ -100,11 +119,19 @@ const parents = computed(
 }
 
 .bride__nickname {
+  /*
+   * Widened from the design's 202px box to the full text column, keeping the same
+   * centre, and fitted to its own single line. `nickname` is the SHORT name -- the
+   * design sizes this slot for "Antonio" -- but the CMS lets a client type anything,
+   * and an over-long value used to wrap into three lines straight through the ornament
+   * and the name below it. A short name renders identically either way.
+   */
   top: calc(556 * var(--px));
-  left: calc(91 * var(--px));
-  width: calc(202 * var(--px));
+  left: calc(31.5 * var(--px));
+  width: calc(321 * var(--px));
+  height: calc(38 * var(--px));
   font-family: var(--font-script);
-  font-size: calc(40 * var(--px));
+  font-size: calc(40 * var(--px) * var(--fit, 1));
   font-weight: 400;
   line-height: calc(38 * var(--px));
   color: var(--brown-soft);
@@ -134,12 +161,18 @@ const parents = computed(
 
 .lyr {
   pointer-events: none;
+  /*
+   * A no-op for the bundled exports, which are all cut to their box. It matters for the
+   * CMS plate: a client can upload any aspect ratio and cover keeps it filling the
+   * frame's aperture instead of squashing.
+   */
+  object-fit: cover;
 }
 
 /*
- * Reveal: the frame settles, the garden plate fills its aperture, the portrait
- * rises into it, the
- * calla sweeps in from the right, then the name block writes itself out.
+ * Reveal: the frame settles, the photo plate fills its aperture, the calla sweeps
+ * in from the right, then the name block writes itself out. The plate used to be two
+ * beats -- garden, then portrait rising into it -- but it is one image now.
  */
 .bride .lyr,
 .bride__nickname,
@@ -163,14 +196,10 @@ const parents = computed(
   transform: translateY(calc(26 * var(--px))) scale(0.97);
 }
 
-.lyr--portrait {
-  transform: translateY(calc(30 * var(--px))) scale(0.94);
-}
-
 /*
  * The paper layers never fade: outside the frame's aperture this IS the band's
  * opaque paper, and the wash below it is what hides the drape's lower edge. Any
- * opacity under 1 ghosts the garden photo's rectangle through both.
+ * opacity under 1 ghosts the photo plate's rectangle through both.
  */
 /*
  * Scoped: `.bride .lyr` above is (0,2,0) and outranks a bare `.lyr--paper`, so

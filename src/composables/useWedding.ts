@@ -78,29 +78,41 @@ export function useWedding() {
   const wedding = computed(() => state.value.data?.wedding ?? null)
   const theme = computed(() => state.value.data?.theme ?? null)
   const guest = computed(() => state.value.data?.guest ?? null)
-  const pengantin = computed(() => state.value.data?.pengantin ?? [])
-  const acara = computed(() => state.value.data?.acara ?? [])
-  const gallery = computed(() => state.value.data?.gallery ?? [])
-  const gift = computed(() => state.value.data?.gift ?? [])
   /*
-   * The API calls this `ucapan`; `wishes` was a guess and read empty against every real
-   * payload — which no pixel diff could catch, because an empty list falls back to the
-   * design's own four cards and scores perfectly. Read both so it works either way.
+   * getHome nests every list under `data.content` -- these were read straight off `data`,
+   * so all five were permanently empty. No pixel diff could catch it: an empty list falls
+   * back to the design's own copy and scores perfectly. Same class of bug as the `ucapan`
+   * / `wishes` guess below. Read `content` first, then the flat key, so a payload of
+   * either shape works.
    */
-  const wishes = computed(() => state.value.data?.ucapan ?? state.value.data?.wishes ?? [])
+  const content = computed(() => state.value.data?.content ?? state.value.data ?? null)
+  const pengantin = computed(() => content.value?.pengantin ?? [])
+  const acara = computed(() => content.value?.acara ?? [])
+  const gallery = computed(() => content.value?.gallery ?? [])
+  // The API calls the account list `rekening`.
+  const gift = computed(() => content.value?.rekening ?? content.value?.gift ?? [])
+  const wishes = computed(() => content.value?.ucapan ?? content.value?.wishes ?? [])
 
   /**
    * Post a wish and get it into the list without a refetch. The API may answer with the
    * refreshed list, with just the created row, or with neither, so all three are handled
    * — otherwise a guest submits and sees nothing happen.
    */
+  // Writes `ucapan` back where `content` reads it from, or the new row is invisible.
+  function putWishes(list: any[]) {
+    const data = state.value.data
+    state.value.data = data.content
+      ? { ...data, content: { ...data.content, ucapan: list } }
+      : { ...data, ucapan: list }
+  }
+
   async function sendWish(body: { guest_name: string; message: string }): Promise<any> {
     const res = await submitUcapan(slug.value, body)
     if (!state.value.data) return res
 
     const list = Array.isArray(res) ? res : Array.isArray(res?.data) ? res.data : null
     if (list) {
-      state.value.data = { ...state.value.data, ucapan: list }
+      putWishes(list)
       return res
     }
 
@@ -108,10 +120,7 @@ export function useWedding() {
       res?.data && typeof res.data === 'object' && !Array.isArray(res.data)
         ? res.data
         : { id: `local-${Date.now()}`, ...body, created_at: new Date().toISOString() }
-    state.value.data = {
-      ...state.value.data,
-      ucapan: [row, ...(Array.isArray(wishes.value) ? wishes.value : [])],
-    }
+    putWishes([row, ...(Array.isArray(wishes.value) ? wishes.value : [])])
     return res
   }
 

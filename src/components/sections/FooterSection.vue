@@ -191,10 +191,6 @@ const waUrl = computed(() => (wedding.value?.vendor_whatsapp as string) || '')
     </p>
     <p class="footer__couple">{{ coupleLine }}</p>
 
-    <p class="footer__body footer__body--credit">
-      We sincerely thank you for your presence, prayers, and blessings on our special day.
-    </p>
-
     <p class="footer__by">Created with Love by,</p>
     <p class="footer__vendor footer__vendor--a">@25ribuaja</p>
     <p class="footer__vendor footer__vendor--x">x</p>
@@ -241,7 +237,7 @@ const waUrl = computed(() => (wedding.value?.vendor_whatsapp as string) || '')
 /* 1049 = 7700 to 8749, the frame's own bottom edge. */
 .footer {
   position: relative;
-  height: calc(1049 * var(--px));
+  height: calc(1001 * var(--px));
   overflow: visible;
 }
 
@@ -302,15 +298,14 @@ const waUrl = computed(() => (wedding.value?.vendor_whatsapp as string) || '')
   color: #7c4a15;
 }
 
-/* 2594:438 — the same sentence again at the very bottom, Pochaevsk 12/17. */
-.footer__body--credit {
-  top: calc(839 * var(--px));
-  left: calc(66 * var(--px));
-  width: calc(272 * var(--px));
-  font-size: calc(12 * var(--px));
-  line-height: calc(17 * var(--px));
-}
-
+/*
+ * The design repeated the thank-you sentence a second time just above this credit
+ * (2594:438). The client asked for it gone, so the credit block and the buttons below it
+ * move up 93px and the band loses 48 -- otherwise deleting the sentence just leaves a
+ * hole between the envelope and "Created with Love by,". The gap closes from 69px to 24,
+ * and the extra band tail lifts the buttons off the bottom nav, which they overlapped by
+ * 20px even before this change.
+ */
 /* 2594:295 — Pinyon Script 36 in a 45-tall box, same centring as the heading. */
 .footer__couple {
   /* Swept to 268: 5.86 against 9.62 and 14.6. Same auto-box centring as the heading. */
@@ -335,7 +330,7 @@ const waUrl = computed(() => (wedding.value?.vendor_whatsapp as string) || '')
 }
 
 .footer__by {
-  top: calc(887 * var(--px));
+  top: calc(794 * var(--px));
   left: calc(90 * var(--px));
   width: calc(224 * var(--px));
 }
@@ -345,7 +340,7 @@ const waUrl = computed(() => (wedding.value?.vendor_whatsapp as string) || '')
  * is their centres -- 104.45, 203.65, 288.55.
  */
 .footer__vendor {
-  top: calc(919 * var(--px));
+  top: calc(826 * var(--px));
   width: calc(172.9 * var(--px));
 }
 
@@ -391,12 +386,12 @@ a.footer__btn:focus-visible {
 }
 
 .footer__btn--ig {
-  top: calc(957 * var(--px));
+  top: calc(864 * var(--px));
   left: calc(155 * var(--px));
 }
 
 .footer__btn--wa {
-  top: calc(958 * var(--px));
+  top: calc(865 * var(--px));
   left: calc(211 * var(--px));
 }
 
@@ -461,10 +456,6 @@ a.footer__btn:focus-visible {
 .footer__photo {
   --in: 1250ms;
   transform: translateY(calc(16 * var(--px)));
-}
-
-.footer__body--credit {
-  --in: 2000ms;
 }
 
 .footer__by {
