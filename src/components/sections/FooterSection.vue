@@ -76,7 +76,9 @@ type Layer = { src: string; x: number; y: number; w: number; h: number; in: numb
  * y is art that hangs above this band's own top, which two of these do.
  */
 const under: Layer[] = [
-  { src: leafLeft, x: 3, y: 74, w: 86, h: 98.5, in: 700 },
+  // Pulled 18px off its probed x 3, so the leaf bleeds past the left edge the way
+  // its frame-clipped twin does on the right.
+  { src: leafLeft, x: -15, y: 74, w: 86, h: 98.5, in: 700 },
   { src: leafRight, x: 306, y: 78, w: 69, h: 98.5, in: 750 },
   { src: orchidRight, x: 260, y: 374, w: 115, h: 173, in: 1500 },
   { src: roseLeft, x: 0, y: 365, w: 101, h: 134.5, in: 1450 },
@@ -108,9 +110,9 @@ const top: Layer[] = [
   { src: lilyLeft, x: 0, y: 56, w: 127, h: 193, in: 400 },
   { src: gypRight, x: 291, y: 134, w: 84, h: 104, in: 900 },
   { src: gypLeft, x: 0, y: 131, w: 101, h: 104, in: 900 },
-  { src: callaLeft, x: 3, y: 148, w: 61.5, h: 83.5, in: 550 },
+  { src: callaLeft, x: -15, y: 148, w: 61.5, h: 83.5, in: 550 },
   { src: callaRight, x: 327, y: 141, w: 48, h: 83.5, in: 550 },
-  { src: daisyLeft, x: 17, y: 202, w: 58, h: 58, in: 850 },
+  { src: daisyLeft, x: -1, y: 202, w: 58, h: 58, in: 850 },
   { src: daisyRight, x: 320, y: 202, w: 55, h: 58, in: 850 },
   { src: budRight, x: 335, y: 72, w: 40, h: 35, in: 250 },
   // 2594:474 is byte-identical to 2594:473, so it reuses that export.

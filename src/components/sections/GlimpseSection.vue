@@ -256,11 +256,29 @@ const dateLine = computed(() => formatShortDate((acara.value as any[])[0]?.event
  * z40. Printed on the tag, so it carries the tag's 9.9deg. The rotation has to
  * be repeated in the reveal transform below -- one `transform` property, and the
  * tilt is not part of the animation.
+ *
+ * The API reports this node's font family, size and line-height as "mixed" and
+ * gives only the rotated bounding box, so all four numbers below were measured off
+ * the render instead, anchored on the tag's punch hole (the one landmark both the
+ * reference and the live page share):
+ *
+ * - The caps are Playfair, not EB Garamond. De-rotating the render's ink puts THE
+ *   at 43.3 wide and GLIMPSE OF at 130.6 on a 13.76 cap height -- w/cap 3.15 and
+ *   9.49. Of the faces the page loads only Playfair comes close (3.07 / 9.33);
+ *   EB Garamond sets 2.85 / 7.92, which is why 27px was needed to fill the width
+ *   and why the line then ran off the tag onto the florals.
+ * - The script line really is Pinyon, but at 52px, not 34 -- the render's US is
+ *   74 x 35.5 and 34px sets it at 48 x 21.
+ * - `margin-top` on that line is the leftover 9.5px between the two blocks; it is
+ *   a gap Figma's mixed line-heights carry and CSS line-height alone cannot, since
+ *   growing the box moves the ink by only half the growth.
+ *
+ * Ink now lands within ~1px of the render on all three lines.
  */
 .glimpse__title {
   /* Node is at (38.87, -4); the offset lines the rotated ink up with the render. */
-  top: calc(14 * var(--px));
-  left: calc(18.87 * var(--px));
+  top: calc(18 * var(--px));
+  left: calc(27.57 * var(--px));
   width: calc(275 * var(--px));
   text-align: center;
   color: var(--ink);
@@ -270,17 +288,18 @@ const dateLine = computed(() => formatShortDate((acara.value as any[])[0]?.event
 
 .glimpse__title-caps {
   display: block;
-  font-family: var(--font-serif);
-  font-size: calc(27 * var(--px));
-  line-height: calc(36 * var(--px));
+  font-family: var(--font-quote);
+  font-size: calc(25 * var(--px));
+  line-height: calc(30 * var(--px));
   text-transform: uppercase;
 }
 
 .glimpse__title-us {
   display: block;
   font-family: var(--font-script);
-  font-size: calc(34 * var(--px));
-  line-height: calc(44 * var(--px));
+  font-size: calc(52 * var(--px));
+  line-height: calc(40 * var(--px));
+  margin-top: calc(9.5 * var(--px));
 }
 
 /*
