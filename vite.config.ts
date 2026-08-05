@@ -17,7 +17,7 @@ export default defineConfig(({ mode }) => {
     // and a relative base would resolve assets against the slug path instead of the root.
     base: '/',
     server: {
-      port: 5175,
+      port: 5174,
       proxy: {
         '/api': {
           target,

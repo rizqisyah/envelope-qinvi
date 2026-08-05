@@ -9,7 +9,7 @@ import couplePlate from '../../assets/footer/parts/21_2594-208_img-8300.webp' //
 import ornateFrame from '../../assets/hero/parts/00_2587-110_group-234.webp' // z14
 
 const { el, shown } = useReveal(0.15)
-const { wedding } = useWedding()
+const { invitePhoto } = useWedding()
 
 /*
  * z13 is the couple's PHOTOGRAPH, not artwork -- the same node the footer band draws
@@ -18,9 +18,7 @@ const { wedding } = useWedding()
  * unconfigured fallback so the render still matches; `object-fit: cover` is what lets a
  * photo of any aspect fill the frame's 342x342 aperture without stretching.
  */
-const couple = computed(
-  () => (wedding.value?.image_cover as string) || (wedding.value?.image_bg1 as string) || couplePlate,
-)
+const couple = computed(() => invitePhoto.value || couplePlate)
 </script>
 
 <template>

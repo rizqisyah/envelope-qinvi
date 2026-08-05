@@ -119,7 +119,7 @@ const top: Layer[] = [
 ]
 
 const { el, shown } = useReveal()
-const { wedding, groom, bride } = useWedding()
+const { wedding, groom, bride, spousePhoto } = useWedding()
 
 /*
  * The design's own string is "Antonio + Aliyah", where the bride is "Ayu Shella Pratni
@@ -135,12 +135,9 @@ const coupleLine = computed(() => {
 
 /*
  * 2594:208 is a photograph. The sliced plate keeps an unconfigured render matching the
- * design; a configured one shows the couple. (HeroSection imports the same file directly
- * and does NOT bind the API -- a pre-existing gap, not this band's to fix.)
+ * design; a configured one shows the couple.
  */
-const couplePhoto = computed(
-  () => (wedding.value?.image_cover as string) || (wedding.value?.image_bg1 as string) || couplePlate,
-)
+const couplePhoto = computed(() => spousePhoto.value || couplePlate)
 
 /*
  * "Created with Love by, @25ribuaja x Qinvi" is the template vendor's credit, not the

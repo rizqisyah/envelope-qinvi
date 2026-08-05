@@ -27,13 +27,46 @@ function applyTheme(themeData: any, weddingData: any) {
   const colors = { ...(cfg?.colors || {}), ...(override?.colors || {}) }
   const fonts = { ...(cfg?.fonts || {}), ...(override?.fonts || {}) }
 
+  // Map Colors
   if (colors.primary) root.style.setProperty('--maroon-title', colors.primary)
   if (colors.secondary) root.style.setProperty('--maroon-text', colors.secondary)
   if (colors.accent) root.style.setProperty('--gold', colors.accent)
   if (colors.bg_body) root.style.setProperty('--bg-body', colors.bg_body)
+  if (colors.brown_deep) root.style.setProperty('--brown-deep', colors.brown_deep)
+  if (colors.brown_title) root.style.setProperty('--brown-title', colors.brown_title)
+  if (colors.brown_mid) root.style.setProperty('--brown-mid', colors.brown_mid)
+  if (colors.brown_soft) root.style.setProperty('--brown-soft', colors.brown_soft)
+  if (colors.olive) root.style.setProperty('--olive', colors.olive)
+  if (colors.paper) root.style.setProperty('--paper', colors.paper)
 
+  // Map Fonts
   if (fonts.script) root.style.setProperty('--font-script', fonts.script)
+  if (fonts.serif) root.style.setProperty('--font-serif', fonts.serif)
+  if (fonts.serif_alt) root.style.setProperty('--font-serif-alt', fonts.serif_alt)
+  if (fonts.serif_bold) root.style.setProperty('--font-serif-bold', fonts.serif_bold)
+  if (fonts.caps || fonts.headline) root.style.setProperty('--font-caps', fonts.caps || fonts.headline)
   if (fonts.hand) root.style.setProperty('--font-hand', fonts.hand)
+  if (fonts.sans || fonts.body) root.style.setProperty('--font-sans', fonts.sans || fonts.body)
+  if (fonts.arabic) root.style.setProperty('--font-arabic', fonts.arabic)
+  if (fonts.quran) root.style.setProperty('--font-quran', fonts.quran)
+  if (fonts.eyebrow) root.style.setProperty('--font-eyebrow', fonts.eyebrow)
+  if (fonts.serif_soft) root.style.setProperty('--font-serif-soft', fonts.serif_soft)
+  if (fonts.guest) root.style.setProperty('--font-guest', fonts.guest)
+  if (fonts.quote) root.style.setProperty('--font-quote', fonts.quote)
+  if (fonts.thanks) root.style.setProperty('--font-thanks', fonts.thanks)
+
+  // Dynamic Google Font loader if custom font URL is provided
+  if (override?.google_fonts_url) {
+    const linkId = 'custom-theme-google-font'
+    let link = document.getElementById(linkId) as HTMLLinkElement
+    if (!link) {
+      link = document.createElement('link')
+      link.id = linkId
+      link.rel = 'stylesheet'
+      document.head.appendChild(link)
+    }
+    link.href = override.google_fonts_url
+  }
 }
 
 /*
@@ -149,6 +182,19 @@ export function useWedding() {
       'وَمِنْ اٰيٰتِهٖٓ اَنْ خَلَقَ لَكُمْ مِّنْ اَنْفُسِكُمْ اَزْوَاجًا لِّتَسْكُنُوْٓا اِلَيْهَا وَجَعَلَ بَيْنَكُمْ مَّوَدَّةً وَّرَحْمَةًۗ اِنَّ فِيْ ذٰلِكَ لَاٰيٰتٍ لِّقَوْمٍ يَّتَفَكَّرُوْنَ',
   )
 
+  const invitePhoto = computed(
+    () =>
+      (wedding.value?.image_bg1 as string) ||
+      (wedding.value?.image_cover as string) ||
+      null,
+  )
+
+  const spousePhoto = computed(
+    () =>
+      (wedding.value?.image_spouse as string) ||
+      invitePhoto.value,
+  )
+
   return {
     slug,
     guestCode,
@@ -165,6 +211,8 @@ export function useWedding() {
     sendWish,
     groom,
     bride,
+    invitePhoto,
+    spousePhoto,
     coupleNickname,
     quoteText,
     quoteVerse,

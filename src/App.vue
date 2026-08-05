@@ -10,7 +10,7 @@ import BottomNav from './components/sections/BottomNav.vue'
 const isOpen = ref(false)
 const isLocked = ref(true)
 const contentVisible = ref(false)
-const { wedding, coupleNickname, quoteText, quoteVerse } = useWedding()
+const { coupleNickname, quoteText, quoteVerse, invitePhoto } = useWedding()
 const { preloadCover, preloadInviteBody } = usePreloadAssets()
 
 onMounted(async () => {
@@ -36,7 +36,7 @@ function onSplashLeave() {
 }
 
 const leftBackgroundStyle = computed(() => {
-  const img = wedding.value?.image_bg1 || wedding.value?.image_cover || ''
+  const img = invitePhoto.value || ''
   return img ? { backgroundImage: `url(${img})` } : {}
 })
 </script>
