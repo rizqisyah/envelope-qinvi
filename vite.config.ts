@@ -10,12 +10,12 @@ export default defineConfig(({ mode }) => {
    * machine, so every request came back 502. Set VITE_API_PROXY_TARGET to override.
    */
   const target = env.VITE_API_PROXY_TARGET || 'https://api.qinvi.id'
+  const isProd = mode === 'production'
 
   return {
     plugins: [vue()],
-    // Absolute, not './': slug routes like /demo-envelop are rewritten to index.html,
-    // and a relative base would resolve assets against the slug path instead of the root.
-    base: '/',
+    // Production build serves static files under /TemaEnvelop/ asset subpath on VPS
+    base: isProd ? '/TemaEnvelop/' : '/',
     server: {
       port: 5174,
       proxy: {
