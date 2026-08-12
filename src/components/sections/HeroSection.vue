@@ -9,16 +9,15 @@ import couplePlate from '../../assets/footer/parts/21_2594-208_img-8300.webp' //
 import ornateFrame from '../../assets/hero/parts/00_2587-110_group-234.webp' // z14
 
 const { el, shown } = useReveal(0.15)
-const { invitePhoto } = useWedding()
+const { invitePhoto, groom, bride } = useWedding()
 
-/*
- * z13 is the couple's PHOTOGRAPH, not artwork -- the same node the footer band draws
- * (2594:208, deduped into footer/). It has to come from the API, or a real couple's
- * invitation opens on the design's stock portrait. The sliced plate stays as the
- * unconfigured fallback so the render still matches; `object-fit: cover` is what lets a
- * photo of any aspect fill the frame's 342x342 aperture without stretching.
- */
 const couple = computed(() => invitePhoto.value || couplePlate)
+const groomName = computed(
+  () => (groom.value as any)?.nickname || (groom.value as any)?.name?.trim()?.split(' ')[0] || 'The Bride &',
+)
+const brideName = computed(
+  () => (bride.value as any)?.nickname || (bride.value as any)?.name?.trim()?.split(' ')[0] || 'The Groom',
+)
 </script>
 
 <template>
@@ -33,8 +32,8 @@ const couple = computed(() => invitePhoto.value || couplePlate)
     -->
     <img :src="ornateFrame" alt="" width="375" height="686" class="hero__frame" />
     <h2 id="hero-heading" class="hero__title">
-      <span class="hero__line">The Bride &amp;</span>
-      <span class="hero__line hero__line--2">The Groom</span>
+      <span class="hero__line">{{ groomName }} &amp;</span>
+      <span class="hero__line hero__line--2">{{ brideName }}</span>
     </h2>
   </section>
 </template>
@@ -105,12 +104,13 @@ const couple = computed(() => invitePhoto.value || couplePlate)
 }
 
 .hero__couple {
-  top: calc(270 * var(--px));
+  top: calc(205 * var(--px));
   left: calc(17 * var(--px));
   width: calc(342 * var(--px));
-  height: calc(342 * var(--px));
+  height: calc(410 * var(--px));
   object-fit: cover;
-  transform: translateY(calc(34 * var(--px))) scale(1.04);
+  object-position: center;
+  transform: translateY(calc(20 * var(--px))) scale(1.04);
   transition:
     opacity 1500ms ease-out 900ms,
     transform 1900ms cubic-bezier(0.16, 1, 0.3, 1) 900ms;
