@@ -57,7 +57,7 @@ function onLayerError(e: Event) {
  * floating on the paper — same treatment as the bride's.
  */
 const behind = computed<Layer[]>(() => [
-  { src: plate.value, x: 8, y: 147, w: 360, h: 409, kind: 'plate', in: 260 },
+  { src: plate.value, x: 8, y: 120, w: 360, h: 450, kind: 'plate', in: 260 },
   { src: innerFrame, x: 45, y: 146, w: 285, h: 410, kind: 'plate', in: 0 },
   { src: paperFrame, x: 0, y: 0, w: 375, h: 796, kind: 'paper', in: 0 },
   { src: leaf, x: 26, y: 666, w: 86, h: 95, kind: 'plate', in: 760 },
@@ -158,6 +158,7 @@ const parents = computed(
    * frame's aperture instead of squashing.
    */
   object-fit: cover;
+  object-position: center;
 }
 
 /*

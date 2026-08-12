@@ -51,7 +51,7 @@ function onLayerError(e: Event) {
 // `in` is entrance order, not z-order: the frame lands first and the photo plate
 // fills its aperture after, so the plate never reads as a bare floating rectangle.
 const behind = computed<Layer[]>(() => [
-  { src: plate.value, x: 8, y: 147, w: 360, h: 409, kind: 'plate', in: 260 },
+  { src: plate.value, x: 8, y: 120, w: 360, h: 450, kind: 'plate', in: 260 },
   { src: innerFrame, x: 23, y: 133, w: 341, h: 435, kind: 'plate', in: 0 },
   { src: paperFrame, x: 0, y: 0, w: 375, h: 796, kind: 'paper', in: 0 },
   /*
@@ -167,6 +167,7 @@ const parents = computed(
    * frame's aperture instead of squashing.
    */
   object-fit: cover;
+  object-position: center;
 }
 
 /*
