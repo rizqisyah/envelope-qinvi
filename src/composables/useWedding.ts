@@ -86,6 +86,13 @@ export function useWedding() {
     state.value.error = null
     try {
       const data = await getHome(slug.value, guestCode.value)
+      if (data?.wedding && typeof data.wedding.theme_override === 'string') {
+        try {
+          data.wedding.theme_override = JSON.parse(data.wedding.theme_override)
+        } catch (e) {
+          console.error('Failed to parse theme_override string:', e)
+        }
+      }
       state.value.data = data
       if (data?.theme || data?.wedding) {
         applyTheme(data.theme, data.wedding)
@@ -111,6 +118,18 @@ export function useWedding() {
   const wedding = computed(() => state.value.data?.wedding ?? null)
   const theme = computed(() => state.value.data?.theme ?? null)
   const guest = computed(() => state.value.data?.guest ?? null)
+
+  const themeOverride = computed(() => {
+    const raw = wedding.value?.theme_override
+    if (!raw) return {}
+    if (typeof raw === 'object') return raw
+    try {
+      return JSON.parse(raw)
+    } catch {
+      return {}
+    }
+  })
+
   /*
    * getHome nests every list under `data.content` -- these were read straight off `data`,
    * so all five were permanently empty. No pixel diff could catch it: an empty list falls
@@ -170,30 +189,30 @@ export function useWedding() {
 
   const quoteText = computed(
     () =>
-      wedding.value?.theme_override?.words?.quote_text ||
-      wedding.value?.theme_override?.quote?.text ||
-      wedding.value?.theme_override?.quote_text ||
+      themeOverride.value?.words?.quote_text ||
+      themeOverride.value?.quote?.text ||
+      themeOverride.value?.quote_text ||
       'Di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri agar kamu merasa tenteram kepadanya. Dia menjadikan di antaramu rasa cinta dan kasih sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda kebesaran Allah bagi kaum yang berpikir.',
   )
   const quoteVerse = computed(
     () =>
-      wedding.value?.theme_override?.words?.quote_verse ||
-      wedding.value?.theme_override?.quote?.verse ||
-      wedding.value?.theme_override?.quote_verse ||
+      themeOverride.value?.words?.quote_verse ||
+      themeOverride.value?.quote?.verse ||
+      themeOverride.value?.quote_verse ||
       'QS Ar-Rum 21',
   )
   const quoteArabic = computed(
     () =>
-      wedding.value?.theme_override?.words?.quote_arabic ||
-      wedding.value?.theme_override?.quote?.arabic ||
-      wedding.value?.theme_override?.quote_arabic ||
+      themeOverride.value?.words?.quote_arabic ||
+      themeOverride.value?.quote?.arabic ||
+      themeOverride.value?.quote_arabic ||
       'وَمِنْ اٰيٰتِهٖٓ اَنْ خَلَقَ لَكُمْ مِّنْ اَنْفُسِكُمْ اَزْوَاجًا لِّتَسْكُنُوْٓا اِلَيْهَا وَجَعَلَ بَيْنَكُمْ مَّوَدَّةً وَّرَحْمَةًۗ اِنَّ فِيْ ذٰلِكَ لَاٰيٰتٍ لِّقَوْمٍ يَّتَفَكَّرُوْنَ',
   )
 
   const invitePhoto = computed(
     () =>
-      (wedding.value?.theme_override?.images?.foto_mempelai_setelah_buka as string) ||
-      (wedding.value?.theme_override?.backgrounds?.cover as string) ||
+      (themeOverride.value?.images?.foto_mempelai_setelah_buka as string) ||
+      (themeOverride.value?.backgrounds?.cover as string) ||
       (wedding.value?.image_cover as string) ||
       (wedding.value?.image_bg1 as string) ||
       null,
@@ -202,7 +221,7 @@ export function useWedding() {
   const spousePhoto = computed(
     () =>
       (wedding.value?.image_spouse as string) ||
-      (wedding.value?.theme_override?.images?.foto_mempelai_setelah_buka as string) ||
+      (themeOverride.value?.images?.foto_mempelai_setelah_buka as string) ||
       invitePhoto.value,
   )
 
@@ -213,6 +232,7 @@ export function useWedding() {
     error: computed(() => state.value.error),
     wedding,
     theme,
+    themeOverride,
     guest,
     pengantin,
     acara,

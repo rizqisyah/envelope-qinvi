@@ -10,11 +10,11 @@ import lily from '../../assets/opening/parts/03_2588-124_lily.webp'
 defineProps<{ guestName: string }>()
 defineEmits<{ open: [] }>()
 
-const { coupleNickname, wedding } = useWedding()
+const { coupleNickname, wedding, themeOverride } = useWedding()
 
 const coverBackgroundStyle = computed(() => {
   const bg =
-    (wedding.value?.theme_override?.backgrounds?.cover as string) ||
+    (themeOverride.value?.backgrounds?.cover as string) ||
     (wedding.value?.image_cover as string) ||
     paperBg
   return { backgroundImage: `url(${bg})` }
