@@ -9,15 +9,9 @@ import couplePlate from '../../assets/footer/parts/21_2594-208_img-8300.webp' //
 import ornateFrame from '../../assets/hero/parts/00_2587-110_group-234.webp' // z14
 
 const { el, shown } = useReveal(0.15)
-const { invitePhoto, groom, bride } = useWedding()
+const { invitePhoto } = useWedding()
 
 const couple = computed(() => invitePhoto.value || couplePlate)
-const groomName = computed(
-  () => (groom.value as any)?.nickname || (groom.value as any)?.name?.trim()?.split(' ')[0] || 'The Bride &',
-)
-const brideName = computed(
-  () => (bride.value as any)?.nickname || (bride.value as any)?.name?.trim()?.split(' ')[0] || 'The Groom',
-)
 </script>
 
 <template>
@@ -32,8 +26,8 @@ const brideName = computed(
     -->
     <img :src="ornateFrame" alt="" width="375" height="686" class="hero__frame" />
     <h2 id="hero-heading" class="hero__title">
-      <span class="hero__line">{{ groomName }} &amp;</span>
-      <span class="hero__line hero__line--2">{{ brideName }}</span>
+      <span class="hero__line">The Bride &amp;</span>
+      <span class="hero__line hero__line--2">The Groom</span>
     </h2>
   </section>
 </template>
