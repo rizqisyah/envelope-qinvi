@@ -170,28 +170,39 @@ export function useWedding() {
 
   const quoteText = computed(
     () =>
+      wedding.value?.theme_override?.words?.quote_text ||
       wedding.value?.theme_override?.quote?.text ||
-      // Matches the copy set on the card in Frame 242, so an unconfigured
-      // render lines up with the design.
+      wedding.value?.theme_override?.quote_text ||
       'Di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri agar kamu merasa tenteram kepadanya. Dia menjadikan di antaramu rasa cinta dan kasih sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda kebesaran Allah bagi kaum yang berpikir.',
   )
-  const quoteVerse = computed(() => wedding.value?.theme_override?.quote?.verse || 'QS Ar-Rum 21')
+  const quoteVerse = computed(
+    () =>
+      wedding.value?.theme_override?.words?.quote_verse ||
+      wedding.value?.theme_override?.quote?.verse ||
+      wedding.value?.theme_override?.quote_verse ||
+      'QS Ar-Rum 21',
+  )
   const quoteArabic = computed(
     () =>
+      wedding.value?.theme_override?.words?.quote_arabic ||
       wedding.value?.theme_override?.quote?.arabic ||
+      wedding.value?.theme_override?.quote_arabic ||
       'وَمِنْ اٰيٰتِهٖٓ اَنْ خَلَقَ لَكُمْ مِّنْ اَنْفُسِكُمْ اَزْوَاجًا لِّتَسْكُنُوْٓا اِلَيْهَا وَجَعَلَ بَيْنَكُمْ مَّوَدَّةً وَّرَحْمَةًۗ اِنَّ فِيْ ذٰلِكَ لَاٰيٰتٍ لِّقَوْمٍ يَّتَفَكَّرُوْنَ',
   )
 
   const invitePhoto = computed(
     () =>
-      (wedding.value?.image_bg1 as string) ||
+      (wedding.value?.theme_override?.images?.foto_mempelai_setelah_buka as string) ||
+      (wedding.value?.theme_override?.backgrounds?.cover as string) ||
       (wedding.value?.image_cover as string) ||
+      (wedding.value?.image_bg1 as string) ||
       null,
   )
 
   const spousePhoto = computed(
     () =>
       (wedding.value?.image_spouse as string) ||
+      (wedding.value?.theme_override?.images?.foto_mempelai_setelah_buka as string) ||
       invitePhoto.value,
   )
 

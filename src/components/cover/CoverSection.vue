@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useWedding } from '../../composables/useWedding'
 
 import paperBg from '../../assets/opening/parts/00_2548-133_paper-bg.webp'
@@ -9,12 +10,20 @@ import lily from '../../assets/opening/parts/03_2588-124_lily.webp'
 defineProps<{ guestName: string }>()
 defineEmits<{ open: [] }>()
 
-const { coupleNickname } = useWedding()
+const { coupleNickname, wedding } = useWedding()
+
+const coverBackgroundStyle = computed(() => {
+  const bg =
+    (wedding.value?.theme_override?.backgrounds?.cover as string) ||
+    (wedding.value?.image_cover as string) ||
+    paperBg
+  return { backgroundImage: `url(${bg})` }
+})
 </script>
 
 <template>
   <!-- Figma Frame 241 (2548:110), 375 x 725. Coords below are frame-local design px. -->
-  <section class="opening" :style="{ backgroundImage: `url(${paperBg})` }">
+  <section class="opening" :style="coverBackgroundStyle">
     <div class="opening__frame">
       <p class="opening__eyebrow">THE WEDDING OF</p>
       <h1 class="opening__couple">{{ coupleNickname }}</h1>

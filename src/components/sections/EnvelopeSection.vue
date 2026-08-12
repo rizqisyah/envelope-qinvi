@@ -91,7 +91,7 @@ const { quoteVerse, quoteText, quoteArabic } = useWedding()
       four lines pushes it down instead of running into it.
     -->
     <div class="envelope__block">
-      <p class="envelope__arabic envelope__quote">{{ quoteArabic }}</p>
+      <p v-if="quoteArabic && quoteArabic.trim()" class="envelope__arabic envelope__quote">{{ quoteArabic }}</p>
       <blockquote :ref="fitQuote" class="envelope__quote envelope__quote-id">&ldquo;{{ quoteText }}&rdquo;</blockquote>
     </div>
 
