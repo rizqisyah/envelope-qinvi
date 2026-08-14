@@ -9,7 +9,7 @@ import couplePlate from '../../assets/footer/parts/21_2594-208_img-8300.webp' //
 import ornateFrame from '../../assets/hero/parts/00_2587-110_group-234.webp' // z14
 
 const { el, shown } = useReveal(0.15)
-const { invitePhoto } = useWedding()
+const { invitePhoto, fotoMempelaiTransform } = useWedding()
 
 const couple = computed(() => invitePhoto.value || couplePlate)
 </script>
@@ -17,7 +17,20 @@ const couple = computed(() => invitePhoto.value || couplePlate)
 <template>
   <section :ref="el" class="hero" :class="{ 'is-in': shown }" aria-labelledby="hero-heading">
     <img :src="forest" alt="" width="274" height="457" class="hero__forest" />
-    <img :src="couple" alt="Foto mempelai" width="342" height="342" class="hero__couple" />
+    <img
+      :src="couple"
+      alt="Foto mempelai"
+      width="342"
+      height="342"
+      class="hero__couple"
+      :style="{
+        objectPosition: `${fotoMempelaiTransform.x}% ${fotoMempelaiTransform.y}%`,
+        transformOrigin: `${fotoMempelaiTransform.x}% ${fotoMempelaiTransform.y}%`,
+        transform: shown
+          ? `translateY(0) scale(${1.04 * fotoMempelaiTransform.scale})`
+          : `translateY(calc(20 * var(--px))) scale(${1.04 * fotoMempelaiTransform.scale})`
+      }"
+    />
     <!--
       Group 234 is paper backdrop + ornate frame flattened into one layer with a
       transparent aperture, and it paints ABOVE the two photos — that hole is what

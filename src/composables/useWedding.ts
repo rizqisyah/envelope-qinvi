@@ -130,27 +130,13 @@ export function useWedding() {
     }
   })
 
-  /*
-   * getHome nests every list under `data.content` -- these were read straight off `data`,
-   * so all five were permanently empty. No pixel diff could catch it: an empty list falls
-   * back to the design's own copy and scores perfectly. Same class of bug as the `ucapan`
-   * / `wishes` guess below. Read `content` first, then the flat key, so a payload of
-   * either shape works.
-   */
   const content = computed(() => state.value.data?.content ?? state.value.data ?? null)
   const pengantin = computed(() => content.value?.pengantin ?? [])
   const acara = computed(() => content.value?.acara ?? [])
   const gallery = computed(() => content.value?.gallery ?? [])
-  // The API calls the account list `rekening`.
   const gift = computed(() => content.value?.rekening ?? content.value?.gift ?? [])
   const wishes = computed(() => content.value?.ucapan ?? content.value?.wishes ?? [])
 
-  /**
-   * Post a wish and get it into the list without a refetch. The API may answer with the
-   * refreshed list, with just the created row, or with neither, so all three are handled
-   * — otherwise a guest submits and sees nothing happen.
-   */
-  // Writes `ucapan` back where `content` reads it from, or the new row is invisible.
   function putWishes(list: any[]) {
     const data = state.value.data
     state.value.data = data.content
@@ -225,6 +211,31 @@ export function useWedding() {
       invitePhoto.value,
   )
 
+  const fotoMempelaiTransform = computed(() => {
+    const t = (themeOverride.value as any)?.foto_mempelai_transform
+    return {
+      scale: typeof t?.scale === 'number' ? t.scale : 1,
+      x: typeof t?.x === 'number' ? t.x : 50,
+      y: typeof t?.y === 'number' ? t.y : 50,
+    }
+  })
+
+  const spousePhotoTransform = computed(() => {
+    const t = (themeOverride.value as any)?.spouse_photo_transform
+    return {
+      scale: typeof t?.scale === 'number' ? t.scale : 1,
+      x: typeof t?.x === 'number' ? t.x : 50,
+      y: typeof t?.y === 'number' ? t.y : 50,
+    }
+  })
+
+  const activeSpousePhotoTransform = computed(() => {
+    if (wedding.value?.image_spouse) {
+      return spousePhotoTransform.value
+    }
+    return fotoMempelaiTransform.value
+  })
+
   return {
     slug,
     guestCode,
@@ -244,6 +255,9 @@ export function useWedding() {
     bride,
     invitePhoto,
     spousePhoto,
+    fotoMempelaiTransform,
+    spousePhotoTransform,
+    activeSpousePhotoTransform,
     coupleNickname,
     quoteText,
     quoteVerse,

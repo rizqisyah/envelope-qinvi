@@ -119,7 +119,7 @@ const top: Layer[] = [
 ]
 
 const { el, shown } = useReveal()
-const { wedding, groom, bride, spousePhoto } = useWedding()
+const { wedding, groom, bride, spousePhoto, activeSpousePhotoTransform } = useWedding()
 
 /*
  * The design's own string is "Antonio + Aliyah", where the bride is "Ayu Shella Pratni
@@ -167,7 +167,16 @@ const waUrl = computed(() => (wedding.value?.vendor_whatsapp as string) || '')
     />
 
     <!-- z105: the couple photograph, inside the envelope the layers above and below form. -->
-    <img :src="couplePhoto" alt="Foto mempelai" class="footer__photo" />
+    <img
+      :src="couplePhoto"
+      alt="Foto mempelai"
+      class="footer__photo"
+      :style="{
+        objectPosition: `${activeSpousePhotoTransform.x}% ${activeSpousePhotoTransform.y}%`,
+        transformOrigin: `${activeSpousePhotoTransform.x}% ${activeSpousePhotoTransform.y}%`,
+        transform: `scale(${activeSpousePhotoTransform.scale})`
+      }"
+    />
 
     <img
       v-for="(l, i) in over"
