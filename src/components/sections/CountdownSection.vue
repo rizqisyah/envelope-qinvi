@@ -97,9 +97,39 @@ const CELLS = [
 const CELL_W = 74
 
 const { el, shown } = useReveal()
-const { acara } = useWedding()
+const { acara, themeOverride, wedding } = useWedding()
+
+function parseCustomDate(str: string): Date {
+  const m = str.match(/(\d{1,2})\s*[/|-]\s*(\d{1,2})\s*[/|-]\s*(\d{4})(?:\s*[,|-]?\s*(\d{1,2})\s*[.:]\s*(\d{1,2}))?/)
+  if (m) {
+    const [_, d, mo, y, h, mi] = m
+    return new Date(
+      Number(y),
+      Number(mo) - 1,
+      Number(d),
+      h ? Number(h) : 0,
+      mi ? Number(mi) : 0
+    )
+  }
+  return new Date(str)
+}
 
 const target = computed(() => {
+  const w = wedding.value as any
+  const t = themeOverride.value as any
+  
+  const overrideDate = 
+    t?.TanggalCountdown || 
+    t?.words?.TanggalCountdown || 
+    t?.countdown_date || 
+    t?.words?.countdown_date ||
+    w?.TanggalCountdown ||
+    w?.countdown_date
+
+  if (overrideDate) {
+    const d = parseCustomDate(String(overrideDate))
+    if (!Number.isNaN(d.getTime())) return d
+  }
   const e = (acara.value as any[])[0]
   return e ? parseEventStart(e.event_date, e.event_time) : null
 })

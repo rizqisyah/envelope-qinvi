@@ -171,11 +171,6 @@ const waUrl = computed(() => (wedding.value?.vendor_whatsapp as string) || '')
       :src="couplePhoto"
       alt="Foto mempelai"
       class="footer__photo"
-      :style="{
-        objectPosition: `${activeSpousePhotoTransform.x}% ${activeSpousePhotoTransform.y}%`,
-        transformOrigin: `${activeSpousePhotoTransform.x}% ${activeSpousePhotoTransform.y}%`,
-        transform: `scale(${activeSpousePhotoTransform.scale})`
-      }"
     />
 
     <img
@@ -268,11 +263,12 @@ const waUrl = computed(() => (wedding.value?.vendor_whatsapp as string) || '')
 }
 
 /* 2594:208 — 342x342 at (17, 8054). A live photo of any aspect fills the same box. */
+/* Adjusted width and left to match envInner (274px wide at x: 56) per user request */
 .footer__photo {
-  top: calc(354 * var(--px));
-  left: calc(17 * var(--px));
-  width: calc(342 * var(--px));
-  height: calc(342 * var(--px));
+  top: calc(321 * var(--px));
+  left: calc(56 * var(--px));
+  width: calc(274 * var(--px));
+  height: calc(412 * var(--px));
   object-fit: cover;
 }
 
