@@ -119,7 +119,7 @@ const top: Layer[] = [
 ]
 
 const { el, shown } = useReveal()
-const { wedding, groom, bride, spousePhoto, activeSpousePhotoTransform } = useWedding()
+const { wedding, groom, bride, spousePhoto } = useWedding()
 
 /*
  * The design's own string is "Antonio + Aliyah", where the bride is "Ayu Shella Pratni
