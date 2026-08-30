@@ -13,18 +13,28 @@
   --ink: #000000;
   --muted: #ababab;
   --olive: #3b4030;
-  --rose-muted: #8f7373; /* Frame 241 guest-name block */
-  --paper: #efe7dc; /* behind the paper-texture slice */
+  --rose-muted: #8f7373;
+  /* Frame 241 guest-name block */
+  --paper: #efe7dc;
+  /* behind the paper-texture slice */
 
   /* fonts */
-  --font-script: "Pinyon Script", cursive; /* display names, section titles */
-  --font-serif: "EB Garamond", serif; /* body copy */
-  --font-serif-alt: "Ovo", serif; /* small caption serif */
-  --font-serif-bold: "Cormorant Garamond", serif; /* emphasised serif */
-  --font-caps: "Playfair Display SC", serif; /* small-caps headings */
-  --font-hand: "Meow Script", cursive; /* Frame 242 akad/resepsi date lines */
-  --font-sans: "Jost", system-ui, sans-serif; /* UI labels */
-  --font-arabic: "Noto Sans", system-ui, sans-serif; /* the wish list's sans block */
+  --font-script: "Pinyon Script", cursive;
+  /* display names, section titles */
+  --font-serif: "EB Garamond", serif;
+  /* body copy */
+  --font-serif-alt: "Ovo", serif;
+  /* small caption serif */
+  --font-serif-bold: "Cormorant Garamond", serif;
+  /* emphasised serif */
+  --font-caps: "Playfair Display SC", serif;
+  /* small-caps headings */
+  --font-hand: "Meow Script", cursive;
+  /* Frame 242 akad/resepsi date lines */
+  --font-sans: "Jost", system-ui, sans-serif;
+  /* UI labels */
+  --font-arabic: "Noto Sans", system-ui, sans-serif;
+  /* the wish list's sans block */
   /*
    * The Arabic verse needs a face that actually HAS Arabic glyphs. Noto Sans does not, so
    * the verse was falling through to whatever Arabic face the OS happened to ship — which
@@ -32,11 +42,16 @@
    * translation under it on one. Pinned so the layout is the same everywhere.
    */
   --font-quran: "Noto Naskh Arabic", "Noto Sans", serif;
-  --font-eyebrow: "Reddit Sans", system-ui, sans-serif; /* Frame 241 "THE WEDDING OF" */
-  --font-serif-soft: "Platypi", serif; /* Frame 241 "Dear Mr/ Mrs/ Ms" */
-  --font-guest: "Poltawski Nowy", serif; /* Frame 241 guest name */
-  --font-quote: "Playfair", serif; /* Frame 242 quote card body */
-  --font-thanks: "Pochaevsk", serif; /* Frame 242 footer thank-you paragraphs */
+  --font-eyebrow: "Reddit Sans", system-ui, sans-serif;
+  /* Frame 241 "THE WEDDING OF" */
+  --font-serif-soft: "Platypi", serif;
+  /* Frame 241 "Dear Mr/ Mrs/ Ms" */
+  --font-guest: "Poltawski Nowy", serif;
+  /* Frame 241 guest name */
+  --font-quote: "Playfair", serif;
+  /* Frame 242 quote card body */
+  --font-thanks: "Pochaevsk", serif;
+  /* Frame 242 footer thank-you paragraphs */
 
   /* design frame reference (Figma Frame 242) */
   --frame-w: 375;
