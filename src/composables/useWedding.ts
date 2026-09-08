@@ -77,9 +77,34 @@ function applyTheme(themeData: any, weddingData: any) {
  */
 let inflight: Promise<void> | null = null
 
+function getGuestCode(): string {
+  if (typeof window === 'undefined') return ''
+  const searchParams = new URLSearchParams(window.location.search)
+  return (
+    searchParams.get('to') ||
+    searchParams.get('guest') ||
+    searchParams.get('c') ||
+    searchParams.get('code') ||
+    ''
+  ).trim()
+}
+
+function isSystemGuestCode(val: string): boolean {
+  if (!val) return false
+  return /^[A-Za-z]{2,4}\d{2,6}$/.test(val.trim())
+}
+
+function formatDirectName(val: string): string {
+  try {
+    return decodeURIComponent(val.replace(/\+/g, ' ')).trim()
+  } catch {
+    return val.replace(/\+/g, ' ').trim()
+  }
+}
+
 export function useWedding() {
   const slug = ref(resolveSlug())
-  const guestCode = ref(new URLSearchParams(window.location.search).get('to') || '')
+  const guestCode = ref(getGuestCode())
 
   async function fetchWeddingData() {
     state.value.loading = true
@@ -236,9 +261,24 @@ export function useWedding() {
     return fotoMempelaiTransform.value
   })
 
+  const guestName = computed(() => {
+    if (guest.value?.guest_name) return guest.value.guest_name
+    if (guest.value?.name) return guest.value.name
+
+    const rawParam = guestCode.value.trim()
+    if (!rawParam) return 'Nama Tamu'
+
+    if (isSystemGuestCode(rawParam)) {
+      return 'Nama Tamu'
+    }
+
+    return formatDirectName(rawParam) || 'Nama Tamu'
+  })
+
   return {
     slug,
     guestCode,
+    guestName,
     loading: computed(() => state.value.loading),
     error: computed(() => state.value.error),
     wedding,

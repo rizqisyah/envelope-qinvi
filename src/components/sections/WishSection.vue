@@ -26,7 +26,7 @@
  *   2594:432  (0, 6774)   123 left and 87 above its declared spot
  *   2594:433  (348, 6858) x clip-proven, y as declared
  */
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useReveal } from '../../composables/useReveal'
 import { useWedding } from '../../composables/useWedding'
 import { relativeTime } from '../../lib/format'
@@ -75,7 +75,7 @@ const FALLBACK: Wish[] = [
 ]
 
 const { el, shown } = useReveal()
-const { wishes, sendWish, guest } = useWedding()
+const { wishes, sendWish, guest, guestName } = useWedding()
 
 const list = computed<Wish[]>(() => {
   const live = (wishes.value as Wish[]).filter((w) => w.guest_name || w.message)
@@ -84,7 +84,21 @@ const list = computed<Wish[]>(() => {
 
 const stamp = (w: Wish) => w.time ?? relativeTime(w.created_at)
 
-const name = ref(String((guest.value as any)?.name ?? ''))
+const name = ref('')
+
+watch(
+  [guest, guestName],
+  () => {
+    if (!name.value) {
+      const resolved =
+        guest.value?.guest_name ||
+        guest.value?.name ||
+        (guestName.value !== 'Nama Tamu' ? guestName.value : '')
+      if (resolved) name.value = resolved
+    }
+  },
+  { immediate: true },
+)
 const message = ref('')
 const submitting = ref(false)
 const error = ref('')

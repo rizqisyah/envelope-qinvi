@@ -40,7 +40,7 @@ import callaBud from '../../assets/rsvp/parts/05_2594-315_vdf-6.webp'
 import valley from '../../assets/rsvp/parts/06_2594-316.webp'
 
 const { el, shown } = useReveal()
-const { slug, guestCode, guest } = useWedding()
+const { slug, guestCode, guest, guestName } = useWedding()
 
 const name = ref('')
 const phone = ref('')
@@ -75,10 +75,13 @@ onMounted(() => {
  * local receipt, and the API is the only thing that knows.
  */
 watch(
-  guest,
-  (g: any) => {
+  [guest, guestName],
+  ([g, gName]) => {
     if (g?.has_rsvp) sent.value = true
-    const known = g?.name ?? g?.guest_name
+    const known =
+      g?.guest_name ??
+      g?.name ??
+      (gName !== 'Nama Tamu' ? gName : '')
     if (known && !name.value) name.value = String(known)
   },
   { immediate: true },

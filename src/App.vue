@@ -10,17 +10,12 @@ import BottomNav from './components/sections/BottomNav.vue'
 const isOpen = ref(false)
 const isLocked = ref(true)
 const contentVisible = ref(false)
-const { coupleNickname, quoteText, quoteVerse, invitePhoto } = useWedding()
+const { coupleNickname, quoteText, quoteVerse, invitePhoto, guestName } = useWedding()
 const { preloadCover, preloadInviteBody } = usePreloadAssets()
 
 onMounted(async () => {
   await preloadCover()
   preloadInviteBody()
-})
-
-const guestName = computed(() => {
-  const urlParam = new URLSearchParams(location.search).get('to')
-  return urlParam || 'Nama Tamu'
 })
 
 async function openInvitation() {
