@@ -101,7 +101,9 @@ const copyable = (a: Account) => !!a.account_number
 const copyLabel = (a: Account) => (a.address ? 'alamat' : 'nomor rekening')
 
 const copied = ref(-1)
+const toastMessage = ref('')
 let clear = 0
+let toastTimer = 0
 
 async function copy(a: Account, i: number) {
   const text = a.account_number ?? ''
@@ -126,8 +128,17 @@ async function copy(a: Account, i: number) {
   copied.value = i
   window.clearTimeout(clear)
   clear = window.setTimeout(() => (copied.value = -1), 1800)
+
+  toastMessage.value = a.address ? 'Alamat berhasil disalin!' : 'Nomor rekening berhasil disalin!'
+  window.clearTimeout(toastTimer)
+  toastTimer = window.setTimeout(() => {
+    toastMessage.value = ''
+  }, 2200)
 }
-onUnmounted(() => window.clearTimeout(clear))
+onUnmounted(() => {
+  window.clearTimeout(clear)
+  window.clearTimeout(toastTimer)
+})
 
 const cardTop = (i: number) => CARD_TOP + i * PITCH
 const px = (n: number) => `calc(${n} * var(--px))`
@@ -186,6 +197,21 @@ const px = (n: number) => `calc(${n} * var(--px))`
     <p class="gift__sr" aria-live="polite">
       {{ copied >= 0 ? `${copyLabel(accounts[copied])} disalin ke papan klip` : '' }}
     </p>
+
+    <Teleport to="body">
+      <Transition name="gift-toast">
+        <div v-if="toastMessage" class="gift__toast" role="status" aria-live="polite">
+          <svg class="gift__toast-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              fill-rule="evenodd"
+              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span>{{ toastMessage }}</span>
+        </div>
+      </Transition>
+    </Teleport>
   </section>
 </template>
 
@@ -407,6 +433,63 @@ const px = (n: number) => `calc(${n} * var(--px))`
 
   .gift__copy img {
     transition: none;
+  }
+}
+
+.gift__toast {
+  position: fixed;
+  bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 9999px;
+  background: rgba(45, 45, 30, 0.94);
+  color: #ffffff;
+  font-family: var(--font-arabic, sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 99999;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .gift__toast {
+    left: auto;
+    right: calc(var(--card-max, 430px) / 2);
+    transform: translateX(50%);
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.gift__toast-icon {
+  width: 16px;
+  height: 16px;
+  color: #a4be7b;
+  flex-shrink: 0;
+}
+
+.gift-toast-enter-active,
+.gift-toast-leave-active {
+  transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gift-toast-enter-from,
+.gift-toast-leave-to {
+  opacity: 0;
+  transform: translate(-50%, 12px) scale(0.95);
+}
+
+@media (min-width: 768px) {
+  .gift-toast-enter-from,
+  .gift-toast-leave-to {
+    transform: translate(50%, 12px) scale(0.95);
   }
 }
 </style>

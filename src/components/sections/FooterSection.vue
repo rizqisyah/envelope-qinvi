@@ -119,18 +119,19 @@ const top: Layer[] = [
 ]
 
 const { el, shown } = useReveal()
-const { wedding, groom, bride, spousePhoto } = useWedding()
+const { wedding, groom, bride, spousePhoto, isGroomFirst } = useWedding()
 
 /*
- * The design's own string is "Antonio + Aliyah", where the bride is "Ayu Shella Pratni
- * (Allysa)" -- an inconsistency in the design, recorded in SLICING.md. So the live line
- * and the reference line differ by construction and the text rows never diff clean once
- * `pengantin` is populated. Live names win; the design's literal is the fallback.
+ * Live names win; the design's literal is the fallback.
+ * Respects isGroomFirst (order_groom_first) and uses '&' instead of '+'.
  */
 const coupleLine = computed(() => {
-  const g = (groom.value as any)?.name?.split(' ')[0]
-  const b = (bride.value as any)?.name?.split(' ')[0]
-  return g && b ? `${g} + ${b}` : 'Antonio + Aliyah'
+  const g = (groom.value as any)?.nickname?.trim() || (groom.value as any)?.name?.trim().split(' ')[0]
+  const b = (bride.value as any)?.nickname?.trim() || (bride.value as any)?.name?.trim().split(' ')[0]
+  if (g && b) {
+    return isGroomFirst.value ? `${g} & ${b}` : `${b} & ${g}`
+  }
+  return isGroomFirst.value ? 'Antonio & Allysa' : 'Allysa & Antonio'
 })
 
 /*

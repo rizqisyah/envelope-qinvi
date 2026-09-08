@@ -190,12 +190,19 @@ export function useWedding() {
   const groom = computed(() => pengantin.value.find((p: any) => p.type === 'groom') || null)
   const bride = computed(() => pengantin.value.find((p: any) => p.type === 'bride') || null)
 
+  const isGroomFirst = computed(() => {
+    if (!wedding.value) return true
+    return wedding.value.order_groom_first !== false
+  })
+
   const coupleNickname = computed(() => {
-    if (wedding.value?.title) return wedding.value.title
     if (groom.value?.name && bride.value?.name) {
-      return `${groom.value.name.split(' ')[0]} & ${bride.value.name.split(' ')[0]}`
+      const gName = (groom.value as any)?.nickname?.trim() || groom.value.name.trim().split(' ')[0]
+      const bName = (bride.value as any)?.nickname?.trim() || bride.value.name.trim().split(' ')[0]
+      return isGroomFirst.value ? `${gName} & ${bName}` : `${bName} & ${gName}`
     }
-    return 'Pengantin'
+    if (wedding.value?.title) return wedding.value.title
+    return isGroomFirst.value ? 'Antonio & Allysa' : 'Allysa & Antonio'
   })
 
   const quoteText = computed(
@@ -293,6 +300,7 @@ export function useWedding() {
     sendWish,
     groom,
     bride,
+    isGroomFirst,
     invitePhoto,
     spousePhoto,
     fotoMempelaiTransform,
