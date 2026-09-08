@@ -17,12 +17,17 @@
  *     layouts get the position each one actually needs, by media query -- see the style
  *     block, which explains why neither one works for both.
  */
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useWedding } from '../../composables/useWedding'
 
-const { wedding } = useWedding()
+const { wedding, gallery } = useWedding()
 
 const musicUrl = computed(() => (wedding.value?.music_url as string) || '')
+
+const hasGallery = computed(() => {
+  const arr = (gallery.value as any[]) || []
+  return arr.some((g) => !!(g && (g.image_url || g.url || g.src || (typeof g === 'string' && g))))
+})
 
 /** One entry per destination; the target is the band's own class, which it already sets. */
 const ITEMS = [
@@ -32,6 +37,10 @@ const ITEMS = [
   { key: 'gallery', target: '.gallery', label: 'Galeri' },
   { key: 'wish', target: '.wish', label: 'Ucapan' },
 ] as const
+
+const navItems = computed(() =>
+  ITEMS.filter((item) => item.key !== 'gallery' || hasGallery.value)
+)
 
 const active = ref<string>('hero')
 const audioEl = ref<HTMLAudioElement | null>(null)
@@ -73,16 +82,27 @@ onMounted(() => {
     (entries) => {
       for (const e of entries) {
         if (!e.isIntersecting) continue
-        const hit = ITEMS.find((i) => e.target.matches(i.target))
+        const hit = navItems.value.find((i) => e.target.matches(i.target))
         if (hit) active.value = hit.key
       }
     },
     { rootMargin: '-33% 0px -60% 0px' },
   )
-  for (const i of ITEMS) {
+  for (const i of navItems.value) {
     const el = document.querySelector(i.target)
     if (el) obs.observe(el)
   }
+})
+
+watch(navItems, (items) => {
+  if (!obs) return
+  obs.disconnect()
+  nextTick(() => {
+    for (const i of items) {
+      const el = document.querySelector(i.target)
+      if (el) obs?.observe(el)
+    }
+  })
 })
 
 onBeforeUnmount(() => {
@@ -94,7 +114,7 @@ onBeforeUnmount(() => {
 <template>
   <nav class="nav" aria-label="Navigasi undangan">
     <ul class="nav__list">
-      <li v-for="item in ITEMS" :key="item.key" class="nav__item">
+      <li v-for="item in navItems" :key="item.key" class="nav__item">
         <button
           class="nav__btn"
           :class="{ 'is-active': active === item.key }"

@@ -23,45 +23,38 @@ import { useReveal } from '../../composables/useReveal'
 import { useWedding } from '../../composables/useWedding'
 
 import plate from '../../assets/gallery/parts/01_2560-183_group-219.webp' // z65
-import stockCloseup from '../../assets/gallery/fallback/photo-1.webp'
-import stockFull from '../../assets/gallery/fallback/photo-2.webp'
 
 // Thumbnail slots, band-local. Every rect in the group has cornerRadius 29.
 const THUMB_XS = [43.49, 116.78, 190.07, 263.36]
 const THUMB = { y: 296.14, w: 68.82, h: 70.86 }
 
-/*
- * The design alternates two shots across its four thumbnail slots and shows the
- * full-length one in the main slot, so a two-photo fallback with `active` starting
- * at 1 reproduces the composition it was drawn with.
- */
-const STOCK = [
-  { src: stockCloseup, caption: '' },
-  { src: stockFull, caption: '' },
-]
-const STOCK_ACTIVE = 1
-
 const { el, shown } = useReveal()
 const { gallery } = useWedding()
 
 const photos = computed(() => {
-  const configured = (gallery.value as any[])
-    .map((g) => ({ src: g.image_url as string, caption: (g.caption as string) || '' }))
+  const configured = ((gallery.value as any[]) || [])
+    .map((g) => ({
+      src: (g?.image_url || g?.url || (typeof g === 'string' ? g : '')) as string,
+      caption: (g?.caption as string) || '',
+    }))
     .filter((p) => !!p.src)
-  return configured.length ? configured : STOCK
+  return configured
 })
 
-const active = ref(STOCK_ACTIVE)
-watch(photos, (list, was) => {
-  // Configured photos arriving replaces the stock pair, so the index restarts.
-  active.value = list === STOCK ? STOCK_ACTIVE : was === STOCK ? 0 : Math.min(active.value, list.length - 1)
+const hasGallery = computed(() => photos.value.length > 0)
+
+const active = ref(0)
+watch(photos, (list) => {
+  active.value = Math.min(active.value, Math.max(0, list.length - 1))
 })
 
-const current = computed(() => photos.value[active.value] ?? photos.value[0])
+const current = computed(() => photos.value[active.value] ?? photos.value[0] ?? null)
 
 // Fewer photos than slots repeats the set, which is what the design does.
 const thumbs = computed(() =>
-  THUMB_XS.map((x, i) => ({ x, index: i % photos.value.length, in: 900 + i * 150 })),
+  photos.value.length
+    ? THUMB_XS.map((x, i) => ({ x, index: i % photos.value.length, in: 900 + i * 150 }))
+    : []
 )
 
 function step(delta: number) {
@@ -119,7 +112,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section :ref="el" class="gallery" :class="{ 'is-in': shown }" aria-label="Galeri foto">
+  <section v-if="hasGallery" :ref="el" class="gallery" :class="{ 'is-in': shown }" aria-label="Galeri foto">
     <div class="gallery__stage">
       <img :src="plate" alt="" class="gallery__plate" />
 
