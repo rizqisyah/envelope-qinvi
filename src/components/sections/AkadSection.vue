@@ -22,7 +22,15 @@
  * Meanwhile 2594:323/324/325 are right-edge clipped, and the clip width *proves*
  * their x (69 = 375-306, 60 = 375-315), so those needed no solving at all.
  */
+import { computed } from 'vue'
+import { useWedding } from '../../composables/useWedding'
 import CeremonyBand, { type Layer } from './CeremonyBand.vue'
+
+const { gallery } = useWedding()
+const hasGallery = computed(() => {
+  const arr = (gallery.value as any[]) || []
+  return arr.some((g) => !!(g && (g.image_url || g.url || g.src || (typeof g === 'string' && g))))
+})
 
 import hops from '../../assets/akad/parts/g245_2594-323.webp'
 import envelope from '../../assets/akad/parts/g245_2594-318_envelope.webp'
@@ -66,6 +74,7 @@ const front: Layer[] = [
   -->
   <CeremonyBand
     name="akad"
+    :class="{ 'no-gallery': !hasGallery }"
     :height="587"
     :event-index="0"
     :behind="behind"

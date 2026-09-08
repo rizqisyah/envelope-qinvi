@@ -409,6 +409,15 @@ const mapsUrl = computed(() => event.value?.maps_url || '')
   left: calc(153.1 * var(--px));
 }
 
+/*
+ * When the gallery band is empty/hidden, akad sits directly below glimpse. Glimpse's
+ * green envelope bottom is at y 640 of its 691 height, so akad's negative heading
+ * (-78.4px) would collide with the envelope without top breathing room.
+ */
+.band.akad.no-gallery {
+  margin-top: calc(160 * var(--px));
+}
+
 @media (prefers-reduced-motion: reduce) {
   .band .lyr,
   .band__date,
