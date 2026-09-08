@@ -47,33 +47,6 @@ type Wish = {
   time?: string
 }
 
-/*
- * Frame 242's own four cards, verbatim -- including "diberahi", which is the design's
- * typo, and its emoji spacing. An unconfigured render has to match the reference.
- */
-const FALLBACK: Wish[] = [
-  {
-    id: 'd1',
-    guest_name: 'Anggun',
-    time: '2 hari lalu',
-    message:
-      'Happy wedding 💐 Semoga keluarga kecil kalian senantiasa diberahi kebahagiaan, kecukupan, dan kesehatan✨ Selamat beribadah bersama sampai jannah ya🙏🏻',
-  },
-  {
-    id: 'd2',
-    guest_name: 'Amri',
-    time: '3 hari lalu',
-    message: 'Happy wedding yaaa, semoga samawa, bahagia dunia akhirat ❤️',
-  },
-  {
-    id: 'd3',
-    guest_name: 'Amanda',
-    time: '3 hari lalu',
-    message: 'Alhamdulillah, terharu banget, samawa yak',
-  },
-  { id: 'd4', guest_name: 'Gilang', time: '3 hari lalu', message: 'Happy wedding broo...' },
-]
-
 const { el, shown } = useReveal()
 const { wishes, sendWish, guest, guestName } = useWedding()
 
@@ -82,8 +55,7 @@ const displayLimit = ref(BATCH_SIZE)
 const isLoadingMore = ref(false)
 
 const allWishes = computed<Wish[]>(() => {
-  const live = (wishes.value as Wish[]).filter((w) => w.guest_name || w.message)
-  return live.length ? live : FALLBACK
+  return (wishes.value as Wish[]).filter((w) => w.guest_name || w.message)
 })
 
 const displayedList = computed<Wish[]>(() => {
@@ -219,7 +191,13 @@ async function submit() {
 
     <!-- Frame 237: fixed 428 with radius 17, clipping its own cards. -->
     <div ref="panelRef" class="wish__panel">
-      <ul class="wish__list">
+      <div v-if="!allWishes.length" class="wish__empty">
+        <p class="wish__empty-title">Belum Ada Ucapan</p>
+        <p class="wish__empty-desc">
+          Kirimkan doa dan ucapan pertama untuk kedua mempelai melalui formulir di atas.
+        </p>
+      </div>
+      <ul v-else class="wish__list">
         <li v-for="(w, i) in displayedList" :key="w.id ?? i" class="wish__card">
           <p class="wish__name">{{ w.guest_name }}</p>
           <p class="wish__time">{{ stamp(w) }}</p>
@@ -518,6 +496,38 @@ async function submit() {
   color: #55391c;
   text-align: center;
   background: #ffffff;
+}
+
+.wish__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: calc(306 * var(--px));
+  min-height: calc(180 * var(--px));
+  padding: calc(36 * var(--px)) calc(24 * var(--px));
+  background: #ffffff;
+  box-sizing: border-box;
+  text-align: center;
+  box-shadow: inset 0 calc(-1 * var(--px)) 0 #cdc2ae;
+}
+
+.wish__empty-title {
+  margin: 0;
+  font-family: var(--font-arabic);
+  font-size: calc(14 * var(--px));
+  line-height: calc(20 * var(--px));
+  font-weight: 600;
+  color: #55391c;
+}
+
+.wish__empty-desc {
+  margin: calc(6 * var(--px)) 0 0;
+  font-family: var(--font-arabic);
+  font-size: calc(12 * var(--px));
+  line-height: calc(18 * var(--px));
+  font-weight: 300;
+  color: #8c8c8c;
 }
 
 .wish__fl {
