@@ -26,7 +26,7 @@
  *   2594:432  (0, 6774)   123 left and 87 above its declared spot
  *   2594:433  (348, 6858) x clip-proven, y as declared
  */
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useReveal } from '../../composables/useReveal'
 import { useWedding } from '../../composables/useWedding'
 import { relativeTime } from '../../lib/format'
@@ -77,9 +77,56 @@ const FALLBACK: Wish[] = [
 const { el, shown } = useReveal()
 const { wishes, sendWish, guest, guestName } = useWedding()
 
-const list = computed<Wish[]>(() => {
+const BATCH_SIZE = 8
+const displayLimit = ref(BATCH_SIZE)
+const isLoadingMore = ref(false)
+
+const allWishes = computed<Wish[]>(() => {
   const live = (wishes.value as Wish[]).filter((w) => w.guest_name || w.message)
   return live.length ? live : FALLBACK
+})
+
+const displayedList = computed<Wish[]>(() => {
+  return allWishes.value.slice(0, displayLimit.value)
+})
+
+const hasMore = computed(() => {
+  return displayLimit.value < allWishes.value.length
+})
+
+function loadMore() {
+  if (!hasMore.value || isLoadingMore.value) return
+  isLoadingMore.value = true
+  setTimeout(() => {
+    displayLimit.value += BATCH_SIZE
+    isLoadingMore.value = false
+  }, 150)
+}
+
+const panelRef = ref<HTMLDivElement | null>(null)
+const sentinelRef = ref<HTMLDivElement | null>(null)
+let observer: IntersectionObserver | null = null
+
+onMounted(() => {
+  if (typeof IntersectionObserver !== 'undefined' && panelRef.value && sentinelRef.value) {
+    observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          loadMore()
+        }
+      },
+      {
+        root: panelRef.value,
+        rootMargin: '40px',
+      },
+    )
+    observer.observe(sentinelRef.value)
+  }
+})
+
+onBeforeUnmount(() => {
+  observer?.disconnect()
+  observer = null
 })
 
 const stamp = (w: Wish) => w.time ?? relativeTime(w.created_at)
@@ -120,6 +167,8 @@ async function submit() {
     // The list is prepended by sendWish, so clearing the box is the whole reset.
     message.value = ''
     sent.value = true
+    // Increment display limit so new prepended wish does not hide already visible items
+    displayLimit.value += 1
   } catch (err: any) {
     error.value = err?.message || 'Gagal mengirim ucapan. Coba lagi.'
   } finally {
@@ -169,14 +218,16 @@ async function submit() {
     <p class="wish__sr" aria-live="polite">{{ sent ? 'Ucapan Anda sudah terkirim.' : '' }}</p>
 
     <!-- Frame 237: fixed 428 with radius 17, clipping its own cards. -->
-    <div class="wish__panel">
+    <div ref="panelRef" class="wish__panel">
       <ul class="wish__list">
-        <li v-for="(w, i) in list" :key="w.id ?? i" class="wish__card">
+        <li v-for="(w, i) in displayedList" :key="w.id ?? i" class="wish__card">
           <p class="wish__name">{{ w.guest_name }}</p>
           <p class="wish__time">{{ stamp(w) }}</p>
           <p class="wish__message">{{ w.message }}</p>
         </li>
       </ul>
+      <div v-if="isLoadingMore" class="wish__loading" aria-live="polite">Memuat ucapan...</div>
+      <div ref="sentinelRef" class="wish__sentinel" aria-hidden="true"></div>
     </div>
 
     <!-- z 126-131: every floral paints over the group. -->
@@ -451,6 +502,22 @@ async function submit() {
   font-weight: 300;
   color: #55391c;
   overflow-wrap: break-word;
+}
+
+.wish__sentinel {
+  width: 100%;
+  height: 1px;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.wish__loading {
+  padding: calc(8 * var(--px)) 0;
+  font-family: var(--font-arabic);
+  font-size: calc(12 * var(--px));
+  color: #55391c;
+  text-align: center;
+  background: #ffffff;
 }
 
 .wish__fl {
