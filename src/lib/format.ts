@@ -11,7 +11,6 @@
  * that is what these return. The zone suffix is part of the design's string, not
  * something the API sends.
  */
-const ZONE = 'WIB'
 const RANGE_SEPARATORS = ['|', 's/d', ' - ', '-', '–']
 
 export type EventDate = { weekday: string; date: string }
@@ -81,21 +80,8 @@ export function remainingUntil(target: Date | null, now: number = Date.now()): R
   }
 }
 
-/** '10:00:00' -> '10.00'. Anything unparseable comes back as given. */
-function clockOf(part: string): string {
-  const m = part.trim().match(/^(\d{1,2})[.:](\d{2})/)
-  return m ? `${m[1].padStart(2, '0')}.${m[2]}` : part.trim()
-}
-
 export function formatEventTime(raw?: string | null): string {
-  if (!raw) return ''
-  const sep = RANGE_SEPARATORS.find((s) => raw.includes(s))
-  if (!sep) return `${clockOf(raw)} ${ZONE}`
-  const [from, to] = raw.split(sep)
-  // An end of midnight is how the API says "no end time".
-  const end = clockOf(to ?? '')
-  if (!end || end === '00.00' || end === '23.59') return `${clockOf(from)} ${ZONE} - Selesai`
-  return `${clockOf(from)} ${ZONE} - ${end} ${ZONE}`
+  return raw?.trim() || ''
 }
 
 /*

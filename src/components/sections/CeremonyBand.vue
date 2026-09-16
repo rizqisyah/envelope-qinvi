@@ -85,7 +85,7 @@ const event = computed(() => (acara.value as any[])[props.eventIndex] ?? null)
 const when = computed(
   () => formatEventDate(event.value?.event_date) ?? { weekday: 'Saturday', date: '19 April 2029' },
 )
-const time = computed(() => formatEventTime(event.value?.event_time) || '10.00 WIB - 12.00 WIB')
+const time = computed(() => formatEventTime(event.value?.event_time) || '')
 const venue = computed(() => event.value?.location_name || 'Rumah mempelai wanita')
 const address = computed(
   () =>

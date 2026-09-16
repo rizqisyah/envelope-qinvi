@@ -126,7 +126,7 @@ for (const band of BANDS) {
     },
   ])
   check(live.date === 'Saturday, 21 April 2029', `date renders weekday + date (got "${live.date}")`)
-  check(live.time === '08.00 WIB - 10.00 WIB', `time range formatted (got "${live.time}")`)
+  check(live.time === '08:00:00 - 10:00:00', `time range matches API event_time (got "${live.time}")`)
   check(live.venue === `Masjid Al-Azhar (${band.name})`, `venue comes from acara[${band.index}]`)
   check(live.address.startsWith('Jl. Sisingamangaraja'), 'address comes from the API')
   check(
@@ -163,9 +163,9 @@ for (const band of BANDS) {
     `the design's own address stays in its box (overflow ${live.addressOverflow}px)`,
   )
 
-  // --- an end of 23:59 is how the API says "no end time" ---
+  // --- event_time passes through from API verbatim ---
   const open = await render(band, [{ event_date: '2029-04-21', event_time: '19:00 - 23:59' }])
-  check(open.time === '19.00 WIB - Selesai', `open-ended range (got "${open.time}")`)
+  check(open.time === '19:00 - 23:59', `raw range from API (got "${open.time}")`)
 
   /*
    * Resepsi's five TEXT nodes ride Group 244's -8 through a `.band.resepsi` modifier
@@ -209,7 +209,7 @@ for (const band of BANDS) {
   // --- with no acara the card shows the copy Frame 242 was drawn with ---
   const bare = await render(band, [])
   check(bare.date === 'Saturday, 19 April 2029', `fallback date (got "${bare.date}")`)
-  check(bare.time === '10.00 WIB - 12.00 WIB', `fallback time (got "${bare.time}")`)
+  check(bare.time === '', `fallback time is empty (got "${bare.time}")`)
   check(bare.venue === 'Rumah mempelai wanita', 'fallback venue')
   check(bare.address.startsWith('Jl. Melati Raya No. 27'), 'fallback address')
   check(!bare.isLink, 'no maps_url leaves the button inert rather than a dead link')
