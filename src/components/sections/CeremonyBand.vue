@@ -32,7 +32,7 @@ export type HeadingLine = { top: number; left: number }
  * offset (it shifts (-0.05, +594.85)), which is why `heading` is its own prop and
  * is never computed from the layers.
  */
-import { computed } from 'vue'
+import { computed, ref, watch, nextTick, onUnmounted, type ComponentPublicInstance } from 'vue'
 import { formatEventDate, formatEventTime } from '../../lib/format'
 import { useFitText } from '../../composables/useFitText'
 import { useReveal } from '../../composables/useReveal'
@@ -93,6 +93,64 @@ const address = computed(
     'Jl. Melati Raya No. 27, RT 004/RW 006, Kelurahan Cikini, Kecamatan Menteng, Jakarta Pusat, DKI Jakarta 10330',
 )
 const mapsUrl = computed(() => event.value?.maps_url || '')
+
+const venueEl = ref<HTMLElement | null>(null)
+const venueOffset = ref(0)
+
+let venueResizeObs: ResizeObserver | null = null
+let venueIntersectObs: IntersectionObserver | null = null
+
+function updateVenueOffset() {
+  const node = venueEl.value
+  if (!node || !node.clientHeight) {
+    return
+  }
+  const computedFs = parseFloat(window.getComputedStyle(node).fontSize) || 12
+  const px = computedFs / 12
+  if (px <= 0) return
+
+  // Measure content height in design px. Baseline single-line height is 20px.
+  const heightInDesignPx = node.scrollHeight / px
+  const extra = Math.max(0, heightInDesignPx - 20)
+  venueOffset.value = Math.round(extra * 10) / 10
+}
+
+function setVenueEl(node: Element | ComponentPublicInstance | null) {
+  venueResizeObs?.disconnect()
+  venueResizeObs = null
+  venueIntersectObs?.disconnect()
+  venueIntersectObs = null
+
+  if (node instanceof HTMLElement) {
+    venueEl.value = node
+
+    venueResizeObs = new ResizeObserver(() => {
+      requestAnimationFrame(updateVenueOffset)
+    })
+    venueResizeObs.observe(node)
+
+    venueIntersectObs = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        requestAnimationFrame(updateVenueOffset)
+      }
+    })
+    venueIntersectObs.observe(node)
+
+    updateVenueOffset()
+    document.fonts?.ready.then(updateVenueOffset)
+  } else {
+    venueEl.value = null
+  }
+}
+
+watch(venue, () => {
+  nextTick(() => requestAnimationFrame(updateVenueOffset))
+})
+
+onUnmounted(() => {
+  venueResizeObs?.disconnect()
+  venueIntersectObs?.disconnect()
+})
 </script>
 
 <template>
@@ -100,7 +158,10 @@ const mapsUrl = computed(() => event.value?.maps_url || '')
     :ref="el"
     class="band"
     :class="[name, { 'is-in': shown }]"
-    :style="{ height: `calc(${height} * var(--px))` }"
+    :style="{
+      height: `calc(${height} * var(--px))`,
+      '--venue-offset': venueOffset,
+    }"
     :aria-labelledby="`${name}-heading`"
   >
     <img
@@ -120,7 +181,7 @@ const mapsUrl = computed(() => event.value?.maps_url || '')
 
     <p class="band__date">{{ when.weekday }},<br />{{ when.date }}</p>
     <p class="band__time">{{ time }}</p>
-    <p class="band__venue">{{ venue }}</p>
+    <p :ref="setVenueEl" class="band__venue">{{ venue }}</p>
     <p :ref="fitAddress" class="band__address">{{ address }}</p>
 
     <!--
@@ -232,11 +293,13 @@ const mapsUrl = computed(() => event.value?.maps_url || '')
   font-family: var(--font-serif-alt);
   font-size: calc(12 * var(--px));
   font-weight: 400;
-  line-height: calc(24 * var(--px));
+  line-height: calc(18 * var(--px));
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .band__address {
-  top: calc(217 * var(--px));
+  top: calc((217 + var(--venue-offset, 0)) * var(--px));
   left: calc(116 * var(--px));
   width: calc(147 * var(--px));
   height: calc(36 * var(--px));
@@ -248,10 +311,12 @@ const mapsUrl = computed(() => event.value?.maps_url || '')
    * addresses run longer than the one Frame 242 was drawn with.
    */
   line-height: calc(12 * var(--px) * var(--fit, 1));
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .band__maps {
-  top: calc(271 * var(--px));
+  top: calc((271 + var(--venue-offset, 0)) * var(--px));
   left: calc(161.08 * var(--px));
   display: flex;
   align-items: center;
