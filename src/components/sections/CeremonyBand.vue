@@ -94,6 +94,40 @@ const address = computed(
 )
 const mapsUrl = computed(() => event.value?.maps_url || '')
 
+function splitByAmpersand(text: string): string[] {
+  if (!text) return []
+  const normalized = text.replace(/&amp;/g, '&')
+  const rawLines = normalized.split(/\r?\n/)
+  const result: string[] = []
+
+  for (const line of rawLines) {
+    const trimmed = line.trim()
+    if (!trimmed) continue
+
+    const parts = trimmed.split(/\s*&\s*/)
+    if (parts.length === 1) {
+      result.push(parts[0])
+      continue
+    }
+
+    if (parts[0]) {
+      result.push(parts[0])
+    }
+    for (let i = 1; i < parts.length; i++) {
+      if (parts[i]) {
+        result.push(`& ${parts[i]}`)
+      } else if (i === parts.length - 1 && trimmed.endsWith('&')) {
+        result.push('&')
+      }
+    }
+  }
+
+  return result.length > 0 ? result : [text]
+}
+
+const venueLines = computed(() => splitByAmpersand(venue.value))
+const addressLines = computed(() => splitByAmpersand(address.value))
+
 const venueEl = ref<HTMLElement | null>(null)
 const venueOffset = ref(0)
 
@@ -143,7 +177,7 @@ function setVenueEl(node: Element | ComponentPublicInstance | null) {
   }
 }
 
-watch(venue, () => {
+watch(venueLines, () => {
   nextTick(() => requestAnimationFrame(updateVenueOffset))
 })
 
@@ -181,8 +215,18 @@ onUnmounted(() => {
 
     <p class="band__date">{{ when.weekday }},<br />{{ when.date }}</p>
     <p class="band__time">{{ time }}</p>
-    <p :ref="setVenueEl" class="band__venue">{{ venue }}</p>
-    <p :ref="fitAddress" class="band__address">{{ address }}</p>
+    <p :ref="setVenueEl" class="band__venue">
+      <template v-for="(line, idx) in venueLines" :key="idx">
+        <br v-if="idx > 0" />
+        {{ line }}
+      </template>
+    </p>
+    <p :ref="fitAddress" class="band__address">
+      <template v-for="(line, idx) in addressLines" :key="idx">
+        <br v-if="idx > 0" />
+        {{ line }}
+      </template>
+    </p>
 
     <!--
       The Maps plate is a flat #eed891 rounded rect with a uniform radius 6 and no
