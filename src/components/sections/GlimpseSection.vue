@@ -110,9 +110,12 @@ const { el, shown } = useReveal()
  * formatEventTime produces that shape. Falls back to the design's own string, so an
  * unconfigured render still matches the reference.
  */
-const { acara } = useWedding()
+const { acara, countdownDate } = useWedding()
 
-const dateLine = computed(() => formatShortDate((acara.value as any[])[0]?.event_date) || '09. 09. 26')
+const dateLine = computed(() => {
+  const raw = countdownDate.value || (acara.value as any[])[0]?.event_date
+  return formatShortDate(raw) || '09. 09. 26'
+})
 </script>
 
 <template>

@@ -122,20 +122,78 @@ export function relativeTime(value?: string | Date | null, now: number = Date.no
   return 'baru saja'
 }
 
+const ID_MONTHS: Record<string, number> = {
+  januari: 1, jan: 1,
+  februari: 2, feb: 2,
+  maret: 3, mar: 3,
+  april: 4, apr: 4,
+  mei: 5, may: 5,
+  juni: 6, jun: 6,
+  juli: 7, jul: 7,
+  agustus: 8, agu: 8, aug: 8,
+  september: 9, sep: 9,
+  oktober: 10, okt: 10, oct: 10,
+  november: 11, nov: 11,
+  desember: 12, des: 12, dec: 12,
+}
+
 /*
- * "09. 09. 26" — the glimpse band's date plate. Neither of the formats above produces it:
+ * "09. 09. 26" — the glimpse band's date plate. Formats any date input into:
  * two-digit day, month and YEAR, separated by ". " with the trailing dot on the first two.
- * The design's own string is 09. 09. 26 for a 2026-09-09 wedding, so the last field is the
- * year, not the day repeated.
+ * Supports Date objects, ISO strings, DD/MM/YYYY, Indonesian text dates, etc.
  */
-export function formatShortDate(raw?: string | null): string {
+export function formatShortDate(raw?: string | Date | null): string {
   if (!raw) return ''
-  const m = raw.match(/^(\d{4})-(\d{2})-(\d{2})/)
-  if (m) return `${m[3]}. ${m[2]}. ${m[1].slice(2)}`
-  const d = new Date(raw)
-  if (Number.isNaN(d.getTime())) return ''
-  const p = (n: number) => String(n).padStart(2, '0')
-  return `${p(d.getDate())}. ${p(d.getMonth() + 1)}. ${String(d.getFullYear()).slice(2)}`
+  if (raw instanceof Date) {
+    if (Number.isNaN(raw.getTime())) return ''
+    const p = (n: number) => String(n).padStart(2, '0')
+    return `${p(raw.getDate())}. ${p(raw.getMonth() + 1)}. ${String(raw.getFullYear()).slice(2)}`
+  }
+
+  const str = String(raw).trim()
+  if (!str) return ''
+
+  // Already formatted like "10. 10. 26" or "10.10.26"
+  const already = str.match(/^(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{2,4})$/)
+  if (already) {
+    const p = (n: string | number) => String(n).padStart(2, '0')
+    const yr = already[3].length === 4 ? already[3].slice(2) : already[3]
+    return `${p(already[1])}. ${p(already[2])}. ${yr}`
+  }
+
+  // YYYY-MM-DD (e.g. "2026-10-10" or "2026-10-10T08:00:00.000Z")
+  const mYmd = str.match(/^(\d{4})-(\d{2})-(\d{2})/)
+  if (mYmd) {
+    return `${mYmd[3]}. ${mYmd[2]}. ${mYmd[1].slice(2)}`
+  }
+
+  // DD/MM/YYYY or DD-MM-YYYY
+  const mDmy = str.match(/^(\d{1,2})[/|-](\d{1,2})[/|-](\d{2,4})/)
+  if (mDmy) {
+    const p = (n: string | number) => String(n).padStart(2, '0')
+    const yr = mDmy[3].length === 4 ? mDmy[3].slice(2) : mDmy[3]
+    return `${p(mDmy[1])}. ${p(mDmy[2])}. ${yr}`
+  }
+
+  // Indonesian / English month name (e.g. "Sabtu, 10 Oktober 2026" or "10 October 2026")
+  const mText = str.match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/)
+  if (mText) {
+    const monthKey = mText[2].toLowerCase()
+    const monthNum = ID_MONTHS[monthKey]
+    if (monthNum) {
+      const p = (n: string | number) => String(n).padStart(2, '0')
+      return `${p(mText[1])}. ${p(monthNum)}. ${mText[3].slice(2)}`
+    }
+  }
+
+  // Standard JS Date fallback
+  const d = new Date(str)
+  if (!Number.isNaN(d.getTime())) {
+    const p = (n: number) => String(n).padStart(2, '0')
+    return `${p(d.getDate())}. ${p(d.getMonth() + 1)}. ${String(d.getFullYear()).slice(2)}`
+  }
+
+  return ''
 }
 
 /*

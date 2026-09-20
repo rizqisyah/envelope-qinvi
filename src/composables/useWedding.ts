@@ -296,6 +296,21 @@ export function useWedding() {
     )
   })
 
+  const countdownDate = computed(() => {
+    const w = wedding.value as any
+    const t = themeOverride.value as any
+
+    return (
+      t?.TanggalCountdown ||
+      t?.words?.TanggalCountdown ||
+      t?.countdown_date ||
+      t?.words?.countdown_date ||
+      w?.TanggalCountdown ||
+      w?.countdown_date ||
+      null
+    )
+  })
+
   return {
     slug,
     guestCode,
@@ -325,6 +340,7 @@ export function useWedding() {
     quoteText,
     quoteVerse,
     quoteArabic,
+    countdownDate,
     refetch: fetchWeddingData,
   }
 }
