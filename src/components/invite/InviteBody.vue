@@ -10,6 +10,7 @@ import DividerSection from '../sections/DividerSection.vue'
 import BrideSection from '../sections/BrideSection.vue'
 import GlimpseSection from '../sections/GlimpseSection.vue'
 import GallerySection from '../sections/GallerySection.vue'
+import PrewedVideoSection from '../sections/PrewedVideoSection.vue'
 import AkadSection from '../sections/AkadSection.vue'
 import ResepsiSection from '../sections/ResepsiSection.vue'
 import CountdownSection from '../sections/CountdownSection.vue'
@@ -43,6 +44,7 @@ import bgStrip from '../../assets/page/parts/01_2560-276_bg-strip.webp' // z3, y
     <BrideSection />
     <GlimpseSection />
     <GallerySection />
+    <PrewedVideoSection />
     <AkadSection />
     <ResepsiSection />
     <CountdownSection />

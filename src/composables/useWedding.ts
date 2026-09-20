@@ -44,7 +44,12 @@ function applyTheme(themeData: any, weddingData: any) {
   if (fonts.serif) root.style.setProperty('--font-serif', fonts.serif)
   if (fonts.serif_alt) root.style.setProperty('--font-serif-alt', fonts.serif_alt)
   if (fonts.serif_bold) root.style.setProperty('--font-serif-bold', fonts.serif_bold)
-  if (fonts.caps || fonts.headline) root.style.setProperty('--font-caps', fonts.caps || fonts.headline)
+  const nameFont = fonts.name || fonts.caps || fonts.headline
+  if (nameFont) {
+    const cleanName = String(nameFont).replace(/Playfair Display SC/g, 'Playfair')
+    root.style.setProperty('--font-name', cleanName)
+    root.style.setProperty('--font-caps', cleanName)
+  }
   if (fonts.hand) root.style.setProperty('--font-hand', fonts.hand)
   if (fonts.sans || fonts.body) root.style.setProperty('--font-sans', fonts.sans || fonts.body)
   if (fonts.arabic) root.style.setProperty('--font-arabic', fonts.arabic)
@@ -282,6 +287,15 @@ export function useWedding() {
     return formatDirectName(rawParam) || 'Nama Tamu'
   })
 
+  const videoPrewed = computed(() => {
+    const override = themeOverride.value as any
+    return (
+      override?.words?.video_prewed ||
+      override?.video_prewed ||
+      ''
+    )
+  })
+
   return {
     slug,
     guestCode,
@@ -289,6 +303,7 @@ export function useWedding() {
     loading: computed(() => state.value.loading),
     error: computed(() => state.value.error),
     wedding,
+    videoPrewed,
     theme,
     themeOverride,
     guest,

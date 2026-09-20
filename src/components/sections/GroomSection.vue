@@ -12,7 +12,7 @@ import { computed, ref } from 'vue'
 import { useFitText } from '../../composables/useFitText'
 import { useReveal } from '../../composables/useReveal'
 import { useWedding } from '../../composables/useWedding'
-import { parentLine } from '../../lib/format'
+import { parentLine, formatName } from '../../lib/format'
 
 /*
  * z9 (garden) and z11 (portrait) used to be two layers. getHome serves `photo_url` as
@@ -77,7 +77,7 @@ function box(l: Layer, delay = l.in) {
 
 // Fallbacks are the copy set in Frame 242, so an unconfigured render matches it.
 const nickname = computed(() => groom.value?.nickname?.trim() || groom.value?.name?.trim().split(' ')[0] || 'Antonio')
-const fullName = computed(() => groom.value?.name?.trim() || 'Antonio Josua Setiyadi')
+const fullName = computed(() => formatName(groom.value?.name) || 'Antonio Josua Setiyadi')
 const parents = computed(
   () => parentLine(groom.value) || 'Putra Pertama dari Bapak Tono\n& Ibu Ratna',
 )
@@ -89,8 +89,10 @@ const parents = computed(
 
     <h2 :ref="fitNickname" id="groom-heading" class="groom__nickname">{{ nickname }}</h2>
     <img :src="ornament" alt="" :style="box({ src: ornament, x: 131, y: 585, w: 120, h: 29, kind: 'ornament', in: 1500 })" class="lyr groom__ornament" />
-    <p class="groom__name">{{ fullName }}</p>
-    <p :ref="fitParents" class="groom__parents">{{ parents }}</p>
+    <div class="groom__bio">
+      <p class="groom__name">{{ fullName }}</p>
+      <p :ref="fitParents" class="groom__parents">{{ parents }}</p>
+    </div>
 
     <img v-for="(l, i) in front" :key="`f${i}`" :src="l.src" alt="" :style="box(l)" class="lyr lyr--front" />
   </section>
@@ -128,21 +130,30 @@ const parents = computed(
   color: var(--brown-soft);
 }
 
-.groom__name {
+.groom__bio {
   top: calc(606 * var(--px));
-  left: calc(30 * var(--px));
+  left: calc(27 * var(--px));
   width: calc(321 * var(--px));
-  font-family: var(--font-caps);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.groom__name {
+  width: 100%;
+  font-family: var(--font-name, "Playfair", serif);
   font-size: calc(20 * var(--px));
-  line-height: calc(38 * var(--px));
+  font-weight: 600;
+  line-height: calc(26 * var(--px));
   color: var(--brown-soft);
+  letter-spacing: 0.02em;
 }
 
 .groom__parents {
-  top: calc(643 * var(--px));
-  left: calc(30 * var(--px));
-  width: calc(321 * var(--px));
-  height: calc(83 * var(--px));
+  width: 100%;
+  margin-top: calc(8 * var(--px));
+  max-height: calc(83 * var(--px));
   white-space: pre-line;
   font-family: var(--font-serif-alt);
   font-size: calc(15 * var(--px) * var(--fit, 1));

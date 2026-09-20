@@ -156,3 +156,20 @@ export function parentLine(p?: {
   if (prefix && parents && prefix.includes(parents)) return prefix
   return [prefix, parents].filter(Boolean).join(' ').trim()
 }
+
+/**
+ * Normalizes full name casing: if the string was entered in ALL CAPS,
+ * converts each word to Title Case, but leaves mixed-case strings
+ * (e.g. "Antonio Josua Setiyadi, S.Kom.") intact.
+ */
+export function formatName(name?: string | null): string {
+  if (!name) return ''
+  const trimmed = name.trim()
+  const lettersOnly = trimmed.replace(/[^a-zA-Z]/g, '')
+  if (lettersOnly.length > 0 && lettersOnly === lettersOnly.toUpperCase()) {
+    return trimmed
+      .toLowerCase()
+      .replace(/(?:^|\s|-)\S/g, (c) => c.toUpperCase())
+  }
+  return trimmed
+}

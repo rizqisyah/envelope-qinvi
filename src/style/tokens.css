@@ -27,8 +27,9 @@
   /* small caption serif */
   --font-serif-bold: "Cormorant Garamond", serif;
   /* emphasised serif */
-  --font-caps: "Playfair Display SC", serif;
-  /* small-caps headings */
+  --font-caps: "Playfair", serif;
+  /* groom & bride full names (title case) */
+  --font-name: "Playfair", serif;
   --font-hand: "Meow Script", cursive;
   /* Frame 242 akad/resepsi date lines */
   --font-sans: "Jost", system-ui, sans-serif;

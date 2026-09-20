@@ -13,7 +13,7 @@ import { computed, ref } from 'vue'
 import { useFitText } from '../../composables/useFitText'
 import { useReveal } from '../../composables/useReveal'
 import { useWedding } from '../../composables/useWedding'
-import { parentLine } from '../../lib/format'
+import { parentLine, formatName } from '../../lib/format'
 
 /*
  * z10 (garden) and z18 (portrait) used to be two layers. getHome serves `photo_url` as
@@ -78,7 +78,7 @@ function box(l: Layer) {
 
 // Fallbacks are the copy set in Frame 242, so an unconfigured render matches it.
 const nickname = computed(() => bride.value?.nickname?.trim() || bride.value?.name?.trim().split(' ')[0] || 'Allysa')
-const fullName = computed(() => bride.value?.name?.trim() || 'Ayu Shella Pratni')
+const fullName = computed(() => formatName(bride.value?.name) || 'Ayu Shella Pratni')
 const parents = computed(
   () => parentLine(bride.value) || 'Putri Pertama dari Bapak Heri\n& Ibu Sofie',
 )
@@ -98,8 +98,10 @@ const parents = computed(
     />
 
     <h2 :ref="fitNickname" id="bride-heading" class="bride__nickname">{{ nickname }}</h2>
-    <p class="bride__name">{{ fullName }}</p>
-    <p :ref="fitParents" class="bride__parents">{{ parents }}</p>
+    <div class="bride__bio">
+      <p class="bride__name">{{ fullName }}</p>
+      <p :ref="fitParents" class="bride__parents">{{ parents }}</p>
+    </div>
 
     <img :src="front.src" alt="" :style="box(front)" class="lyr lyr--front" />
   </section>
@@ -137,21 +139,30 @@ const parents = computed(
   color: var(--brown-soft);
 }
 
-.bride__name {
+.bride__bio {
   top: calc(621 * var(--px));
-  left: calc(35 * var(--px));
+  left: calc(27 * var(--px));
   width: calc(321 * var(--px));
-  font-family: var(--font-caps);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.bride__name {
+  width: 100%;
+  font-family: var(--font-name, "Playfair", serif);
   font-size: calc(20 * var(--px));
-  line-height: calc(38 * var(--px));
+  font-weight: 600;
+  line-height: calc(26 * var(--px));
   color: var(--brown-soft);
+  letter-spacing: 0.02em;
 }
 
 .bride__parents {
-  top: calc(660 * var(--px));
-  left: calc(31 * var(--px));
-  width: calc(321 * var(--px));
-  height: calc(83 * var(--px));
+  width: 100%;
+  margin-top: calc(8 * var(--px));
+  max-height: calc(83 * var(--px));
   white-space: pre-line;
   font-family: var(--font-serif-alt);
   font-size: calc(15 * var(--px) * var(--fit, 1));

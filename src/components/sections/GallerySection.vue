@@ -29,7 +29,9 @@ const THUMB_XS = [43.49, 116.78, 190.07, 263.36]
 const THUMB = { y: 296.14, w: 68.82, h: 70.86 }
 
 const { el, shown } = useReveal()
-const { gallery } = useWedding()
+const { gallery, videoPrewed } = useWedding()
+
+const hasVideo = computed(() => Boolean(videoPrewed.value && String(videoPrewed.value).trim().length > 0))
 
 const photos = computed(() => {
   const configured = ((gallery.value as any[]) || [])
@@ -112,7 +114,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section v-if="hasGallery" :ref="el" class="gallery" :class="{ 'is-in': shown }" aria-label="Galeri foto">
+  <section v-if="hasGallery" :ref="el" class="gallery" :class="{ 'is-in': shown, 'has-video': hasVideo }" aria-label="Galeri foto">
     <div class="gallery__stage">
       <img :src="plate" alt="" class="gallery__plate" />
 
@@ -177,6 +179,10 @@ onBeforeUnmount(() => {
   position: relative;
   height: calc(551 * var(--px));
   overflow: visible;
+}
+
+.gallery.has-video {
+  height: calc(395 * var(--px));
 }
 
 /*
