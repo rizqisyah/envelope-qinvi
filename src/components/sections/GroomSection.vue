@@ -21,7 +21,8 @@ import { parentLine, formatName } from '../../lib/format'
  * This bundled merge of the two original exports is only the not-yet-uploaded fallback;
  * regenerate it with scripts/merge-plate.py.
  */
-import plateFallback from '../../assets/groom/parts/plate-groom-merged.webp'
+import plateGroomFallback from '../../assets/groom/parts/plate-groom-merged.webp'
+import plateBrideFallback from '../../assets/bride/parts/plate-bride-merged.webp'
 import innerFrame from '../../assets/groom/parts/02_2594-171_sdvbsdbsddb-5.webp' // z16
 import paperFrame from '../../assets/groom/parts/00_2551-179_sdvbsdbsddb-2.webp' // z17
 import leaf from '../../assets/groom/parts/09_2594-142.webp' // z30
@@ -37,17 +38,20 @@ type Layer = { src: string; x: number; y: number; w: number; h: number; kind: st
 const { el, shown } = useReveal()
 const fitParents = useFitText()
 const fitNickname = useFitText()
-const { groom } = useWedding()
+const { groom, bride, isGroomFirst } = useWedding()
+
+const person = computed(() => (isGroomFirst.value ? groom.value : bride.value))
 
 /*
  * photo_url is a cross-origin upload host, so a 404 there would leave a broken-image
  * icon where a designed layer belongs. Fall back to the bundled merge instead.
  */
 const plateFailed = ref(false)
-const plate = computed(() => (!plateFailed.value && groom.value?.photo_url) || plateFallback)
+const plateFallback = computed(() => (isGroomFirst.value ? plateGroomFallback : plateBrideFallback))
+const plate = computed(() => (!plateFailed.value && person.value?.photo_url) || plateFallback.value)
 
 function onLayerError(e: Event) {
-  if ((e.target as HTMLImageElement).src !== plateFallback) plateFailed.value = true
+  if ((e.target as HTMLImageElement).src !== plateFallback.value) plateFailed.value = true
 }
 
 /*
@@ -76,11 +80,22 @@ function box(l: Layer, delay = l.in) {
 }
 
 // Fallbacks are the copy set in Frame 242, so an unconfigured render matches it.
-const nickname = computed(() => groom.value?.nickname?.trim() || groom.value?.name?.trim().split(' ')[0] || 'Antonio')
-const fullName = computed(() => formatName(groom.value?.name) || 'Antonio Josua Setiyadi')
-const parents = computed(
-  () => parentLine(groom.value) || 'Putra Pertama dari Bapak Tono\n& Ibu Ratna',
+const nickname = computed(() => {
+  if (person.value?.nickname?.trim()) return person.value.nickname.trim()
+  if (person.value?.name?.trim()) return person.value.name.trim().split(' ')[0]
+  return isGroomFirst.value ? 'Antonio' : 'Allysa'
+})
+const fullName = computed(() => {
+  const formatted = formatName(person.value?.name)
+  if (formatted) return formatted
+  return isGroomFirst.value ? 'Antonio Josua Setiyadi' : 'Ayu Shella Pratni'
+})
+const fallbackParents = computed(() =>
+  isGroomFirst.value
+    ? 'Putra Pertama dari Bapak Tono\n& Ibu Ratna'
+    : 'Putri Pertama dari Bapak Heri\n& Ibu Sofie',
 )
+const parents = computed(() => parentLine(person.value) || fallbackParents.value)
 </script>
 
 <template>

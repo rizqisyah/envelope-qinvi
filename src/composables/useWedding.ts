@@ -192,12 +192,34 @@ export function useWedding() {
     return res
   }
 
-  const groom = computed(() => pengantin.value.find((p: any) => p.type === 'groom') || null)
-  const bride = computed(() => pengantin.value.find((p: any) => p.type === 'bride') || null)
-
   const isGroomFirst = computed(() => {
+    if (themeOverride.value?.order_groom_first !== undefined) {
+      const val = themeOverride.value.order_groom_first
+      return val !== false && val !== 'false' && val !== 0
+    }
     if (!wedding.value) return true
-    return wedding.value.order_groom_first !== false
+    const val = wedding.value.order_groom_first
+    return val !== false && val !== 'false' && val !== 0
+  })
+
+  const groom = computed(() => {
+    return (
+      pengantin.value.find(
+        (p: any) => p.type?.toLowerCase() === 'groom' || p.type?.toLowerCase() === 'pria',
+      ) ??
+      (isGroomFirst.value ? pengantin.value[0] : pengantin.value[1]) ??
+      null
+    )
+  })
+
+  const bride = computed(() => {
+    return (
+      pengantin.value.find(
+        (p: any) => p.type?.toLowerCase() === 'bride' || p.type?.toLowerCase() === 'wanita',
+      ) ??
+      (isGroomFirst.value ? pengantin.value[1] : pengantin.value[0]) ??
+      null
+    )
   })
 
   const coupleNickname = computed(() => {
