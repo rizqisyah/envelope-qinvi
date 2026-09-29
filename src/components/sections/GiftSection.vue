@@ -26,7 +26,6 @@ import { useReveal } from '../../composables/useReveal'
 import { useWedding } from '../../composables/useWedding'
 
 import cardPlate from '../../assets/gift/parts/g236_2594-193_card.webp'
-import bcaLogo from '../../assets/gift/parts/g236_2594-156_bca-logo.webp'
 import copyIcon from '../../assets/gift/parts/03_2594-196_copy-icon.webp'
 import floralBackA from '../../assets/gift/parts/01_2594-199.webp'
 import floralBackB from '../../assets/gift/parts/02_2594-200.webp'
@@ -76,9 +75,6 @@ const accounts = computed<Account[]>(() => {
     .filter((a) => a.account_number || a.account_name)
   return live.length ? live : FALLBACK
 })
-
-// The real app ships a BCA logo and renders every other bank as its own name.
-const isBca = (a: Account) => (a.bank_name || '').trim().toUpperCase() === 'BCA'
 
 /** What a card prints, and where -- the address variant sets three lines, higher up. */
 function lines(a: Account): { top: number; leading: number; rows: string[] } {
@@ -165,8 +161,8 @@ const px = (n: number) => `calc(${n} * var(--px))`
 
       <img :src="cardPlate" alt="" class="gift__plate" />
 
-      <img v-if="isBca(a)" :src="bcaLogo" alt="BCA" class="gift__logo" />
-      <p v-else-if="a.bank_name" class="gift__bank">{{ a.bank_name }}</p>
+      <!-- No bank logos, BCA included: every bank prints as its own name. -->
+      <p v-if="a.bank_name" class="gift__bank">{{ a.bank_name }}</p>
 
       <p
         class="gift__lines"
@@ -288,14 +284,7 @@ const px = (n: number) => `calc(${n} * var(--px))`
   height: calc(110 * var(--px));
 }
 
-.gift__logo {
-  top: calc(15 * var(--px));
-  left: calc(45 * var(--px));
-  width: calc(60 * var(--px));
-  height: calc(19.5 * var(--px));
-}
-
-/* Any bank the design has no logo for renders as its own name, at the logo's baseline. */
+/* The bank's name, where Frame 242 drew the BCA logo (removed on request). */
 .gift__bank {
   top: calc(15 * var(--px));
   left: calc(45 * var(--px));

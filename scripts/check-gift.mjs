@@ -60,7 +60,7 @@ async function cards(page) {
   const { ctx, page } = await open([])
   const c = await cards(page)
   check(c.length === 3, `fallback renders the design's three cards (got ${c.length})`)
-  check(c[0].hasLogo && c[1].hasLogo, 'the two BCA cards show the logo asset')
+  check(!c[0].hasLogo && !c[1].hasLogo && c[0].bank === 'BCA', 'BCA prints as its name, no logo asset')
   check(
     c[0].lines[0] === 'No. Rekening : 8715154435' && c[0].lines[1] === 'A/n Muhammad Arif',
     `fallback card 1 copy (got ${JSON.stringify(c[0].lines)})`,
@@ -97,7 +97,7 @@ async function cards(page) {
     c[0].lines[0] === 'No. Rekening : 1122334455' && c[0].lines[1] === 'A/n Ahmad Setiawan',
     `account 1 comes from the API (got ${JSON.stringify(c[0].lines)})`,
   )
-  check(c[0].hasLogo && !c[1].hasLogo, 'only BCA gets the logo asset')
+  check(!c[0].hasLogo && c[0].bank === 'BCA', 'BCA prints as its name, no logo asset')
   check(c[1].bank === 'Mandiri', `a bank with no logo renders its name (got "${c[1].bank}")`)
 
   /*
