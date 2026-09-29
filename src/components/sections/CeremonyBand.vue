@@ -330,10 +330,16 @@ onUnmounted(() => {
   line-height: calc(24 * var(--px));
 }
 
+/*
+ * Figma's venue node is 240 wide, but that is wider than the card's scalloped
+ * waist at this height, so a long venue ran past the card's edges before it
+ * wrapped. The box is narrowed to the card's inner width around the same centre
+ * (x 188), so a long name breaks onto the next line inside the card instead.
+ */
 .band__venue {
   top: calc(192 * var(--px));
-  left: calc(68 * var(--px));
-  width: calc(240 * var(--px));
+  left: calc(96 * var(--px));
+  width: calc(184 * var(--px));
   font-family: var(--font-serif-alt);
   font-size: calc(12 * var(--px));
   font-weight: 400;
@@ -507,7 +513,7 @@ onUnmounted(() => {
 }
 
 .band.resepsi .band__venue {
-  left: calc(60 * var(--px));
+  left: calc(88 * var(--px));
 }
 
 .band.resepsi .band__address {

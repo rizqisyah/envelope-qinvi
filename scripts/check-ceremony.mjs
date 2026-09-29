@@ -31,14 +31,14 @@ const BANDS = [
     index: 0,
     line2: 'Akad Nikah',
     want: { x0: 24.9, y0: 3937.1, x1: 281.3, y1: 4042.9 },
-    lefts: { date: 104, time: 104, venue: 68, address: 116, maps: 161.08 },
+    lefts: { date: 104, time: 104, venue: 96, address: 116, maps: 161.08 },
   },
   {
     name: 'resepsi',
     index: 1,
     line2: 'Resepsi Nikah',
     want: { x0: 24.88, y0: 4531.93, x1: 306.76, y1: 4637.79 },
-    lefts: { date: 96, time: 96, venue: 60, address: 108, maps: 153.1 },
+    lefts: { date: 96, time: 96, venue: 88, address: 108, maps: 153.1 },
   },
 ]
 
