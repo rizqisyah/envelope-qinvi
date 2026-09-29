@@ -23,6 +23,12 @@ import { useWedding } from '../../composables/useWedding'
 const { wedding, gallery } = useWedding()
 
 const musicUrl = computed(() => (wedding.value?.music_url as string) || '')
+/*
+ * Seconds to skip the song's intro by, and where to cut it off, as set per wedding in
+ * the dashboard (same fields fe-clevert-ivana reads). 0 means "no trim" on either end.
+ */
+const musicStart = computed(() => Number(wedding.value?.music_start) || 0)
+const musicEnd = computed(() => Number(wedding.value?.music_end) || 0)
 
 const hasGallery = computed(() => {
   const arr = (gallery.value as any[]) || []
@@ -53,6 +59,57 @@ function goTo(target: string) {
   if (!el) return
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
+}
+
+/** Clamped, because seeking past the end of the file fires `ended` straight away. */
+function seekTo(audio: HTMLAudioElement, t: number) {
+  if (!(audio.duration > 0)) return
+  try {
+    audio.currentTime = Math.max(0, Math.min(t, audio.duration - 0.1))
+  } catch {
+    // Not seekable yet; `timeupdate` retries.
+  }
+}
+
+/**
+ * `music_start`, unless it is past the end of this file -- a typo there would otherwise
+ * park playback on the last frame and loop silence.
+ */
+function startOf(audio: HTMLAudioElement) {
+  const start = musicStart.value
+  return start > 0 && start < audio.duration ? start : 0
+}
+
+/*
+ * `preload="none"` means there is no duration until playback starts, so the jump to
+ * `music_start` happens here rather than on mount. Only while still inside the intro,
+ * so pausing and resuming later in the song does not rewind it.
+ */
+function onLoaded(e: Event) {
+  const audio = e.target as HTMLAudioElement
+  const start = startOf(audio)
+  if (audio.currentTime < start) seekTo(audio, start)
+}
+
+/*
+ * The native `loop` would restart at 0 and replay the intro, so looping is done here.
+ * The intro check is repeated too: iOS Safari can drop a seek made at `loadedmetadata`,
+ * before it has buffered anything, and then plays from 0. There is no scrubber, so
+ * nothing but that dropped seek can put playback before `music_start`.
+ */
+function onTimeUpdate(e: Event) {
+  const audio = e.target as HTMLAudioElement
+  const start = startOf(audio)
+  const end = musicEnd.value
+  if (audio.currentTime < start - 0.5 || (end > start && audio.currentTime >= end)) {
+    seekTo(audio, start)
+  }
+}
+
+function onEnded(e: Event) {
+  const audio = e.target as HTMLAudioElement
+  seekTo(audio, startOf(audio))
+  audio.play().catch(() => {})
 }
 
 async function play() {
@@ -176,8 +233,10 @@ onBeforeUnmount(() => {
       v-if="musicUrl"
       ref="audioEl"
       :src="musicUrl"
-      loop
       preload="none"
+      @loadedmetadata="onLoaded"
+      @timeupdate="onTimeUpdate"
+      @ended="onEnded"
       @play="playing = true"
       @pause="playing = false"
     />
