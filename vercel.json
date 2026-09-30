@@ -1,6 +1,28 @@
 {
   "rewrites": [
     { "source": "/api/:path*", "destination": "https://api.qinvi.id/api/:path*" },
+    {
+      "source": "/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(facebookexternalhit|WhatsApp|Twitterbot|Pinterest|Googlebot|bingbot|YandexBot|Yahoo|LinkedInBot|TelegramBot|Slackbot|crawler).*"
+        }
+      ],
+      "destination": "https://api.qinvi.id/:slug"
+    },
+    {
+      "source": "/:themeCode/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(facebookexternalhit|WhatsApp|Twitterbot|Pinterest|Googlebot|bingbot|YandexBot|Yahoo|LinkedInBot|TelegramBot|Slackbot|crawler).*"
+        }
+      ],
+      "destination": "https://api.qinvi.id/:themeCode/:slug"
+    },
     { "source": "/:path*", "destination": "/index.html" }
   ]
 }
