@@ -249,27 +249,24 @@ export function useWedding() {
    */
   const demoQuote = computed(() => !state.value.loading && !wedding.value)
 
-  const quoteText = computed(
-    () =>
-      themeOverride.value?.words?.quote_text ||
-      themeOverride.value?.quote?.text ||
-      themeOverride.value?.quote_text ||
-      (demoQuote.value ? DEMO_QUOTE.text : ''),
-  )
-  const quoteVerse = computed(
-    () =>
-      themeOverride.value?.words?.quote_verse ||
-      themeOverride.value?.quote?.verse ||
-      themeOverride.value?.quote_verse ||
-      (demoQuote.value ? DEMO_QUOTE.verse : ''),
-  )
-  const quoteArabic = computed(
-    () =>
-      themeOverride.value?.words?.quote_arabic ||
-      themeOverride.value?.quote?.arabic ||
-      themeOverride.value?.quote_arabic ||
-      (demoQuote.value ? DEMO_QUOTE.arabic : ''),
-  )
+  /*
+   * The quote is stored in up to three places: `words.quote_*` (admin form, AI
+   * autofill), `quote.*` (seeds, older saves) and a flat `quote_*`. The first one that
+   * is SET wins, even when it is an empty string -- chaining with `||` let a cleared
+   * `words.quote_text` fall through to a stale `quote.text`, so the verse could never
+   * be removed.
+   */
+  function quoteField(wordKey: string, quoteKey: string, demo: string): string {
+    const o = themeOverride.value as any
+    for (const v of [o?.words?.[wordKey], o?.quote?.[quoteKey], o?.[wordKey]]) {
+      if (typeof v === 'string') return v.trim()
+    }
+    return demoQuote.value ? demo : ''
+  }
+
+  const quoteText = computed(() => quoteField('quote_text', 'text', DEMO_QUOTE.text))
+  const quoteVerse = computed(() => quoteField('quote_verse', 'verse', DEMO_QUOTE.verse))
+  const quoteArabic = computed(() => quoteField('quote_arabic', 'arabic', DEMO_QUOTE.arabic))
 
   /*
    * Akad takes acara[0], Resepsi acara[1]. A wedding with a single event gets a

@@ -93,10 +93,12 @@ const fullName = computed(() => {
 })
 const fallbackParents = computed(() =>
   isGroomFirst.value
-    ? 'Putri Pertama dari Bapak Heri\n& Ibu Sofie'
-    : 'Putra Pertama dari Bapak Tono\n& Ibu Ratna',
+    ? 'Putri Pertama dari\nBapak Heri\n& Ibu Sofie'
+    : 'Putra Pertama dari\nBapak Tono\n& Ibu Ratna',
 )
-const parents = computed(() => parentLine(person.value) || fallbackParents.value)
+const parents = computed(
+  () => parentLine(person.value, { multiline: true }) || fallbackParents.value,
+)
 </script>
 
 <template>
@@ -181,7 +183,9 @@ const parents = computed(() => parentLine(person.value) || fallbackParents.value
   white-space: pre-line;
   font-family: var(--font-serif-alt);
   font-size: calc(15 * var(--px) * var(--fit, 1));
-  line-height: calc(22 * var(--px));
+  /* em, not px: the stacked parent lines can run to four, and useFitText can only
+     shrink the block if the line height shrinks with the font. 1.47em = 22px at 15. */
+  line-height: 1.47em;
   color: var(--brown-soft);
 }
 

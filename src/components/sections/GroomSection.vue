@@ -92,10 +92,12 @@ const fullName = computed(() => {
 })
 const fallbackParents = computed(() =>
   isGroomFirst.value
-    ? 'Putra Pertama dari Bapak Tono\n& Ibu Ratna'
-    : 'Putri Pertama dari Bapak Heri\n& Ibu Sofie',
+    ? 'Putra Pertama dari\nBapak Tono\n& Ibu Ratna'
+    : 'Putri Pertama dari\nBapak Heri\n& Ibu Sofie',
 )
-const parents = computed(() => parentLine(person.value) || fallbackParents.value)
+const parents = computed(
+  () => parentLine(person.value, { multiline: true }) || fallbackParents.value,
+)
 </script>
 
 <template>

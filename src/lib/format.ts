@@ -214,17 +214,45 @@ export function formatShortDate(raw?: string | Date | null): string {
  * It ships the pieces separately as `child_of` + `father_name` + `mother_name`, any of
  * which can be blank, so join whatever is there and let the caller supply the fallback.
  */
-export function parentLine(p?: {
-  child_of?: string | null
-  father_name?: string | null
-  mother_name?: string | null
-} | null): string {
+export function parentLine(
+  p?: {
+    child_of?: string | null
+    father_name?: string | null
+    mother_name?: string | null
+  } | null,
+  /**
+   * Stack it: "Putra Pertama dari" / "Bapak A" / "& Ibu B", one per line. Needs
+   * `white-space: pre-line` on the element.
+   */
+  opts: { multiline?: boolean } = {},
+): string {
   if (!p) return ''
   const prefix = (p.child_of || '').trim()
-  const parents = [p.father_name, p.mother_name].map((s) => (s || '').trim()).filter(Boolean).join(' ')
+  const names = [p.father_name, p.mother_name].map((s) => (s || '').trim()).filter(Boolean)
+  const parents = names.join(' ')
   // `child_of` on real data is often the whole sentence already; don't repeat the parents.
-  if (prefix && parents && prefix.includes(parents)) return prefix
-  return [prefix, parents].filter(Boolean).join(' ').trim()
+  if (prefix && parents && prefix.includes(parents)) {
+    return opts.multiline ? stackParentSentence(prefix) : prefix
+  }
+  if (!opts.multiline) return [prefix, parents].filter(Boolean).join(' ').trim()
+  if (!names.length) return stackParentSentence(prefix)
+  /*
+   * Father and mother arrive as separate fields, normally without the "&" (the AI
+   * autofill is told to drop it), so supply it here -- but strip any the admin typed
+   * so it never doubles up.
+   */
+  const stacked = names
+    .map((n) => n.replace(/^&\s*|\s*&$/g, '').trim())
+    .filter(Boolean)
+    .join('\n& ')
+  return [stackParentSentence(prefix), stacked].filter(Boolean).join('\n')
+}
+
+/** "Putra Pertama dari Bapak A & Ibu B" -> "Putra Pertama dari\nBapak A\n& Ibu B". */
+function stackParentSentence(sentence: string): string {
+  return sentence
+    .replace(/^(.*?\b(?:dari|of))\s+(?=\S)/i, '$1\n')
+    .replace(/\s*&\s*/g, '\n& ')
 }
 
 /**
