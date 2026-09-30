@@ -11,6 +11,7 @@
  */
 import { computed, ref } from 'vue'
 import { useFitText } from '../../composables/useFitText'
+import { useNameFit } from '../../composables/useNameFit'
 import { useReveal } from '../../composables/useReveal'
 import { useWedding } from '../../composables/useWedding'
 import { parentLine, formatName } from '../../lib/format'
@@ -33,8 +34,9 @@ import calla from '../../assets/bride/parts/03_2588-135_vdf-3.webp' // z67
 type Layer = { src: string; x: number; y: number; w: number; h: number; kind: string; in: number }
 
 const { el, shown } = useReveal()
-const fitParents = useFitText()
+const fitBio = useFitText()
 const fitNickname = useFitText()
+const nameFit = useNameFit()
 const { groom, bride, isGroomFirst } = useWedding()
 
 const person = computed(() => (isGroomFirst.value ? bride.value : groom.value))
@@ -115,9 +117,9 @@ const parents = computed(
     />
 
     <h2 :ref="fitNickname" id="bride-heading" class="bride__nickname">{{ nickname }}</h2>
-    <div class="bride__bio">
+    <div :ref="fitBio" class="bride__bio" :style="{ '--name-fit': nameFit }">
       <p class="bride__name">{{ fullName }}</p>
-      <p :ref="fitParents" class="bride__parents">{{ parents }}</p>
+      <p class="bride__parents">{{ parents }}</p>
     </div>
 
     <img :src="front.src" alt="" :style="box(front)" class="lyr lyr--front" />
@@ -156,10 +158,12 @@ const parents = computed(
   color: var(--brown-soft);
 }
 
+/* Kept identical to .groom__bio -- see the note there. */
 .bride__bio {
   top: calc(621 * var(--px));
   left: calc(27 * var(--px));
   width: calc(321 * var(--px));
+  max-height: calc(101 * var(--px));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -169,22 +173,19 @@ const parents = computed(
 .bride__name {
   width: 100%;
   font-family: var(--font-name, "Playfair", serif);
-  font-size: calc(20 * var(--px));
+  font-size: calc(20 * var(--px) * var(--fit, 1) * var(--name-fit, 1));
   font-weight: 600;
-  line-height: calc(26 * var(--px));
+  line-height: 1.3em;
   color: var(--brown-soft);
   letter-spacing: 0.02em;
 }
 
 .bride__parents {
   width: 100%;
-  margin-top: calc(8 * var(--px));
-  max-height: calc(83 * var(--px));
+  margin-top: calc(8 * var(--px) * var(--fit, 1));
   white-space: pre-line;
   font-family: var(--font-serif-alt);
   font-size: calc(15 * var(--px) * var(--fit, 1));
-  /* em, not px: the stacked parent lines can run to four, and useFitText can only
-     shrink the block if the line height shrinks with the font. 1.47em = 22px at 15. */
   line-height: 1.47em;
   color: var(--brown-soft);
 }

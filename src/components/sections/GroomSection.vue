@@ -10,6 +10,7 @@
  */
 import { computed, ref } from 'vue'
 import { useFitText } from '../../composables/useFitText'
+import { useNameFit } from '../../composables/useNameFit'
 import { useReveal } from '../../composables/useReveal'
 import { useWedding } from '../../composables/useWedding'
 import { parentLine, formatName } from '../../lib/format'
@@ -38,6 +39,7 @@ type Layer = { src: string; x: number; y: number; w: number; h: number; kind: st
 const { el, shown } = useReveal()
 const fitBio = useFitText()
 const fitNickname = useFitText()
+const nameFit = useNameFit()
 const { groom, bride, isGroomFirst } = useWedding()
 
 const person = computed(() => (isGroomFirst.value ? groom.value : bride.value))
@@ -64,7 +66,8 @@ const behind = computed<Layer[]>(() => [
   { src: plate.value, x: 8, y: 120, w: 360, h: 450, kind: 'plate', in: 260 },
   { src: innerFrame, x: 45, y: 146, w: 285, h: 410, kind: 'plate', in: 0 },
   { src: paperFrame, x: 0, y: 0, w: 375, h: 796, kind: 'paper', in: 0 },
-  { src: leaf, x: 26, y: 666, w: 86, h: 95, kind: 'plate', in: 760 },
+  // Figma x 26; nudged left so the stacked parents' "& Ibu …" line clears its tip.
+  { src: leaf, x: 12, y: 666, w: 86, h: 95, kind: 'plate', in: 760 },
 ])
 
 const front: Layer[] = [{ src: calla, x: 0, y: 226, w: 136, h: 200, kind: 'front', in: 900 }]
@@ -106,7 +109,7 @@ const parents = computed(
 
     <h2 :ref="fitNickname" id="groom-heading" class="groom__nickname">{{ nickname }}</h2>
     <img :src="ornament" alt="" :style="box({ src: ornament, x: 131, y: 585, w: 120, h: 29, kind: 'ornament', in: 1500 })" class="lyr groom__ornament" />
-    <div :ref="fitBio" class="groom__bio">
+    <div :ref="fitBio" class="groom__bio" :style="{ '--name-fit': nameFit }">
       <p class="groom__name">{{ fullName }}</p>
       <p class="groom__parents">{{ parents }}</p>
     </div>
@@ -148,18 +151,18 @@ const parents = computed(
 }
 
 /*
- * Name and parents are fitted as ONE block. The divider's leaves and pearl strand
- * paint over this band from about y 705, so the copy has 99px from 606 -- exactly
- * what the design's one-line name and two-line parents use. A long name that wraps
- * plus the stacked "dari / Bapak / & Ibu" parents runs to ~126px; fitting only the
- * parents let the name push them down into the pearls. `--fit` on this box scales
- * both font sizes, and the line heights are in em so the block really shrinks.
+ * The divider's leaves and pearl strand paint over this band from about y 710, so
+ * the copy has ~100px from 606. That holds a ONE-line name (26) plus the stacked
+ * "dari / Bapak / & Ibu" parents (8 + 66) at full size. `--name-fit` (useNameFit)
+ * keeps a long name on one line -- the same scale as the bride's, so both blocks
+ * match -- and `--fit` is only a last resort for parents that run to four lines.
+ * Kept identical to .bride__bio.
  */
 .groom__bio {
   top: calc(606 * var(--px));
   left: calc(27 * var(--px));
   width: calc(321 * var(--px));
-  max-height: calc(99 * var(--px));
+  max-height: calc(101 * var(--px));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -169,7 +172,7 @@ const parents = computed(
 .groom__name {
   width: 100%;
   font-family: var(--font-name, "Playfair", serif);
-  font-size: calc(20 * var(--px) * var(--fit, 1));
+  font-size: calc(20 * var(--px) * var(--fit, 1) * var(--name-fit, 1));
   font-weight: 600;
   line-height: 1.3em;
   color: var(--brown-soft);
