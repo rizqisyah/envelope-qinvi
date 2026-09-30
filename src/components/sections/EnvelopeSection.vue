@@ -76,14 +76,14 @@ const { quoteVerse, quoteText, quoteArabic } = useWedding()
 </script>
 
 <template>
-  <section :ref="el" class="envelope" :class="{ 'is-in': shown }" aria-labelledby="quote-heading">
+  <section :ref="el" class="envelope" :class="{ 'is-in': shown }" :aria-labelledby="quoteVerse ? 'quote-heading' : undefined">
     <img v-for="(l, i) in behind" :key="`b${i}`" :src="l.src" alt="" :style="box(l, i * 140)" class="lyr lyr--behind" />
 
     <p class="envelope__stamp-text">Wedding<br />Invitation</p>
 
     <img v-for="(l, i) in middle" :key="`m${i}`" :src="l.src" alt="" :style="box(l, 400 + i * 180)" class="lyr lyr--mid" />
 
-    <h2 id="quote-heading" class="envelope__verse">{{ quoteVerse }}</h2>
+    <h2 v-if="quoteVerse" id="quote-heading" class="envelope__verse">{{ quoteVerse }}</h2>
     <p class="envelope__save">Save<br />The<br />Date</p>
     <!--
       One positioned block, two children in normal flow: the translation sits a
@@ -92,7 +92,7 @@ const { quoteVerse, quoteText, quoteArabic } = useWedding()
     -->
     <div class="envelope__block">
       <p v-if="quoteArabic && quoteArabic.trim()" class="envelope__arabic envelope__quote">{{ quoteArabic }}</p>
-      <blockquote :ref="fitQuote" class="envelope__quote envelope__quote-id">&ldquo;{{ quoteText }}&rdquo;</blockquote>
+      <blockquote v-if="quoteText" :ref="fitQuote" class="envelope__quote envelope__quote-id">&ldquo;{{ quoteText }}&rdquo;</blockquote>
     </div>
 
     <img v-for="(l, i) in front" :key="`f${i}`" :src="l.src" alt="" :style="box(l, 1150 + i * 110)" class="lyr lyr--front" />

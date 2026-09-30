@@ -46,9 +46,9 @@ const leftBackgroundStyle = computed(() => {
           <p class="left-subtitle">THE WEDDING OF</p>
           <h1 class="left-title">{{ coupleNickname }}</h1>
         </div>
-        <div class="left-quote-container">
-          <p class="left-quote">“{{ quoteText }}”</p>
-          <span class="left-quote-verse">{{ quoteVerse }}</span>
+        <div v-if="quoteText || quoteVerse" class="left-quote-container">
+          <p v-if="quoteText" class="left-quote">“{{ quoteText }}”</p>
+          <span v-if="quoteVerse" class="left-quote-verse">{{ quoteVerse }}</span>
         </div>
       </div>
     </div>

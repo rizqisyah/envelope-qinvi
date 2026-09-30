@@ -107,6 +107,13 @@ function formatDirectName(val: string): string {
   }
 }
 
+/** Frame 242's own sample quote -- see `demoQuote` in useWedding for when it shows. */
+const DEMO_QUOTE = {
+  text: 'Di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri agar kamu merasa tenteram kepadanya. Dia menjadikan di antaramu rasa cinta dan kasih sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda kebesaran Allah bagi kaum yang berpikir.',
+  verse: 'QS Ar-Rum 21',
+  arabic: 'وَمِنْ اٰيٰتِهٖٓ اَنْ خَلَقَ لَكُمْ مِّنْ اَنْفُسِكُمْ اَزْوَاجًا لِّتَسْكُنُوْٓا اِلَيْهَا وَجَعَلَ بَيْنَكُمْ مَّوَدَّةً وَّرَحْمَةًۗ اِنَّ فِيْ ذٰلِكَ لَاٰيٰتٍ لِّقَوْمٍ يَّتَفَكَّرُوْنَ',
+}
+
 export function useWedding() {
   const slug = ref(resolveSlug())
   const guestCode = ref(getGuestCode())
@@ -234,27 +241,41 @@ export function useWedding() {
     return isGroomFirst.value ? 'Antonio & Allysa' : 'Allysa & Antonio'
   })
 
+  /*
+   * The design's sample quote is only for a render with no wedding at all (local dev,
+   * API unreachable). A loaded wedding whose quote fields are blank shows nothing --
+   * an invitation must not quote a verse the couple never chose. Blank while loading
+   * too, so the desktop column doesn't flash Ar-Rum 21 before the real data lands.
+   */
+  const demoQuote = computed(() => !state.value.loading && !wedding.value)
+
   const quoteText = computed(
     () =>
       themeOverride.value?.words?.quote_text ||
       themeOverride.value?.quote?.text ||
       themeOverride.value?.quote_text ||
-      'Di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri agar kamu merasa tenteram kepadanya. Dia menjadikan di antaramu rasa cinta dan kasih sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda kebesaran Allah bagi kaum yang berpikir.',
+      (demoQuote.value ? DEMO_QUOTE.text : ''),
   )
   const quoteVerse = computed(
     () =>
       themeOverride.value?.words?.quote_verse ||
       themeOverride.value?.quote?.verse ||
       themeOverride.value?.quote_verse ||
-      'QS Ar-Rum 21',
+      (demoQuote.value ? DEMO_QUOTE.verse : ''),
   )
   const quoteArabic = computed(
     () =>
       themeOverride.value?.words?.quote_arabic ||
       themeOverride.value?.quote?.arabic ||
       themeOverride.value?.quote_arabic ||
-      'وَمِنْ اٰيٰتِهٖٓ اَنْ خَلَقَ لَكُمْ مِّنْ اَنْفُسِكُمْ اَزْوَاجًا لِّتَسْكُنُوْٓا اِلَيْهَا وَجَعَلَ بَيْنَكُمْ مَّوَدَّةً وَّرَحْمَةًۗ اِنَّ فِيْ ذٰلِكَ لَاٰيٰتٍ لِّقَوْمٍ يَّتَفَكَّرُوْنَ',
+      (demoQuote.value ? DEMO_QUOTE.arabic : ''),
   )
+
+  /*
+   * Akad takes acara[0], Resepsi acara[1]. A wedding with a single event gets a
+   * single card; with no wedding loaded yet both stay, matching the design.
+   */
+  const hasSecondEvent = computed(() => !wedding.value || acara.value.length > 1)
 
   const invitePhoto = computed(
     () =>
@@ -366,6 +387,7 @@ export function useWedding() {
     quoteVerse,
     quoteArabic,
     countdownDate,
+    hasSecondEvent,
     refetch: fetchWeddingData,
   }
 }

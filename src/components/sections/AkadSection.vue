@@ -26,7 +26,7 @@ import { computed } from 'vue'
 import { useWedding } from '../../composables/useWedding'
 import CeremonyBand, { type Layer } from './CeremonyBand.vue'
 
-const { gallery } = useWedding()
+const { gallery, hasSecondEvent } = useWedding()
 const hasGallery = computed(() => {
   const arr = (gallery.value as any[]) || []
   return arr.some((g) => !!(g && (g.image_url || g.url || g.src || (typeof g === 'string' && g))))
@@ -71,11 +71,15 @@ const front: Layer[] = [
     Heading placement: 2560:211 and 2560:213, hidden in Figma. Measured off the
     design screenshot through two independent registrations (the envelope apex the
     crop includes, then the paper edges of a second shot), agreeing to ~1px.
+
+    587 leaves room below the card for resepsi's heading, which hangs above its own
+    band. With a single event there is no resepsi, so take resepsi's 480 instead --
+    the same bare-paper gap it leaves before the countdown.
   -->
   <CeremonyBand
     name="akad"
     :class="{ 'no-gallery': !hasGallery }"
-    :height="587"
+    :height="hasSecondEvent ? 587 : 480"
     :event-index="0"
     :behind="behind"
     :front="front"

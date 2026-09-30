@@ -22,7 +22,9 @@ import FooterSection from '../sections/FooterSection.vue'
 import paperBg from '../../assets/page/parts/00_2550-130_paper-bg.webp' // z0, y 13
 import quoteBg from '../../assets/quote/parts/00_2588-125_bac-2.webp' // z1, (-16, 679)
 import bgStrip from '../../assets/page/parts/01_2560-276_bg-strip.webp' // z3, y 2821
+import { useWedding } from '../../composables/useWedding'
 
+const { hasSecondEvent } = useWedding()
 </script>
 
 <template>
@@ -46,7 +48,7 @@ import bgStrip from '../../assets/page/parts/01_2560-276_bg-strip.webp' // z3, y
     <GallerySection />
     <PrewedVideoSection />
     <AkadSection />
-    <ResepsiSection />
+    <ResepsiSection v-if="hasSecondEvent" />
     <CountdownSection />
     <GiftSection />
     <RsvpSection />
