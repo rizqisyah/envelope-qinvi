@@ -32,7 +32,7 @@ export type HeadingLine = { top: number; left: number }
  * offset (it shifts (-0.05, +594.85)), which is why `heading` is its own prop and
  * is never computed from the layers.
  */
-import { computed, ref, watch, nextTick, onUnmounted, type ComponentPublicInstance } from 'vue'
+import { computed, ref, watch, nextTick, onMounted, onUnmounted, type ComponentPublicInstance } from 'vue'
 import { dateLocale, formatEventDate, formatEventTime } from '../../lib/format'
 import { useFitText } from '../../composables/useFitText'
 import { useReveal } from '../../composables/useReveal'
@@ -90,6 +90,38 @@ const when = computed(
     },
 )
 const time = computed(() => formatEventTime(event.value?.event_time) || '')
+
+/*
+ * The second heading line is the event's own title ("Pemberkatan Nikah", "Resepsi"),
+ * falling back to the band's design copy. It is one rotated, unwrapped script line
+ * starting ~94px in, so a long title would run off the card's right edge: shrink it
+ * to HEADING_MAX design px. Measured on a canvas at the CSS size (40 design px), so
+ * the ratio holds at any viewport and works while the band is still behind the cover
+ * with no layout box to measure.
+ */
+const HEADING_MAX = 270
+const headingText = computed(() => (event.value?.title || '').trim() || props.headingLine2)
+const headingBEl = ref<HTMLElement | null>(null)
+const headingFit = ref(1)
+let measureCtx: CanvasRenderingContext2D | null = null
+
+function fitHeading() {
+  const el = headingBEl.value
+  if (!el) return
+  measureCtx ??= document.createElement('canvas').getContext('2d')
+  if (!measureCtx) return
+  measureCtx.font = `40px ${getComputedStyle(el).fontFamily}`
+  const w = measureCtx.measureText(headingText.value).width
+  headingFit.value = w > HEADING_MAX ? HEADING_MAX / w : 1
+}
+
+watch(headingText, () => nextTick(fitHeading))
+onMounted(() => {
+  fitHeading()
+  // The script face may still be loading; the fallback's widths would stick.
+  document.fonts?.ready.then(fitHeading)
+})
+
 const venue = computed(() => event.value?.location_name || 'Rumah mempelai wanita')
 const address = computed(
   () =>
@@ -214,7 +246,11 @@ onUnmounted(() => {
 
     <h2 :id="`${name}-heading`" class="band__heading">
       <span class="band__heading-a" :style="place(headingA)">It’s the day!</span>
-      <span class="band__heading-b" :style="place(headingB)">{{ headingLine2 }}</span>
+      <span
+        ref="headingBEl"
+        class="band__heading-b"
+        :style="{ ...place(props.headingB), '--hfit': headingFit }"
+      >{{ headingText }}</span>
     </h2>
 
     <p class="band__date">{{ when.weekday }},<br />{{ when.date }}</p>
@@ -304,6 +340,11 @@ onUnmounted(() => {
   color: var(--ink);
   transform-origin: 0 0;
   transform: rotate(-12.25deg);
+}
+
+/* The event title can be longer than the design's "Akad Nikah"; see fitHeading. */
+.band__heading .band__heading-b {
+  font-size: calc(40 * var(--px) * var(--hfit, 1));
 }
 
 /*

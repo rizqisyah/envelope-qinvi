@@ -36,7 +36,7 @@ import calla from '../../assets/groom/parts/04_2588-131_vdf-1.webp' // z66
 type Layer = { src: string; x: number; y: number; w: number; h: number; kind: string; in: number }
 
 const { el, shown } = useReveal()
-const fitParents = useFitText()
+const fitBio = useFitText()
 const fitNickname = useFitText()
 const { groom, bride, isGroomFirst } = useWedding()
 
@@ -106,9 +106,9 @@ const parents = computed(
 
     <h2 :ref="fitNickname" id="groom-heading" class="groom__nickname">{{ nickname }}</h2>
     <img :src="ornament" alt="" :style="box({ src: ornament, x: 131, y: 585, w: 120, h: 29, kind: 'ornament', in: 1500 })" class="lyr groom__ornament" />
-    <div class="groom__bio">
+    <div :ref="fitBio" class="groom__bio">
       <p class="groom__name">{{ fullName }}</p>
-      <p :ref="fitParents" class="groom__parents">{{ parents }}</p>
+      <p class="groom__parents">{{ parents }}</p>
     </div>
 
     <img v-for="(l, i) in front" :key="`f${i}`" :src="l.src" alt="" :style="box(l)" class="lyr lyr--front" />
@@ -147,10 +147,19 @@ const parents = computed(
   color: var(--brown-soft);
 }
 
+/*
+ * Name and parents are fitted as ONE block. The divider's leaves and pearl strand
+ * paint over this band from about y 705, so the copy has 99px from 606 -- exactly
+ * what the design's one-line name and two-line parents use. A long name that wraps
+ * plus the stacked "dari / Bapak / & Ibu" parents runs to ~126px; fitting only the
+ * parents let the name push them down into the pearls. `--fit` on this box scales
+ * both font sizes, and the line heights are in em so the block really shrinks.
+ */
 .groom__bio {
   top: calc(606 * var(--px));
   left: calc(27 * var(--px));
   width: calc(321 * var(--px));
+  max-height: calc(99 * var(--px));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -160,17 +169,16 @@ const parents = computed(
 .groom__name {
   width: 100%;
   font-family: var(--font-name, "Playfair", serif);
-  font-size: calc(20 * var(--px));
+  font-size: calc(20 * var(--px) * var(--fit, 1));
   font-weight: 600;
-  line-height: calc(26 * var(--px));
+  line-height: 1.3em;
   color: var(--brown-soft);
   letter-spacing: 0.02em;
 }
 
 .groom__parents {
   width: 100%;
-  margin-top: calc(8 * var(--px));
-  max-height: calc(83 * var(--px));
+  margin-top: calc(8 * var(--px) * var(--fit, 1));
   white-space: pre-line;
   font-family: var(--font-serif-alt);
   font-size: calc(15 * var(--px) * var(--fit, 1));
