@@ -3,19 +3,30 @@
  * that follows them). The API gives `event_date` as a date string and `event_time`
  * as a range, and Frame 242 prints them in a very specific shape:
  *
- *   Saturday,            <- English weekday, on its own line
+ *   Saturday,            <- weekday, on its own line
  *   19 April 2029        <- day month year
  *   10.00 WIB - 12.00 WIB
  *
- * The invitation copy is Indonesian but the design sets its dates in English, so
- * that is what these return. The zone suffix is part of the design's string, not
- * something the API sends.
+ * The design sets its dates in English, but the weekday and month follow the
+ * wedding's `lang` from getHome ('indonesia' | 'english', chosen in the admin's
+ * general settings) -- "Sabtu" for an Indonesian invitation. The zone suffix is
+ * part of the design's string, not something the API sends.
  */
 const RANGE_SEPARATORS = ['|', 's/d', ' - ', '-', '–']
 
 export type EventDate = { weekday: string; date: string }
 
-export function formatEventDate(raw?: string | null): EventDate | null {
+/**
+ * `wedding.lang` to a BCP 47 locale. Missing means Indonesian, the column's own
+ * default, so a wedding saved before the setting existed reads the same as a new one.
+ */
+export function dateLocale(lang?: string | null): string {
+  const l = (lang || '').trim().toLowerCase()
+  if (l === 'english' || l === 'en' || l.startsWith('en-')) return 'en-GB'
+  return 'id-ID'
+}
+
+export function formatEventDate(raw?: string | null, lang?: string | null): EventDate | null {
   if (!raw) return null
   /*
    * A bare 'YYYY-MM-DD' is parsed as UTC midnight, so west of Greenwich it renders
@@ -27,9 +38,10 @@ export function formatEventDate(raw?: string | null): EventDate | null {
     ? new Date(Number(parts[1]), Number(parts[2]) - 1, Number(parts[3]))
     : new Date(raw)
   if (Number.isNaN(d.getTime())) return null
+  const locale = dateLocale(lang)
   return {
-    weekday: d.toLocaleDateString('en-GB', { weekday: 'long' }),
-    date: d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+    weekday: d.toLocaleDateString(locale, { weekday: 'long' }),
+    date: d.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' }),
   }
 }
 

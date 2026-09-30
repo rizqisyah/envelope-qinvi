@@ -148,6 +148,8 @@ export function useWedding() {
   const wedding = computed(() => state.value.data?.wedding ?? null)
   const theme = computed(() => state.value.data?.theme ?? null)
   const guest = computed(() => state.value.data?.guest ?? null)
+  /** 'indonesia' | 'english' from the admin's general settings; drives date wording. */
+  const lang = computed<string | null>(() => wedding.value?.lang ?? null)
 
   const themeOverride = computed(() => {
     const raw = wedding.value?.theme_override
@@ -340,6 +342,7 @@ export function useWedding() {
     loading: computed(() => state.value.loading),
     error: computed(() => state.value.error),
     wedding,
+    lang,
     videoPrewed,
     theme,
     themeOverride,

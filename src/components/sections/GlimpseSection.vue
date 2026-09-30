@@ -106,7 +106,7 @@ const { el, shown } = useReveal()
  */
 /*
  * The design prints 09. 09. 26 -- day, month, two-digit year. `formatShortDate` is a third
- * formatter because neither formatEventDate ("Saturday" / "19 April 2029") nor
+ * formatter because neither formatEventDate ("Sabtu" / "19 April 2029") nor
  * formatEventTime produces that shape. Falls back to the design's own string, so an
  * unconfigured render still matches the reference.
  */

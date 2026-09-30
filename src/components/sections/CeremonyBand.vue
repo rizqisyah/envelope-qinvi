@@ -33,7 +33,7 @@ export type HeadingLine = { top: number; left: number }
  * is never computed from the layers.
  */
 import { computed, ref, watch, nextTick, onUnmounted, type ComponentPublicInstance } from 'vue'
-import { formatEventDate, formatEventTime } from '../../lib/format'
+import { dateLocale, formatEventDate, formatEventTime } from '../../lib/format'
 import { useFitText } from '../../composables/useFitText'
 import { useReveal } from '../../composables/useReveal'
 import { useWedding } from '../../composables/useWedding'
@@ -73,7 +73,7 @@ function place(h: HeadingLine) {
 
 const { el, shown } = useReveal()
 const fitAddress = useFitText()
-const { acara } = useWedding()
+const { acara, lang } = useWedding()
 
 /*
  * Fallbacks are the copy Frame 242 draws on the card, so an unconfigured render
@@ -83,7 +83,11 @@ const { acara } = useWedding()
 const event = computed(() => (acara.value as any[])[props.eventIndex] ?? null)
 
 const when = computed(
-  () => formatEventDate(event.value?.event_date) ?? { weekday: 'Saturday', date: '19 April 2029' },
+  () =>
+    formatEventDate(event.value?.event_date, lang.value) ?? {
+      weekday: dateLocale(lang.value) === 'en-GB' ? 'Saturday' : 'Sabtu',
+      date: '19 April 2029',
+    },
 )
 const time = computed(() => formatEventTime(event.value?.event_time) || '')
 const venue = computed(() => event.value?.location_name || 'Rumah mempelai wanita')
