@@ -123,10 +123,12 @@ onMounted(() => {
 })
 
 const venue = computed(() => event.value?.location_name || 'Rumah mempelai wanita')
-const address = computed(
-  () =>
-    event.value?.address ||
-    'Jl. Melati Raya No. 27, RT 004/RW 006, Kelurahan Cikini, Kecamatan Menteng, Jakarta Pusat, DKI Jakarta 10330',
+// The design's address only fills a card with no event; an event saved without an
+// address leaves the line empty instead of printing the mock one.
+const address = computed(() =>
+  event.value
+    ? String(event.value.address || '').trim()
+    : 'Jl. Melati Raya No. 27, RT 004/RW 006, Kelurahan Cikini, Kecamatan Menteng, Jakarta Pusat, DKI Jakarta 10330',
 )
 const mapsUrl = computed(() => event.value?.maps_url || '')
 
