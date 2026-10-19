@@ -231,16 +231,6 @@ export function useWedding() {
     )
   })
 
-  const coupleNickname = computed(() => {
-    if (groom.value?.name && bride.value?.name) {
-      const gName = (groom.value as any)?.nickname?.trim() || groom.value.name.trim().split(' ')[0]
-      const bName = (bride.value as any)?.nickname?.trim() || bride.value.name.trim().split(' ')[0]
-      return isGroomFirst.value ? `${gName} & ${bName}` : `${bName} & ${gName}`
-    }
-    if (wedding.value?.title) return wedding.value.title
-    return isGroomFirst.value ? 'Antonio & Allysa' : 'Allysa & Antonio'
-  })
-
   /*
    * The design's sample quote is only for a render with no wedding at all (local dev,
    * API unreachable). A loaded wedding whose quote fields are blank shows nothing --
@@ -248,6 +238,22 @@ export function useWedding() {
    * too, so the desktop column doesn't flash Ar-Rum 21 before the real data lands.
    */
   const demoQuote = computed(() => !state.value.loading && !wedding.value)
+
+  /*
+   * Same rule as demoQuote: the sample "Antonio & Allysa" name is only for a render
+   * with no wedding at all. While the real wedding is still loading this stays blank,
+   * so the cover doesn't flash the sample couple before the actual names land.
+   */
+  const coupleNickname = computed(() => {
+    if (groom.value?.name && bride.value?.name) {
+      const gName = (groom.value as any)?.nickname?.trim() || groom.value.name.trim().split(' ')[0]
+      const bName = (bride.value as any)?.nickname?.trim() || bride.value.name.trim().split(' ')[0]
+      return isGroomFirst.value ? `${gName} & ${bName}` : `${bName} & ${gName}`
+    }
+    if (wedding.value?.title) return wedding.value.title
+    if (!demoQuote.value) return ''
+    return isGroomFirst.value ? 'Antonio & Allysa' : 'Allysa & Antonio'
+  })
 
   /*
    * The quote is stored in up to three places: `words.quote_*` (admin form, AI
