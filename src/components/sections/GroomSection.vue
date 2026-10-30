@@ -40,7 +40,7 @@ const { el, shown } = useReveal()
 const fitBio = useFitText()
 const fitNickname = useFitText()
 const nameFit = useNameFit()
-const { groom, bride, isGroomFirst } = useWedding()
+const { groom, bride, isGroomFirst, brideTransform, groomTransform } = useWedding()
 
 const person = computed(() => (isGroomFirst.value ? groom.value : bride.value))
 
@@ -55,6 +55,27 @@ const plate = computed(() => (!plateFailed.value && person.value?.photo_url) || 
 function onLayerError(e: Event) {
   if ((e.target as HTMLImageElement).src !== plateFallback.value) plateFailed.value = true
 }
+
+/*
+ * "Pengaturan Zoom & Posisi Foto Mempelai (Dinamis)" in the admin. The transform follows
+ * the PERSON in this slot, not the slot, so swapping the order swaps the framing with it.
+ * Only an uploaded plate is reframed -- the bundled merge is design art and keeps its own.
+ *
+ * The zoom rides on `--zoom` instead of `transform`, because the entrance animation owns
+ * that property here: a second `transform` would replace the travel and the plate would
+ * land without moving. See .lyr--plate below.
+ */
+const plateTransform = computed(() => (isGroomFirst.value ? groomTransform.value : brideTransform.value))
+
+const plateStyle = computed(() =>
+  plate.value === plateFallback.value
+    ? {}
+    : {
+        objectPosition: `${plateTransform.value.x}% ${plateTransform.value.y}%`,
+        transformOrigin: `${plateTransform.value.x}% ${plateTransform.value.y}%`,
+        '--zoom': String(plateTransform.value.scale),
+      },
+)
 
 /*
  * Array order is Figma's z-order and must stay that way; `in` is the entrance
@@ -105,7 +126,7 @@ const parents = computed(
 
 <template>
   <section :ref="el" class="groom" :class="{ 'is-in': shown }" aria-labelledby="groom-heading">
-    <img v-for="(l, i) in behind" :key="`b${i}`" :src="l.src" alt="" :style="box(l)" class="lyr" :class="`lyr--${l.kind}`" @error="onLayerError" />
+    <img v-for="(l, i) in behind" :key="`b${i}`" :src="l.src" alt="" :style="[box(l), l.src === plate ? plateStyle : null]" class="lyr" :class="`lyr--${l.kind}`" @error="onLayerError" />
 
     <h2 :ref="fitNickname" id="groom-heading" class="groom__nickname">{{ nickname }}</h2>
     <img :src="ornament" alt="" :style="box({ src: ornament, x: 131, y: 585, w: 120, h: 29, kind: 'ornament', in: 1500 })" class="lyr groom__ornament" />
@@ -224,7 +245,12 @@ const parents = computed(
 }
 
 .lyr--plate {
-  transform: translateY(calc(24 * var(--px))) scale(0.97);
+  transform: translateY(calc(24 * var(--px))) scale(calc(0.97 * var(--zoom, 1)));
+}
+
+/* Settled: the plate holds the client's zoom, every other layer its own scale(1). */
+.groom.is-in .lyr--plate {
+  transform: scale(var(--zoom, 1));
 }
 
 /*
@@ -264,6 +290,11 @@ const parents = computed(
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* No travel, but the client's framing is not motion -- it stays. */
+  .groom .lyr--plate {
+    transform: scale(var(--zoom, 1));
+  }
+
   .groom .lyr,
   .groom__nickname,
   .groom__name,

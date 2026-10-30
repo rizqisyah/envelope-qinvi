@@ -114,6 +114,86 @@ const DEMO_QUOTE = {
   arabic: 'وَمِنْ اٰيٰتِهٖٓ اَنْ خَلَقَ لَكُمْ مِّنْ اَنْفُسِكُمْ اَزْوَاجًا لِّتَسْكُنُوْٓا اِلَيْهَا وَجَعَلَ بَيْنَكُمْ مَّوَدَّةً وَّرَحْمَةًۗ اِنَّ فِيْ ذٰلِكَ لَاٰيٰتٍ لِّقَوْمٍ يَّتَفَكَّرُوْنَ',
 }
 
+/** theme_override travels as an object from getHome and as a string from the admin. */
+function parseOverride(raw: any): Record<string, any> {
+  if (!raw) return {}
+  if (typeof raw === 'object') return raw
+  try {
+    return JSON.parse(raw)
+  } catch {
+    return {}
+  }
+}
+
+/*
+ * "Mode Imajinasi", realtime. The admin dashboard posts its UNSAVED draft into this
+ * iframe on every keystroke and slider drag (QINVI_PREVIEW_UPDATE), so the invitation
+ * restyles while the form is being edited instead of only after a save.
+ *
+ * What arrives is kept here, not only pushed into `state`: the first getHome can land
+ * after the first preview message (the dashboard posts one on iframe load), and plain
+ * assignment would wipe the draft the admin is still dragging. Every fetch re-merges it.
+ */
+let previewWedding: Record<string, any> | null = null
+let previewTheme: any = null
+let refetchFromPreview: (() => Promise<void>) | null = null
+
+function withPreview(data: any) {
+  if (!previewWedding && !previewTheme) return data
+  return {
+    ...(data || {}),
+    wedding: {
+      ...(data?.wedding || {}),
+      ...(previewWedding || {}),
+      theme_override: {
+        ...parseOverride(data?.wedding?.theme_override),
+        ...parseOverride(previewWedding?.theme_override),
+      },
+    },
+    theme: previewTheme || data?.theme,
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('message', (event: MessageEvent) => {
+    if (event.data?.type !== 'QINVI_PREVIEW_UPDATE') return
+    const { wedding, theme, content, refetch } = event.data
+
+    if (refetch) {
+      // Saved: the API is the truth again, so the draft is dropped rather than merged.
+      previewWedding = null
+      previewTheme = null
+      inflight = null
+      refetchFromPreview?.()
+      return
+    }
+
+    if (wedding) {
+      const incoming = { ...wedding, theme_override: parseOverride(wedding.theme_override) }
+      previewWedding = {
+        ...(previewWedding || {}),
+        ...incoming,
+        // Each tab sends only the keys it owns, so overrides accumulate instead of swapping.
+        theme_override: {
+          ...parseOverride(previewWedding?.theme_override),
+          ...incoming.theme_override,
+        },
+      }
+    }
+    if (theme) previewTheme = theme
+
+    if (content && state.value.data) {
+      const data = state.value.data
+      state.value.data = data.content
+        ? { ...data, content: { ...data.content, ...content } }
+        : { ...data, ...content }
+    }
+
+    state.value.data = withPreview(state.value.data || {})
+    applyTheme(state.value.data?.theme, state.value.data?.wedding)
+  })
+}
+
 export function useWedding() {
   const slug = ref(resolveSlug())
   const guestCode = ref(getGuestCode())
@@ -130,9 +210,10 @@ export function useWedding() {
           console.error('Failed to parse theme_override string:', e)
         }
       }
-      state.value.data = data
-      if (data?.theme || data?.wedding) {
-        applyTheme(data.theme, data.wedding)
+      state.value.data = withPreview(data)
+      const merged = state.value.data
+      if (merged?.theme || merged?.wedding) {
+        applyTheme(merged.theme, merged.wedding)
       }
       if (data?.wedding?.title) {
         document.title = `${data.wedding.title} - Undangan Pernikahan`
@@ -144,6 +225,8 @@ export function useWedding() {
       state.value.loading = false
     }
   }
+
+  refetchFromPreview = fetchWeddingData
 
   onMounted(() => {
     if (state.value.data) return
@@ -305,6 +388,25 @@ export function useWedding() {
     }
   })
 
+  /*
+   * "Pengaturan Zoom & Posisi Foto Mempelai (Dinamis)" in the admin writes one entry per
+   * person: foto_wanita_transform and foto_pria_transform. The portrait plates in
+   * BrideSection/GroomSection read these. An unset entry is 1 / 50 / 50, which is exactly
+   * the framing the design ships with, so an unconfigured invitation is unchanged.
+   */
+  const personTransform = (t: any) => ({
+    scale: typeof t?.scale === 'number' ? t.scale : 1,
+    x: typeof t?.x === 'number' ? t.x : 50,
+    y: typeof t?.y === 'number' ? t.y : 50,
+  })
+
+  const brideTransform = computed(() =>
+    personTransform((themeOverride.value as any)?.foto_wanita_transform),
+  )
+  const groomTransform = computed(() =>
+    personTransform((themeOverride.value as any)?.foto_pria_transform),
+  )
+
   const spousePhotoTransform = computed(() => {
     const t = (themeOverride.value as any)?.spouse_photo_transform
     return {
@@ -383,6 +485,8 @@ export function useWedding() {
     invitePhoto,
     spousePhoto,
     fotoMempelaiTransform,
+    brideTransform,
+    groomTransform,
     spousePhotoTransform,
     activeSpousePhotoTransform,
     coupleNickname,
