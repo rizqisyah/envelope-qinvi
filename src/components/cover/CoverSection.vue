@@ -10,7 +10,7 @@ import lily from '../../assets/opening/parts/03_2588-124_lily.webp'
 defineProps<{ guestName: string }>()
 defineEmits<{ open: [] }>()
 
-const { coupleNickname, wedding, themeOverride } = useWedding()
+const { coupleNickname, wedding, themeOverride, tx } = useWedding()
 
 const coverBackgroundStyle = computed(() => {
   const bg =
@@ -29,7 +29,7 @@ const coverBackgroundStyle = computed(() => {
       <h1 class="opening__couple">{{ coupleNickname }}</h1>
 
       <button type="button" class="opening__envelope" @click="$emit('open')">
-        <span class="sr-only">Buka undangan</span>
+        <span class="sr-only">{{ tx('Buka undangan', 'Open invitation') }}</span>
         <img :src="envelope" alt="" width="361" height="361" class="opening__envelope-img" />
         <img :src="seal" alt="" width="65" height="82" class="opening__seal" />
       </button>

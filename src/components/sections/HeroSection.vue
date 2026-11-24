@@ -9,7 +9,7 @@ import couplePlate from '../../assets/footer/parts/21_2594-208_img-8300.webp' //
 import ornateFrame from '../../assets/hero/parts/00_2587-110_group-234.webp' // z14
 
 const { el, shown } = useReveal(0.15)
-const { invitePhoto, fotoMempelaiTransform, isGroomFirst, themeOverride } = useWedding()
+const { invitePhoto, fotoMempelaiTransform, isGroomFirst, themeOverride, tx } = useWedding()
 
 const couple = computed(() => invitePhoto.value || couplePlate)
 
@@ -26,7 +26,7 @@ const heroLine2 = computed(
     <img :src="forest" alt="" width="274" height="457" class="hero__forest" />
     <img
       :src="couple"
-      alt="Foto mempelai"
+      :alt="tx('Foto mempelai', 'Photo of the couple')"
       width="342"
       height="342"
       class="hero__couple"

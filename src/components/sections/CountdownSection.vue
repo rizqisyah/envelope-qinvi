@@ -97,7 +97,7 @@ const CELLS = [
 const CELL_W = 74
 
 const { el, shown } = useReveal()
-const { acara, countdownDate } = useWedding()
+const { acara, countdownDate, tx } = useWedding()
 
 function parseCustomDate(str: string): Date {
   const m = str.match(/(\d{1,2})\s*[/|-]\s*(\d{1,2})\s*[/|-]\s*(\d{4})(?:\s*[,|-]?\s*(\d{1,2})\s*[.:]\s*(\d{1,2}))?/)
@@ -167,7 +167,7 @@ function cellStyle(cx: number) {
       :class="`lyr--${l.kind}`"
     />
 
-    <h2 id="countdown-label" class="countdown__sr">Menghitung hari menuju hari bahagia</h2>
+    <h2 id="countdown-label" class="countdown__sr">{{ tx('Menghitung hari menuju hari bahagia', 'Counting down to the happy day') }}</h2>
 
     <!--
       One live region for the whole clock, polite and updating on the minute's worth

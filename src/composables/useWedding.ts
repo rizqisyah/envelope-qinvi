@@ -1,5 +1,12 @@
 import { ref, computed, onMounted } from 'vue'
 import { resolveSlug, getHome, submitUcapan } from '../lib/api'
+import { dateLocale } from '../lib/format'
+
+/** True when the admin set the invitation language to English (`wedding.lang`). */
+export const isEnglishLang = (lang?: string | null) => dateLocale(lang) === 'en-GB'
+
+/** The guest-name fallback in both languages, so callers can tell "no real name" apart. */
+export const GUEST_PLACEHOLDERS = ['Nama Tamu', 'Guest Name']
 
 const state = ref<{
   loading: boolean
@@ -215,8 +222,10 @@ export function useWedding() {
       if (merged?.theme || merged?.wedding) {
         applyTheme(merged.theme, merged.wedding)
       }
+      const en = isEnglishLang(data?.wedding?.lang)
+      document.documentElement.lang = en ? 'en' : 'id'
       if (data?.wedding?.title) {
-        document.title = `${data.wedding.title} - Undangan Pernikahan`
+        document.title = `${data.wedding.title} - ${en ? 'Wedding Invitation' : 'Undangan Pernikahan'}`
       }
     } catch (err: any) {
       console.error('Failed to load wedding data:', err)
@@ -238,8 +247,11 @@ export function useWedding() {
   const wedding = computed(() => state.value.data?.wedding ?? null)
   const theme = computed(() => state.value.data?.theme ?? null)
   const guest = computed(() => state.value.data?.guest ?? null)
-  /** 'indonesia' | 'english' from the admin's general settings; drives date wording. */
+  /** 'indonesia' | 'english' from the admin's general settings; drives date wording and UI copy. */
   const lang = computed<string | null>(() => wedding.value?.lang ?? null)
+  const isEn = computed(() => isEnglishLang(lang.value))
+  /** Fixed theme copy in the invitation's language: Indonesian unless the admin chose English. */
+  const tx = (id: string, en: string) => (isEn.value ? en : id)
 
   const themeOverride = computed(() => {
     const raw = wedding.value?.theme_override
@@ -427,14 +439,15 @@ export function useWedding() {
     if (guest.value?.guest_name) return guest.value.guest_name
     if (guest.value?.name) return guest.value.name
 
+    const placeholder = tx('Nama Tamu', 'Guest Name')
     const rawParam = guestCode.value.trim()
-    if (!rawParam) return 'Nama Tamu'
+    if (!rawParam) return placeholder
 
     if (isSystemGuestCode(rawParam)) {
-      return 'Nama Tamu'
+      return placeholder
     }
 
-    return formatDirectName(rawParam) || 'Nama Tamu'
+    return formatDirectName(rawParam) || placeholder
   })
 
   const videoPrewed = computed(() => {
@@ -469,6 +482,8 @@ export function useWedding() {
     error: computed(() => state.value.error),
     wedding,
     lang,
+    isEn,
+    tx,
     videoPrewed,
     theme,
     themeOverride,

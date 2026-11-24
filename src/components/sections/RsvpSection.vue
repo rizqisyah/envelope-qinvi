@@ -28,7 +28,7 @@
  */
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useReveal } from '../../composables/useReveal'
-import { useWedding } from '../../composables/useWedding'
+import { GUEST_PLACEHOLDERS, useWedding } from '../../composables/useWedding'
 import { submitRsvp } from '../../lib/api'
 
 import arch from '../../assets/rsvp/parts/rsvp_2594-299_arch.webp'
@@ -40,7 +40,7 @@ import callaBud from '../../assets/rsvp/parts/05_2594-315_vdf-6.webp'
 import valley from '../../assets/rsvp/parts/06_2594-316.webp'
 
 const { el, shown } = useReveal()
-const { slug, guestCode, guest, guestName } = useWedding()
+const { slug, guestCode, guest, guestName, tx } = useWedding()
 
 const name = ref('')
 const phone = ref('')
@@ -81,7 +81,7 @@ watch(
     const known =
       g?.guest_name ??
       g?.name ??
-      (gName !== 'Nama Tamu' ? gName : '')
+      (!GUEST_PLACEHOLDERS.includes(gName) ? gName : '')
     if (known && !name.value) name.value = String(known)
   },
   { immediate: true },
@@ -89,11 +89,11 @@ watch(
 
 async function submit() {
   if (!name.value.trim()) {
-    error.value = 'Nama wajib diisi.'
+    error.value = tx('Nama wajib diisi.', 'Name is required.')
     return
   }
   if (!attendance.value) {
-    error.value = 'Pilih kehadiran terlebih dahulu.'
+    error.value = tx('Pilih kehadiran terlebih dahulu.', 'Please choose your attendance first.')
     return
   }
   submitting.value = true
@@ -116,7 +116,7 @@ async function submit() {
     await nextTick()
     thanksEl.value?.focus()
   } catch (err: any) {
-    error.value = err?.message || 'Gagal mengirim konfirmasi. Coba lagi.'
+    error.value = err?.message || tx('Gagal mengirim konfirmasi. Coba lagi.', 'Failed to send your confirmation. Please try again.')
   } finally {
     submitting.value = false
   }
@@ -129,8 +129,7 @@ async function submit() {
 
     <h2 id="rsvp-heading" class="rsvp__heading">Rsvp</h2>
     <p class="rsvp__body">
-      Kehadiran Bapak/Ibu/Saudara/i akan menjadi kehormatan besar bagi kami dan keluarga. Mohon
-      konfirmasi kehadiran Anda melalui formulir reservasi di bawah:
+      {{ tx('Kehadiran Bapak/Ibu/Saudara/i akan menjadi kehormatan besar bagi kami dan keluarga. Mohon konfirmasi kehadiran Anda melalui formulir reservasi di bawah:', 'Your presence would be a great honor for us and our families. Please confirm your attendance using the reservation form below:') }}
     </p>
 
     <!--
@@ -139,16 +138,16 @@ async function submit() {
       without this a screen-reader user gets no confirmation at all.
     -->
     <p class="rsvp__sr" aria-live="polite">
-      {{ sent ? 'Konfirmasi kehadiran Anda sudah kami terima.' : '' }}
+      {{ sent ? tx('Konfirmasi kehadiran Anda sudah kami terima.', 'We have received your attendance confirmation.') : '' }}
     </p>
 
     <p v-if="sent" ref="thanksEl" class="rsvp__thanks" tabindex="-1">
-      <span class="rsvp__thanks-title">Terima Kasih!</span>
-      <span>Konfirmasi kehadiran Anda sudah kami terima.</span>
+      <span class="rsvp__thanks-title">{{ tx('Terima Kasih!', 'Thank You!') }}</span>
+      <span>{{ tx('Konfirmasi kehadiran Anda sudah kami terima.', 'We have received your attendance confirmation.') }}</span>
     </p>
 
     <form v-else class="rsvp__form" novalidate @submit.prevent="submit">
-      <label class="rsvp__label rsvp__label--name" for="rsvp-name">Nama:</label>
+      <label class="rsvp__label rsvp__label--name" for="rsvp-name">{{ tx('Nama:', 'Name:') }}</label>
       <input
         id="rsvp-name"
         v-model="name"
@@ -158,7 +157,7 @@ async function submit() {
         required
       />
 
-      <label class="rsvp__label rsvp__label--phone" for="rsvp-phone">No Hp:</label>
+      <label class="rsvp__label rsvp__label--phone" for="rsvp-phone">{{ tx('No Hp:', 'Phone:') }}</label>
       <input
         id="rsvp-phone"
         v-model="phone"
@@ -168,7 +167,7 @@ async function submit() {
         autocomplete="tel"
       />
 
-      <label class="rsvp__label rsvp__label--attend" for="rsvp-attend">Kehadiran</label>
+      <label class="rsvp__label rsvp__label--attend" for="rsvp-attend">{{ tx('Kehadiran', 'Attendance') }}</label>
       <!--
         The design draws an empty box here, so the placeholder option carries no label.
         A native select is the deviation: it shows a dropdown indicator the flat plate
@@ -182,14 +181,14 @@ async function submit() {
         required
       >
         <option value=""></option>
-        <option value="hadir">Hadir</option>
-        <option value="tidak_hadir">Tidak Hadir</option>
+        <option value="hadir">{{ tx('Hadir', 'Attending') }}</option>
+        <option value="tidak_hadir">{{ tx('Tidak Hadir', 'Not Attending') }}</option>
       </select>
 
       <p v-if="error" class="rsvp__error" role="alert">{{ error }}</p>
 
       <button class="rsvp__send" type="submit" :disabled="submitting">
-        {{ submitting ? 'Mengirim...' : 'Send' }}
+        {{ submitting ? tx('Mengirim...', 'Sending...') : 'Send' }}
       </button>
     </form>
 

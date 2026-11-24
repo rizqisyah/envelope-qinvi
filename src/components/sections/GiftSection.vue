@@ -53,7 +53,7 @@ const FALLBACK: Account[] = [
 ]
 
 const { el, shown } = useReveal()
-const { gift } = useWedding()
+const { gift, tx } = useWedding()
 
 /*
  * The API's rekening rows are accounts only -- there is no address field. The CMS
@@ -69,22 +69,25 @@ const accounts = computed<Account[]>(() => {
       const name = g.account_name
       // account_number is kept so the address stays copyable -- see `copyable` below.
       return isKado(g.bank_name)
-        ? { address: ['Alamat', number], account_name: name, account_number: number }
+        ? { address: [tx('Alamat', 'Address'), number], account_name: name, account_number: number }
         : { bank_name: g.bank_name, account_number: number, account_name: name }
     })
     .filter((a) => a.account_number || a.account_name)
-  return live.length ? live : FALLBACK
+  if (live.length) return live
+  return FALLBACK.map((a) =>
+    a.address ? { ...a, address: [tx('Alamat', 'Address'), ...a.address.slice(1)] } : a,
+  )
 })
 
 /** What a card prints, and where -- the address variant sets three lines, higher up. */
 function lines(a: Account): { top: number; leading: number; rows: string[] } {
   if (a.address) {
-    return { top: 22, leading: 18, rows: [...a.address, `A/n ${a.account_name ?? ''}`] }
+    return { top: 22, leading: 18, rows: [...a.address, `${tx('A/n', 'Name:')} ${a.account_name ?? ''}`] }
   }
   return {
     top: 38,
     leading: 19,
-    rows: [`No. Rekening : ${a.account_number ?? ''}`, `A/n ${a.account_name ?? ''}`],
+    rows: [`${tx('No. Rekening', 'Account No.')} : ${a.account_number ?? ''}`, `${tx('A/n', 'Name:')} ${a.account_name ?? ''}`],
   }
 }
 
@@ -94,7 +97,7 @@ function lines(a: Account): { top: number; leading: number; rows: string[] } {
  * renders without the control, exactly as Frame 242 draws it.
  */
 const copyable = (a: Account) => !!a.account_number
-const copyLabel = (a: Account) => (a.address ? 'alamat' : 'nomor rekening')
+const copyLabel = (a: Account) => (a.address ? tx('alamat', 'address') : tx('nomor rekening', 'account number'))
 
 const copied = ref(-1)
 const toastMessage = ref('')
@@ -125,7 +128,9 @@ async function copy(a: Account, i: number) {
   window.clearTimeout(clear)
   clear = window.setTimeout(() => (copied.value = -1), 1800)
 
-  toastMessage.value = a.address ? 'Alamat berhasil disalin!' : 'Nomor rekening berhasil disalin!'
+  toastMessage.value = a.address
+    ? tx('Alamat berhasil disalin!', 'Address copied!')
+    : tx('Nomor rekening berhasil disalin!', 'Account number copied!')
   window.clearTimeout(toastTimer)
   toastTimer = window.setTimeout(() => {
     toastMessage.value = ''
@@ -144,9 +149,7 @@ const px = (n: number) => `calc(${n} * var(--px))`
   <section :ref="el" class="gift" :class="{ 'is-in': shown }" aria-labelledby="gift-heading">
     <h2 id="gift-heading" class="gift__heading">Wedding Gift</h2>
     <p class="gift__body">
-      Bagi Bapak/Ibu/Saudara/i yang berkenan memberikan tanda kasih sebagai bentuk perhatian dan
-      dukungan, dapat menyampaikannya melalui fitur yang telah kami sediakan di bawah ini. Setiap
-      tanda kasih yang diberikan akan kami terima dengan penuh rasa syukur dan penghargaan.
+      {{ tx('Bagi Bapak/Ibu/Saudara/i yang berkenan memberikan tanda kasih sebagai bentuk perhatian dan dukungan, dapat menyampaikannya melalui fitur yang telah kami sediakan di bawah ini. Setiap tanda kasih yang diberikan akan kami terima dengan penuh rasa syukur dan penghargaan.', 'For those who wish to send a token of love as a sign of care and support, you may do so through the options we have provided below. Every gift will be received with deep gratitude and appreciation.') }}
     </p>
 
     <div
@@ -181,8 +184,8 @@ const px = (n: number) => `calc(${n} * var(--px))`
         <img :src="copyIcon" alt="" />
         <span class="gift__sr">{{
           copied === i
-            ? `${copyLabel(a)} disalin`
-            : `Salin ${copyLabel(a)} ${a.account_number}`
+            ? tx(`${copyLabel(a)} disalin`, `${copyLabel(a)} copied`)
+            : tx(`Salin ${copyLabel(a)} ${a.account_number}`, `Copy ${copyLabel(a)} ${a.account_number}`)
         }}</span>
       </button>
 
@@ -191,7 +194,7 @@ const px = (n: number) => `calc(${n} * var(--px))`
     </div>
 
     <p class="gift__sr" aria-live="polite">
-      {{ copied >= 0 ? `${copyLabel(accounts[copied])} disalin ke papan klip` : '' }}
+      {{ copied >= 0 ? tx(`${copyLabel(accounts[copied])} disalin ke papan klip`, `${copyLabel(accounts[copied])} copied to clipboard`) : '' }}
     </p>
 
     <Teleport to="body">

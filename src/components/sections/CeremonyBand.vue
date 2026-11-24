@@ -73,7 +73,7 @@ function place(h: HeadingLine) {
 
 const { el, shown } = useReveal()
 const fitAddress = useFitText()
-const { acara, lang } = useWedding()
+const { acara, lang, tx } = useWedding()
 
 /*
  * Fallbacks are the copy Frame 242 draws on the card, so an unconfigured render
@@ -122,7 +122,7 @@ onMounted(() => {
   document.fonts?.ready.then(fitHeading)
 })
 
-const venue = computed(() => event.value?.location_name || 'Rumah mempelai wanita')
+const venue = computed(() => event.value?.location_name || tx('Rumah mempelai wanita', "The bride's residence"))
 // The design's address only fills a card with no event; an event saved without an
 // address leaves the line empty instead of printing the mock one.
 const address = computed(() =>

@@ -37,7 +37,7 @@ const { el, shown } = useReveal()
 const fitBio = useFitText()
 const fitNickname = useFitText()
 const nameFit = useNameFit()
-const { groom, bride, isGroomFirst, brideTransform, groomTransform } = useWedding()
+const { groom, bride, isGroomFirst, brideTransform, groomTransform, tx } = useWedding()
 
 const person = computed(() => (isGroomFirst.value ? bride.value : groom.value))
 
@@ -116,8 +116,8 @@ const fullName = computed(() => {
 })
 const fallbackParents = computed(() =>
   isGroomFirst.value
-    ? 'Putri Pertama dari\nBapak Heri\n& Ibu Sofie'
-    : 'Putra Pertama dari\nBapak Tono\n& Ibu Ratna',
+    ? tx('Putri Pertama dari\nBapak Heri\n& Ibu Sofie', 'First Daughter of\nMr. Heri\n& Mrs. Sofie')
+    : tx('Putra Pertama dari\nBapak Tono\n& Ibu Ratna', 'First Son of\nMr. Tono\n& Mrs. Ratna'),
 )
 const parents = computed(
   () => parentLine(person.value, { multiline: true }) || fallbackParents.value,

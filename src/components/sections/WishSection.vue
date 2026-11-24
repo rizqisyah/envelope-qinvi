@@ -28,7 +28,7 @@
  */
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useReveal } from '../../composables/useReveal'
-import { useWedding } from '../../composables/useWedding'
+import { GUEST_PLACEHOLDERS, useWedding } from '../../composables/useWedding'
 import { relativeTime } from '../../lib/format'
 
 import lilyTop from '../../assets/wish/parts/00_2594-429.webp'
@@ -48,7 +48,7 @@ type Wish = {
 }
 
 const { el, shown } = useReveal()
-const { wishes, sendWish, guest, guestName } = useWedding()
+const { wishes, sendWish, guest, guestName, lang, tx } = useWedding()
 
 const BATCH_SIZE = 8
 const displayLimit = ref(BATCH_SIZE)
@@ -101,7 +101,7 @@ onBeforeUnmount(() => {
   observer = null
 })
 
-const stamp = (w: Wish) => w.time ?? relativeTime(w.created_at)
+const stamp = (w: Wish) => w.time ?? relativeTime(w.created_at, Date.now(), lang.value)
 
 const name = ref('')
 
@@ -112,7 +112,7 @@ watch(
       const resolved =
         guest.value?.guest_name ||
         guest.value?.name ||
-        (guestName.value !== 'Nama Tamu' ? guestName.value : '')
+        (!GUEST_PLACEHOLDERS.includes(guestName.value) ? guestName.value : '')
       if (resolved) name.value = resolved
     }
   },
@@ -125,11 +125,11 @@ const sent = ref(false)
 
 async function submit() {
   if (!name.value.trim()) {
-    error.value = 'Nama wajib diisi.'
+    error.value = tx('Nama wajib diisi.', 'Name is required.')
     return
   }
   if (!message.value.trim()) {
-    error.value = 'Ucapan wajib diisi.'
+    error.value = tx('Ucapan wajib diisi.', 'Message is required.')
     return
   }
   submitting.value = true
@@ -142,7 +142,7 @@ async function submit() {
     // Increment display limit so new prepended wish does not hide already visible items
     displayLimit.value += 1
   } catch (err: any) {
-    error.value = err?.message || 'Gagal mengirim ucapan. Coba lagi.'
+    error.value = err?.message || tx('Gagal mengirim ucapan. Coba lagi.', 'Failed to send your wish. Please try again.')
   } finally {
     submitting.value = false
   }
@@ -152,10 +152,10 @@ async function submit() {
 <template>
   <section :ref="el" class="wish" :class="{ 'is-in': shown }" aria-labelledby="wish-heading">
     <h2 id="wish-heading" class="wish__heading">Wedding Wish</h2>
-    <p class="wish__body">Silakan kirimkan doa dan ucapan yang tulus untuk kami:</p>
+    <p class="wish__body">{{ tx('Silakan kirimkan doa dan ucapan yang tulus untuk kami:', 'Please send us your sincere prayers and wishes:') }}</p>
 
     <form class="wish__form" novalidate @submit.prevent="submit">
-      <label class="wish__label wish__label--name" for="wish-name">Nama</label>
+      <label class="wish__label wish__label--name" for="wish-name">{{ tx('Nama', 'Name') }}</label>
       <input
         id="wish-name"
         v-model="name"
@@ -166,7 +166,7 @@ async function submit() {
       />
 
       <label class="wish__label wish__label--message" for="wish-message"
-        >Sampaikan ucapan selamat untuk<br />pernikahan kami:</label
+        >{{ tx('Sampaikan ucapan selamat untuk', 'Share your congratulations on') }}<br />{{ tx('pernikahan kami:', 'our wedding:') }}</label
       >
       <textarea
         id="wish-message"
@@ -183,18 +183,18 @@ async function submit() {
         (ends 7170) and the panel (starts 7230). Recorded in the band record.
       -->
       <button class="wish__send" type="submit" :disabled="submitting">
-        {{ submitting ? 'Mengirim...' : 'Kirim Ucapan' }}
+        {{ submitting ? tx('Mengirim...', 'Sending...') : tx('Kirim Ucapan', 'Send Wish') }}
       </button>
     </form>
 
-    <p class="wish__sr" aria-live="polite">{{ sent ? 'Ucapan Anda sudah terkirim.' : '' }}</p>
+    <p class="wish__sr" aria-live="polite">{{ sent ? tx('Ucapan Anda sudah terkirim.', 'Your wish has been sent.') : '' }}</p>
 
     <!-- Frame 237: fixed 428 with radius 17, clipping its own cards. -->
     <div ref="panelRef" class="wish__panel">
       <div v-if="!allWishes.length" class="wish__empty">
-        <p class="wish__empty-title">Belum Ada Ucapan</p>
+        <p class="wish__empty-title">{{ tx('Belum Ada Ucapan', 'No Wishes Yet') }}</p>
         <p class="wish__empty-desc">
-          Kirimkan doa dan ucapan pertama untuk kedua mempelai melalui formulir di atas.
+          {{ tx('Kirimkan doa dan ucapan pertama untuk kedua mempelai melalui formulir di atas.', 'Be the first to send your prayers and wishes to the couple using the form above.') }}
         </p>
       </div>
       <ul v-else class="wish__list">
@@ -204,7 +204,7 @@ async function submit() {
           <p class="wish__message">{{ w.message }}</p>
         </li>
       </ul>
-      <div v-if="isLoadingMore" class="wish__loading" aria-live="polite">Memuat ucapan...</div>
+      <div v-if="isLoadingMore" class="wish__loading" aria-live="polite">{{ tx('Memuat ucapan...', 'Loading wishes...') }}</div>
       <div ref="sentinelRef" class="wish__sentinel" aria-hidden="true"></div>
     </div>
 

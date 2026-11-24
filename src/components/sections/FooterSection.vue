@@ -119,7 +119,7 @@ const top: Layer[] = [
 ]
 
 const { el, shown } = useReveal()
-const { wedding, groom, bride, spousePhoto, isGroomFirst } = useWedding()
+const { wedding, groom, bride, spousePhoto, isGroomFirst, tx } = useWedding()
 
 /*
  * Live names win; the design's literal is the fallback.
@@ -170,7 +170,7 @@ const waUrl = computed(() => (wedding.value?.vendor_whatsapp as string) || '')
     <!-- z105: the couple photograph, inside the envelope the layers above and below form. -->
     <img
       :src="couplePhoto"
-      alt="Foto mempelai"
+      :alt="tx('Foto mempelai', 'Photo of the couple')"
       class="footer__photo"
     />
 

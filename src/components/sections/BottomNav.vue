@@ -20,7 +20,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useWedding } from '../../composables/useWedding'
 
-const { wedding, gallery } = useWedding()
+const { wedding, gallery, tx } = useWedding()
 
 const musicUrl = computed(() => (wedding.value?.music_url as string) || '')
 /*
@@ -37,11 +37,11 @@ const hasGallery = computed(() => {
 
 /** One entry per destination; the target is the band's own class, which it already sets. */
 const ITEMS = [
-  { key: 'hero', target: '.hero', label: 'Awal' },
-  { key: 'groom', target: '.groom', label: 'Mempelai' },
-  { key: 'akad', target: '.akad', label: 'Acara' },
-  { key: 'gallery', target: '.gallery', label: 'Galeri' },
-  { key: 'wish', target: '.wish', label: 'Ucapan' },
+  { key: 'hero', target: '.hero', label: 'Awal', labelEn: 'Home' },
+  { key: 'groom', target: '.groom', label: 'Mempelai', labelEn: 'Couple' },
+  { key: 'akad', target: '.akad', label: 'Acara', labelEn: 'Events' },
+  { key: 'gallery', target: '.gallery', label: 'Galeri', labelEn: 'Gallery' },
+  { key: 'wish', target: '.wish', label: 'Ucapan', labelEn: 'Wishes' },
 ] as const
 
 const navItems = computed(() =>
@@ -169,7 +169,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <nav class="nav" aria-label="Navigasi undangan">
+  <nav class="nav" :aria-label="tx('Navigasi undangan', 'Invitation navigation')">
     <ul class="nav__list">
       <li v-for="item in navItems" :key="item.key" class="nav__item">
         <button
@@ -204,7 +204,7 @@ onBeforeUnmount(() => {
               <path d="M4 5.5h16v10.5H12l-4.5 4v-4H4z" />
             </template>
           </svg>
-          <span class="nav__label">{{ item.label }}</span>
+          <span class="nav__label">{{ tx(item.label, item.labelEn) }}</span>
         </button>
       </li>
 
@@ -224,7 +224,7 @@ onBeforeUnmount(() => {
               <path d="M7 4.5 19 12 7 19.5z" />
             </template>
           </svg>
-          <span class="nav__label">{{ playing ? 'Jeda' : 'Musik' }}</span>
+          <span class="nav__label">{{ playing ? tx('Jeda', 'Pause') : tx('Musik', 'Music') }}</span>
         </button>
       </li>
     </ul>

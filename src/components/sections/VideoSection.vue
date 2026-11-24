@@ -17,7 +17,7 @@
 import { computed } from 'vue'
 import { useWedding } from '../../composables/useWedding'
 
-const { wedding } = useWedding()
+const { wedding, tx } = useWedding()
 
 const src = computed(() => (wedding.value?.video_url as string) || '')
 const poster = computed(() => (wedding.value?.image_cover as string) || undefined)
@@ -42,7 +42,7 @@ function onEnded() {
 </script>
 
 <template>
-  <section v-if="src" class="video" aria-label="Video pernikahan">
+  <section v-if="src" class="video" :aria-label="tx('Video pernikahan', 'Wedding video')">
     <video
       class="video__player"
       :src="src"

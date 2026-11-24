@@ -97,18 +97,24 @@ export function formatEventTime(raw?: string | null): string {
 }
 
 /*
- * "2 hari lalu" — the wish list's timestamps. The design prints Indonesian relative
- * time, and unlike the dates above it does not switch to English.
+ * "2 hari lalu" / "2 days ago" — the wish list's timestamps, in the wedding's `lang`
+ * like the dates above.
  */
-const AGO: [seconds: number, unit: string][] = [
-  [60, 'menit'],
-  [3600, 'jam'],
-  [86400, 'hari'],
-  [2592000, 'bulan'],
-  [31536000, 'tahun'],
+const AGO: [seconds: number, id: string, en: string][] = [
+  [60, 'menit', 'minute'],
+  [3600, 'jam', 'hour'],
+  [86400, 'hari', 'day'],
+  [2592000, 'bulan', 'month'],
+  [31536000, 'tahun', 'year'],
 ]
 
-export function relativeTime(value?: string | Date | null, now: number = Date.now()): string {
+export function relativeTime(
+  value?: string | Date | null,
+  now: number = Date.now(),
+  lang?: string | null,
+): string {
+  const en = dateLocale(lang) === 'en-GB'
+  const justNow = en ? 'just now' : 'baru saja'
   if (!value) return ''
   /*
    * The API sends MySQL-style "2026-07-28 10:00:00" — a space, no T, no zone. Chromium
@@ -125,13 +131,16 @@ export function relativeTime(value?: string | Date | null, now: number = Date.no
   // Under a minute, and also anything in the future: a guest's clock skewed ahead of
   // the server would otherwise read "-3 menit lalu".
   const secs = Math.floor((now - at.getTime()) / 1000)
-  if (secs < 60) return 'baru saja'
+  if (secs < 60) return justNow
 
   for (let i = AGO.length - 1; i >= 0; i--) {
-    const [step, unit] = AGO[i]
-    if (secs >= step) return `${Math.floor(secs / step)} ${unit} lalu`
+    const [step, idUnit, enUnit] = AGO[i]
+    if (secs >= step) {
+      const n = Math.floor(secs / step)
+      return en ? `${n} ${enUnit}${n === 1 ? '' : 's'} ago` : `${n} ${idUnit} lalu`
+    }
   }
-  return 'baru saja'
+  return justNow
 }
 
 const ID_MONTHS: Record<string, number> = {

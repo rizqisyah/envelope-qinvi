@@ -29,7 +29,7 @@ const THUMB_XS = [43.49, 116.78, 190.07, 263.36]
 const THUMB = { y: 296.14, w: 68.82, h: 70.86 }
 
 const { el, shown } = useReveal()
-const { gallery, videoPrewed } = useWedding()
+const { gallery, videoPrewed, tx } = useWedding()
 
 const hasVideo = computed(() => Boolean(videoPrewed.value && String(videoPrewed.value).trim().length > 0))
 
@@ -114,25 +114,25 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section v-if="hasGallery" :ref="el" class="gallery" :class="{ 'is-in': shown, 'has-video': hasVideo }" aria-label="Galeri foto">
+  <section v-if="hasGallery" :ref="el" class="gallery" :class="{ 'is-in': shown, 'has-video': hasVideo }" :aria-label="tx('Galeri foto', 'Photo gallery')">
     <div class="gallery__stage">
       <img :src="plate" alt="" class="gallery__plate" />
 
       <template v-if="current">
-        <button class="gallery__main" type="button" aria-label="Perbesar foto" @click="preview($event)">
-          <img :src="current.src" :alt="current.caption || 'Foto mempelai'" />
+        <button class="gallery__main" type="button" :aria-label="tx('Perbesar foto', 'Enlarge photo')" @click="preview($event)">
+          <img :src="current.src" :alt="current.caption || tx('Foto mempelai', 'Photo of the couple')" />
         </button>
 
         <button
           class="gallery__nav gallery__nav--prev"
           type="button"
-          aria-label="Foto sebelumnya"
+          :aria-label="tx('Foto sebelumnya', 'Previous photo')"
           @click="step(-1)"
         />
         <button
           class="gallery__nav gallery__nav--next"
           type="button"
-          aria-label="Foto berikutnya"
+          :aria-label="tx('Foto berikutnya', 'Next photo')"
           @click="step(1)"
         />
 
@@ -142,7 +142,7 @@ onBeforeUnmount(() => {
           class="gallery__thumb"
           type="button"
           :style="thumbBox(t)"
-          :aria-label="`Lihat foto ${t.index + 1}`"
+          :aria-label="tx(`Lihat foto ${t.index + 1}`, `View photo ${t.index + 1}`)"
           :aria-current="t.index === active"
           @click="preview($event, t.index)"
         >
@@ -157,16 +157,16 @@ onBeforeUnmount(() => {
           ref="closeButton"
           class="gl-lightbox__close"
           type="button"
-          aria-label="Tutup"
+          :aria-label="tx('Tutup', 'Close')"
           @click="zoomed = false"
         >
           &times;
         </button>
-        <button class="gl-lightbox__step gl-lightbox__step--prev" type="button" aria-label="Foto sebelumnya" @click="step(-1)">
+        <button class="gl-lightbox__step gl-lightbox__step--prev" type="button" :aria-label="tx('Foto sebelumnya', 'Previous photo')" @click="step(-1)">
           &#8249;
         </button>
-        <img class="gl-lightbox__photo" :src="current.src" :alt="current.caption || 'Foto mempelai'" />
-        <button class="gl-lightbox__step gl-lightbox__step--next" type="button" aria-label="Foto berikutnya" @click="step(1)">
+        <img class="gl-lightbox__photo" :src="current.src" :alt="current.caption || tx('Foto mempelai', 'Photo of the couple')" />
+        <button class="gl-lightbox__step gl-lightbox__step--next" type="button" :aria-label="tx('Foto berikutnya', 'Next photo')" @click="step(1)">
           &#8250;
         </button>
       </div>
